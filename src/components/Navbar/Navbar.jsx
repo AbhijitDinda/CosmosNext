@@ -34,9 +34,9 @@ const Navbar = () => {
                 key={route.path}
                 href={route.path}
                 className={`${
-                  router.pathname === route.path
+                  router.pathname.startsWith(route.path)
                     ? "text-Primary font-bold text-sm md:text-lg relative border-b-2 border-Primary"
-                    : "text-TEXT_P normal text-sm md:text-lg"
+                    : "text-TEXT_P font-normal text-sm md:text-lg"
                 }`}
               >
                 {route.name}
@@ -76,7 +76,7 @@ const Navbar = () => {
               key={route.path}
               href={route.path}
               className={`${
-                router.pathname === route.path
+                router.pathname.startsWith(route.path)
                   ? "text-Primary font-bold text-sm md:text-lg relative border-b-2 border-Primary"
                   : "text-TEXT_P font-normal text-sm md:text-lg relative group"
               }`}
