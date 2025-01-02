@@ -45,34 +45,7 @@ const CandidateFilter = () => {
               </SelectContent>
             </Select>
           </div>
-          <div className="md:w-56 text-base">
-            <label htmlFor="">Filter by List</label>
-            <Select onValueChange={(value) => setFilters({ status: value })}>
-              <SelectTrigger className="w-full rounded-sm">
-                <SelectValue placeholder="All" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="All">All</SelectItem>
-                <SelectItem value="Not Started">Not Started</SelectItem>
-                <SelectItem value="Ongoing">Ongoing</SelectItem>
-                <SelectItem value="Completed">Completed</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="md:w-56 text-base">
-            <label htmlFor="">Filter by Score</label>
-            <Select onValueChange={(value) => setFilters({ status: value })}>
-              <SelectTrigger className="w-full rounded-sm">
-                <SelectValue placeholder="All" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="All">All</SelectItem>
-                <SelectItem value="Not Started">Not Started</SelectItem>
-                <SelectItem value="Ongoing">Ongoing</SelectItem>
-                <SelectItem value="Completed">Completed</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          
           <div className="md:w-56 text-base">
             <label htmlFor="">Filter by Status</label>
             <Select onValueChange={(value) => setFilters({ status: value })}>

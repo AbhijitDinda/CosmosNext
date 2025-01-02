@@ -15,13 +15,14 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link"; // Replace React Router's Link with Next.js Link
 
 const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+  username: z.string().min(1, {
+    message: "Name is required.",
   }),
-  email: z.string().email({
-    message: "Please enter a valid email address.",
+  password: z.string().min(1, {
+    message: "Password is required.",
   }),
 });
+
 
 const LoginPage = () => {
   const router = useRouter(); // Next.js router
@@ -63,14 +64,14 @@ const LoginPage = () => {
             >
               <FormField
                 control={form.control}
-                name="name"
+                name="username"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm md:text-base">Name</FormLabel>
+                    <label className="text-sm md:text-base">Username</label>
                     <FormControl>
                       <Input
                         className="rounded-sm text-xs md:px-3 md:py-6"
-                        placeholder="Name"
+                        placeholder="username"
                         {...field}
                       />
                     </FormControl>
@@ -80,16 +81,16 @@ const LoginPage = () => {
               />
               <FormField
                 control={form.control}
-                name="email"
+                name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm md:text-base">
-                      Email
-                    </FormLabel>
+                    <label className="text-sm md:text-base">
+                    Password
+                    </label>
                     <FormControl>
-                      <Input
+                      <Input type="password"
                         className="rounded-sm text-xs md:px-3 md:py-6"
-                        placeholder="Email"
+                        placeholder="Password"
                         {...field}
                       />
                     </FormControl>

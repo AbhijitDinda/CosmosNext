@@ -12,7 +12,7 @@ import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 import {StatusBadge} from "@/lib/badgeUtils";
-
+import * as Tooltip from "@radix-ui/react-tooltip";
 const dummyData = [
   // Dummy data to mimic the example
   ...Array(50)
@@ -20,7 +20,7 @@ const dummyData = [
     .map((_, i) => ({
       name: "Adam Smith",
       email: "adamsmith@gmail.com",
-      assessment: "Business Executive",
+      assessment: ["List Of Assessment","Business Executive1","Business Executive2","Business Executive3","Business Executive4"],
       status: i % 3 === 0 ? "Completed" : i % 2 === 0 ? "Ongoing" : "Invited",
       match: i % 3 === 0 ? "99%" : i % 2 === 0 ? "50%" : "",
       rank: i % 3 === 0 ? 1 : i % 2 === 0 ? 2 : null,
@@ -42,11 +42,11 @@ const CandidateTable = () => {
         <TableHeader>
           <TableRow className="font-bold text-sm">
             {[
+              "ID",
               "Name",
               "Email",
               "Assessment",
               "Status",
-              "Match % (With AI)",
               "",
             ].map((heading) => (
               <TableHead key={heading}>{heading}</TableHead>
@@ -56,15 +56,27 @@ const CandidateTable = () => {
         <TableBody>
           {currentPageData.map((item, index) => (
             <TableRow key={index} className="text-nowrap">
+            <TableCell className="font-semibold">
+                {index+1}
+              </TableCell>
               <TableCell className="font-semibold">
                 {item.name}
               </TableCell>
               <TableCell>{item.email}</TableCell>
-              <TableCell>{item.assessment}</TableCell>
+              <TableCell>
+                <select className="border rounded px-2 py-1 text-sm w-full">
+                  {item.assessment.map((assessment, idx) => (
+                    <option key={idx} value={assessment}>
+                      {assessment}
+                    </option>
+                  ))}
+                </select>
+              </TableCell>
+
               <TableCell>
                 <StatusBadge status={item.status} />
               </TableCell>
-              <TableCell>
+              {/* <TableCell>
                 {item.match && (
                   <span className="text-Primary font-bold">{item.match}</span>
                 )}
@@ -73,7 +85,7 @@ const CandidateTable = () => {
                     Rank {item.rank}
                   </span>
                 )}
-              </TableCell>
+              </TableCell> */}
               <TableCell>
                 <Link href={`/candidates/action`} className="">
                   <Button

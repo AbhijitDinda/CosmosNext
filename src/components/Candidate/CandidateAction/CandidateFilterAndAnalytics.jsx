@@ -53,10 +53,7 @@ const antiCheatingMonitor = [
 ];
 
 const testResults = [
-  {
-    label: "Test Score",
-    value: "71%",
-  },
+  
   {
     label: "Test Duration",
     value: "40:00",
@@ -64,16 +61,10 @@ const testResults = [
   {
     label: "Time Taken",
     value: "39:00",
-  },
-  {
-    label: "Ranking",
-    value: "1/10",
-  },
-  {
-    label: "Matching",
-    value: "99%",
-  },
+  }
 ];
+
+const listOfAssessment =["Team Inventory Assessment (TIA)","Motivation Drive Assessment (MDA),","Approach Assessment (AA)","Emotional Intelligence Assessment (EIA)","Team Inventory Assessment (TIA)","Emotional Intelligence Assessment (EIA)"]
 
 const CandidateFilterAndAnalytics = () => {
   const form = useForm({
@@ -97,7 +88,7 @@ const CandidateFilterAndAnalytics = () => {
             <div
               className="rounded-sm p-3 w-full lg:w-80 border border-Lines text-start"
             >
-              Name
+              Abhijit Dinda
             </div>
           </div>
           <div>
@@ -105,7 +96,7 @@ const CandidateFilterAndAnalytics = () => {
             <div
               className="rounded-sm p-3 w-full lg:w-80 border border-Lines text-start"
             >
-              Email
+              abhijitdinda228@gmail.com
             </div>
           </div>
           <Button
@@ -171,29 +162,42 @@ const CandidateFilterAndAnalytics = () => {
           >
             <DownloadIcon className="text-gray-400" />
           </Button>
-          <Button className="bg-white hover:bg-white border border-gray-200 p-2 rounded-sm">
+          {/* <Button className="bg-white hover:bg-white border border-gray-200 p-2 rounded-sm">
             <PencilIcon className="text-gray-400" />
-          </Button>
+          </Button> */}
         </div>
       </div>
 
-            {/* Anti-Cheating Monitor Section */}
-            <div className='space-y-2'>
-                <h2>Anti Cheating Monitor</h2>
-                <div className="flex flex-wrap items-center gap-2 ">
-                    {antiCheatingMonitor.map((type, index) => (
-                        <div key={index} className="border text-nowrap border-Lines p-3 flex items-center rounded-sm gap-2">
-                            <div className='text-Secondary_Text font-medium text-xs md:text-sm lg:text-base'>{type.label}</div>
-                            <div className="font-semibold text-xs md:text-sm lg:text-base">{type.value}</div>
-                            {type.check ? (
-                                <SvgCorrect />
-                            ) : (
-                                <XCircleIcon size={16} className="text-Error " />
-                            )}
-                        </div>
-                    ))}
-                </div>
+      {/* Anti-Cheating Monitor Section */}
+      <div className='space-y-2'>
+        <h2>Anti Cheating Monitor</h2>
+        <div className="flex flex-wrap items-center gap-2 ">
+          {antiCheatingMonitor.map((type, index) => (
+            <div key={index} className="border text-nowrap border-Lines p-3 flex items-center rounded-sm gap-2">
+              <div className='text-Secondary_Text font-medium text-xs md:text-sm lg:text-base'>{type.label}</div>
+              <div className="font-semibold text-xs md:text-sm lg:text-base">{type.value}</div>
+              {type.check ? (
+                <SvgCorrect />
+              ) : (
+                <XCircleIcon size={16} className="text-Error " />
+              )}
             </div>
+          ))}
+        </div>
+      </div>
+
+      {/*List of Assessment Section */}
+      <div className='space-y-2'>
+        <h2>List of Assessment</h2>
+        <div className="flex flex-wrap items-center gap-2 ">
+          {listOfAssessment.map((assessment, index) => (
+            <div key={index} className="border text-nowrap border-Lines p-3 flex items-center rounded-sm gap-2">
+              <div className='text-Secondary_Text font-medium text-xs md:text-sm lg:text-base'>{assessment}</div>
+              
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* {Test Performance Section} */}
       <div className="pt-6 grid grid-cols-12 gap-4">

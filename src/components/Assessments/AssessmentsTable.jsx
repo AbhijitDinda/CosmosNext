@@ -22,7 +22,7 @@ const dummyData = [
     .map((_, i) => ({
       name: `Business Executive ${i + 1}`,
       type: i % 2 === 0 ? "Basic" : "Adaptive",
-      link: "www.google.com",
+      link: "http://137.184.46.213/cosmos/public/assessment/VFZSamVVOVVhM2xPYWxFMVQxaFZOR013VWs5T2JFVXhVMFY0Vm1OVlpEVlNSRTE1Vm1wT2RWVlZTa3hhUlVaNlpETlNWRnBuUFQwPQ==/login",
       startDate: "19 May 2023",
       lastDate: "19 May 2023",
       totalCandidates: 23,
@@ -61,16 +61,34 @@ const AssessmentsTable = () => {
             <TableRow key={index} className="text-nowrap">
               <TableCell className="font-semibold">{item.name}</TableCell>
               <TableCell>
-                <a
-                  href={`https://${item.link}`} // Ensures the link is valid with HTTPS
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-Primary hover:text-Primary_Dark flex items-center space-x-2"
-                >
-                  <LinkIcon className="w-4 h-4 text-Primary" />
-                  <span className="underline">link</span>
-                </a>
-              </TableCell>
+  <div className="flex flex-col space-y-1">
+    {/* Display the URL (Truncated) */}
+    <a
+      href={`https://${item.link}`} // Ensures the link is valid with HTTPS
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-Primary hover:text-Primary_Dark flex items-center space-x-2 truncate max-w-xs"
+      title={`https://${item.link}`} // Show the full URL on hover
+    >
+      <LinkIcon className="w-4 h-4 text-Primary" />
+      <span className="underline">{item.link}</span>
+    </a>
+
+    <Button
+      size="sm"
+      variant="ghost"
+      className="mt-1 text-xs bg-blue-100 text-blue-600 hover:bg-blue-200 px-2 py-1 rounded-md border border-blue-300"
+      onClick={() => {
+        navigator.clipboard.writeText(`https://${item.link}`);
+        alert("Link copied to clipboard!"); // Optional: Feedback for the user
+      }}
+    >
+      Copy Link
+    </Button>
+  </div>
+</TableCell>
+
+
               <TableCell>{item.startDate}</TableCell>
               <TableCell>{item.lastDate}</TableCell>
               <TableCell>{item.totalCandidates}</TableCell>

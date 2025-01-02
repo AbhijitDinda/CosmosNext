@@ -21,6 +21,9 @@ const formSchema = z.object({
   description2: z.string().min(5, {
     message: "Assesment Instructions must be at least 5 characters.",
   }),
+  description3: z.string().min(5, {
+    message: "Assesment Objective must be at least 5 characters.",
+  }),
   testTimer: z.string(),
   file: z.any().optional(),
 });
@@ -31,6 +34,7 @@ const TestGroupForm = () => {
     defaultValues: {
       description1: "",
       description2: "",
+      description3:"",
       testTimer: "",
       file: "",
     },
@@ -90,6 +94,26 @@ const TestGroupForm = () => {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="description3"
+              render={({ field }) => (
+                <FormItem className="w-full ">
+                  <FormLabel className="text-lg font-semibold">
+                    Assesment Objective
+                  </FormLabel>
+                  <FormControl>
+                    <TextEditor
+                      className=""
+                      placeholder="Assesment Objective"
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}
@@ -106,6 +130,7 @@ const TestGroupForm = () => {
                 </FormItem>
               )}
             />
+            
 
             <FormField
               control={form.control}

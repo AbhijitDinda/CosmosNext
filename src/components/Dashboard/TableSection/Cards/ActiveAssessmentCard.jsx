@@ -64,16 +64,16 @@ const ActiveAssessmentCard = () => {
             {assessment.title}
           </h2>
           <div className="flex gap-2 items-center justify-between w-full xl:ps-8 flex-wrap">
-            <div className="grid md:grid-cols-2 grid-cols-2 items-center gap-4 flex-wrap">
-            <div className="text-sm">
+            {/* <div className="grid md:grid-cols-2 grid-cols-2 items-center gap-4 flex-wrap"> */}
+              <div className="text-sm">
                 <h2 className="text-nowrap">Code Name</h2>
                 <h1 className="font-bold text-sm">{assessment.codeName}</h1>
               </div>
-            
+
               <div className="text-sm">
                 <h2 className="text-nowrap">Candidate Assign</h2>
                 <h1 className="font-bold text-sm">{assessment.candidatesInvited}</h1>
-              </div>
+              {/* </div> */}
               
               {/* <div className="text-sm">
                 <h2 className="text-nowrap">Candidates Completed</h2>
@@ -93,14 +93,14 @@ const ActiveAssessmentCard = () => {
               </div> */}
             </div>
 
-            <Badge
+            {/* <Badge
               className={`text-nowrap shadow-none font-bold p-2 ${assessment.endDate === new Date().toJSON().slice(0, 10)
                 ? "bg-red-500 text-white hover:bg-text-Error"
                 : "bg-Label_Background text-label hover:bg-text-label"
                 } capitalize `}
             >
               {assessment.endDate === new Date().toJSON().slice(0, 10) ? "Ends Today" : `Ends ${assessment.endDate}`}
-            </Badge>
+            </Badge> */}
 
             <Button size="icon" variant="outline" className="rounded-sm border border-Secondary_Text">
               <ArrowRight className="!size-6 stroke-1 stroke-Secondary_Text" />
