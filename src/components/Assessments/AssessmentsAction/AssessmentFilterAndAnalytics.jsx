@@ -1,4 +1,4 @@
-import { CheckIcon, Edit2Icon, Star } from "lucide-react";
+import { CheckIcon, Edit2Icon, Star, CopyIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -7,6 +7,7 @@ import { DatePickerDemo } from "@/components/DatePicker";
 import Piechart from "@/components/Piechart";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+
 const stats = {
   invited: 65,
   completed: 45,
@@ -14,18 +15,25 @@ const stats = {
   averageScore: 71,
   topScore: 86,
 };
+
 export function AssessmentFilterAndAnalytics() {
   const [name, setName] = useState("Business Executive");
   const [label, setLabel] = useState("Active");
   const [edit, setEdit] = useState(false);
   const [editLabel, setEditLabel] = useState(false);
+  const [assessmentLink, setAssessmentLink] = useState("https://example.com/assessment-link");
   const endDate = "20 May 2024";
   const completionRate = (stats.completed / stats.invited) * 100;
 
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(assessmentLink);
+    
+  };
+
   return (
     <Card className="p-2 md:p-4 lg:p-6 rounded-sm mb-2 shadow-none font-OpenSans">
-      <div className="flex flex-wrap flex-col items-center gap-6">
-        {/*User Info Portion  */}
+      <div className="flex flex-wrap flex-col  gap-6">
+        {/* User Info Portion */}
         <div className="flex flex-wrap w-full lg:flex-nowrap gap-5 lg:gap-0 justify-between items-end">
           <div className="flex flex-wrap items-end gap-5">
             <div className="flex flex-col justify-center gap-1">
@@ -108,6 +116,26 @@ export function AssessmentFilterAndAnalytics() {
           </div>
         </div>
 
+        {/* Link of Assessment */}
+        <div className="flex flex-col gap-3 w-full md:w-auto">
+          <h2>Assessment Link</h2>
+          <div className="flex items-center gap-2 border px-3 py-2 rounded-sm w-full md:w-80">
+            <Input
+              value={assessmentLink}
+              className="border-none focus-visible:ring-0 shadow-none"
+              readOnly
+            />
+            <Button
+              variant="outline"
+              size="icon"
+              className="ml-2 h-8 w-28"
+              onClick={handleCopyLink}
+            > Copy
+              <CopyIcon />
+            </Button>
+          </div>
+        </div>
+
         {/* Analytics Portion */}
         <div className="grid grid-cols-1 gap-y-2 lg:grid-cols-5 lg:gap-6">
           <div className="flex flex-wrap items-center justify-center md:justify-normal col-span-1 md:col-span-2 gap-3 p-3 bg-Fourth rounded-sm">
@@ -120,20 +148,12 @@ export function AssessmentFilterAndAnalytics() {
                 <span className="ml-2 text-Primary_Text">{stats.invited}</span>
               </div>
               <div>
-                <span className="font-medium text-Secondary_Text">
-                  Completed
-                </span>
-                <span className="ml-2 text-Primary_Text">
-                  {stats.completed}
-                </span>
+                <span className="font-medium text-Secondary_Text">Completed</span>
+                <span className="ml-2 text-Primary_Text">{stats.completed}</span>
               </div>
               <div>
-                <span className="font-medium text-Secondary_Text">
-                  Disqualified
-                </span>
-                <span className="ml-2 text-Primary_Text">
-                  {stats.disqualified}
-                </span>
+                <span className="font-medium text-Secondary_Text">Disqualified</span>
+                <span className="ml-2 text-Primary_Text">{stats.disqualified}</span>
               </div>
             </div>
           </div>
@@ -141,9 +161,7 @@ export function AssessmentFilterAndAnalytics() {
           <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-3 p-3 bg-Fourth rounded-sm">
             <div className="flex flex-col gap-2">
               <h3 className="font-medium">Average Score</h3>
-              <span className="text-sm text-Primary_Text">
-                {stats.averageScore}%
-              </span>
+              <span className="text-sm text-Primary_Text">{stats.averageScore}%</span>
               <Progress
                 value={stats.averageScore}
                 className="h-2 bg-White shadow-md"
@@ -153,9 +171,7 @@ export function AssessmentFilterAndAnalytics() {
 
             <div className="flex flex-col gap-2">
               <h3 className="font-medium">Top Score</h3>
-              <span className="text-sm text-Primary_Text">
-                {stats.topScore}%
-              </span>
+              <span className="text-sm text-Primary_Text">{stats.topScore}%</span>
               <Progress
                 value={stats.topScore}
                 className="h-2 bg-White shadow-md"
