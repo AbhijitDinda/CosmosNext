@@ -14,6 +14,7 @@ import { useRouter } from "next/router"; // Next.js router for navigation
 import { Badge } from "../ui/badge";
 import { StatusBadge } from "@/lib/badgeUtils";
 import { Link as LinkIcon } from "lucide-react";
+import { Copy } from "lucide-react";
 
 const dummyData = [
   // Dummy Data for Testing Pagination
@@ -61,7 +62,7 @@ const AssessmentsTable = () => {
             <TableRow key={index} className="text-nowrap">
               <TableCell className="font-semibold">{item.name}</TableCell>
               <TableCell>
-  <div className="flex flex-col space-y-1">
+  <div className="flex gap-4">
     {/* Display the URL (Truncated) */}
     <a
       href={`https://${item.link}`} // Ensures the link is valid with HTTPS
@@ -77,13 +78,14 @@ const AssessmentsTable = () => {
     <Button
       size="sm"
       variant="ghost"
-      className="mt-1 text-xs bg-blue-100 text-blue-600 hover:bg-blue-200 px-2 py-1 rounded-md border border-blue-300"
+      className="mt-1 text-xs bg-blue-100 text-blue-600 hover:bg-blue-200 px-2 py-1 rounded-md border border-blue-300 flex items-center space-x-1"
       onClick={() => {
         navigator.clipboard.writeText(`https://${item.link}`);
         alert("Link copied to clipboard!"); // Optional: Feedback for the user
       }}
     >
-      Copy Link
+      <Copy className="w-4 h-4 text-blue-600" />
+      <span>Copy Link</span>
     </Button>
   </div>
 </TableCell>
