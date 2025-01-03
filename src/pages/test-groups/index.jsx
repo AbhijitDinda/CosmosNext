@@ -8,7 +8,7 @@ import {
   createColumnHelper,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"; 
 import { ArrowRight, Settings } from "lucide-react";
 import { useRouter } from "next/navigation"; // Use Next.js router
 
