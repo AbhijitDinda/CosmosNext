@@ -16,7 +16,7 @@ const Dashboard = () => {
         designation:`SDE${i+1}`,
         email: "adamsmith@gmail.com",
         assessment: ["List Of Assessment","Business Executive1","Business Executive2","Business Executive3","Business Executive4"],
-        status: i % 3 === 0 ? "Pending" : i % 2 === 0 ? "Ongoing" : "Invited",
+        status: i % 3 === 0 ?  "Ongoing" : "Invited",
         match: i % 3 === 0 ? "99%" : i % 2 === 0 ? "50%" : "",
         rank: i % 3 === 0 ? 1 : i % 2 === 0 ? 2 : null,
       })),
