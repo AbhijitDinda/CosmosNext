@@ -66,17 +66,21 @@ const TestGroups = () => {
     columnHelper.display({
       id: "actions",
       header: "",
-      cell: () => (
-        <Button
-          size="icon"
-          variant="outline"
-          className="p-2 border border-Secondary_Text"
-          onClick={() => router.push("/test-groups/action/")} // Use Next.js router
-        >
-          <ArrowRight className="!size-5 stroke-1 stroke-Secondary_Text" />
-        </Button>
-      ),
+      cell: (info) => {
+        const rowData = info.row.original; // Access the row's data
+        return (
+          <Button
+            size="icon"
+            variant="outline"
+            className="p-2 border border-Secondary_Text"
+            onClick={() => router.push(`/test-groups/action/${rowData.testName}`)} // Dynamic route
+          >
+            <ArrowRight className="!size-5 stroke-1 stroke-Secondary_Text" />
+          </Button>
+        );
+      },
     }),
+    
   ];
 
   const table = useReactTable({
