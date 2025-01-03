@@ -19,14 +19,14 @@ const CandidateFilter = () => {
           className="w-full max-w-[500px] rounded-sm"
         />
 
-        <Button
+        {/* <Button
           size="sm"
           variant="outline"
           className="rounded-sm hover:border hover:border-Primary hover:text-Primary text-white bg-Primary"
           //   onClick={() => navigate("/assessments/create")}
         >
           Create Assessment
-        </Button>
+        </Button> */}
       </div>
 
       <div className="flex flex-wrap gap-3 w-full justify-between text-Secondary_Text items-center">

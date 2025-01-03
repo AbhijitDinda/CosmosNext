@@ -64,7 +64,7 @@ const testResults = [
   }
 ];
 
-const listOfAssessment =["Team Inventory Assessment (TIA)","Motivation Drive Assessment (MDA),","Approach Assessment (AA)","Emotional Intelligence Assessment (EIA)","Team Inventory Assessment (TIA)","Emotional Intelligence Assessment (EIA)"]
+// const listOfAssessment =["Team Inventory Assessment (TIA)","Motivation Drive Assessment (MDA),","Approach Assessment (AA)","Emotional Intelligence Assessment (EIA)","Team Inventory Assessment (TIA)","Emotional Intelligence Assessment (EIA)"]
 
 const CandidateFilterAndAnalytics = () => {
   const form = useForm({
@@ -187,7 +187,7 @@ const CandidateFilterAndAnalytics = () => {
       </div>
 
       {/*List of Assessment Section */}
-      <div className='space-y-2'>
+      {/* <div className='space-y-2'>
         <h2>List of Assessment</h2>
         <div className="flex flex-wrap items-center gap-2 ">
           {listOfAssessment.map((assessment, index) => (
@@ -197,7 +197,7 @@ const CandidateFilterAndAnalytics = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* {Test Performance Section} */}
       <div className="pt-6 grid grid-cols-12 gap-4">

@@ -24,6 +24,13 @@ const dummyData = [
       name: `Business Executive ${i + 1}`,
       type: i % 2 === 0 ? "Basic" : "Adaptive",
       link: "http://137.184.46.213/cosmos/public/assessment/VFZSamVVOVVhM2xPYWxFMVQxaFZOR013VWs5T2JFVXhVMFY0Vm1OVlpEVlNSRTE1Vm1wT2RWVlZTa3hhUlVaNlpETlNWRnBuUFQwPQ==/login",
+      assessment: [
+        "List Of Assessment",
+        "Business Executive1",
+        "Business Executive2",
+        "Business Executive3",
+        "Business Executive4",
+      ],
       startDate: "19 May 2023",
       lastDate: "19 May 2023",
       totalCandidates: 23,
@@ -47,10 +54,10 @@ const AssessmentsTable = () => {
             {[
               "Designations",
               "Test Link",
+              "Assesments",
               "Start Date",
               "Last Date",
               "Total Candidates",
-              "Status",
               "",
             ].map((heading) => (
               <TableHead key={heading}>{heading}</TableHead>
@@ -62,41 +69,50 @@ const AssessmentsTable = () => {
             <TableRow key={index} className="text-nowrap">
               <TableCell className="font-semibold">{item.name}</TableCell>
               <TableCell>
-  <div className="flex gap-4">
-    {/* Display the URL (Truncated) */}
-    <a
-      href={`https://${item.link}`} // Ensures the link is valid with HTTPS
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-Primary hover:text-Primary_Dark flex items-center space-x-2 truncate max-w-xs"
-      title={`https://${item.link}`} // Show the full URL on hover
-    >
-      <LinkIcon className="w-4 h-4 text-Primary" />
-      <span className="underline">{item.link}</span>
-    </a>
+                <div className="flex gap-4">
+                  {/* Display the URL (Truncated) */}
+                  <a
+                    href={`https://${item.link}`} // Ensures the link is valid with HTTPS
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-Primary hover:text-Primary_Dark flex items-center space-x-2 truncate max-w-xs"
+                    title={`https://${item.link}`} // Show the full URL on hover
+                  >
+                    <LinkIcon className="w-4 h-4 text-Primary" />
+                    <span className="underline">{item.link}</span>
+                  </a>
 
-    <Button
-      size="sm"
-      variant="ghost"
-      className="mt-1 text-xs bg-blue-100 text-blue-600 hover:bg-blue-200 px-2 py-1 rounded-md border border-blue-300 flex items-center space-x-1"
-      onClick={() => {
-        navigator.clipboard.writeText(`https://${item.link}`);
-        alert("Link copied to clipboard!"); // Optional: Feedback for the user
-      }}
-    >
-      <Copy className="w-4 h-4 text-blue-600" />
-      <span>Copy Link</span>
-    </Button>
-  </div>
-</TableCell>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="mt-1 text-xs bg-blue-100 text-blue-600 hover:bg-blue-200 px-2 py-1 rounded-md border border-blue-300 flex items-center space-x-1"
+                    onClick={() => {
+                      navigator.clipboard.writeText(`https://${item.link}`);
+                      alert("Link copied to clipboard!"); // Optional: Feedback for the user
+                    }}
+                  >
+                    <Copy className="w-4 h-4 text-blue-600" />
+                    <span>Copy Link</span>
+                  </Button>
+                </div>
+              </TableCell>
+              <TableCell>
+                <select className="border rounded px-2 py-1 text-sm w-full">
+                  {item.assessment.map((assessment, idx) => (
+                    <option key={idx} value={assessment}>
+                      {assessment}
+                    </option>
+                  ))}
+                </select>
+              </TableCell>
 
 
               <TableCell>{item.startDate}</TableCell>
               <TableCell>{item.lastDate}</TableCell>
               <TableCell>{item.totalCandidates}</TableCell>
-              <TableCell>
+              {/* <TableCell>
                 <StatusBadge status={item.status} />
-              </TableCell>
+              </TableCell> */}
               <TableCell>
                 <Button
                   size="icon"

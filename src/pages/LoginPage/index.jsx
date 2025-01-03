@@ -50,7 +50,7 @@ const LoginPage = () => {
             variant="outline"
             className="w-full md:px-32 md:py-6 text-sm md:text-base font-semibold border rounded-sm bg-[#0076B2] text-White hover:text-White font-OpenSans hover:bg-[#0076B2]"
           >
-            Connect with Linkedin
+            Connect with Linkedin 1
           </Button>
           <Form {...form}>
             <form

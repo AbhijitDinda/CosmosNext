@@ -41,17 +41,17 @@ const TestGroups = () => {
     columnHelper.accessor("attempts", {
       header: "Test Attempts",
     }),
-    columnHelper.accessor("score", {
-      header: "Average Score",
-      cell: (info) => (
-        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-Primary text-White">
-          {info.getValue()}
-        </div>
-      ),
-    }),
+    // columnHelper.accessor("score", {
+    //   header: "Average Score",
+    //   cell: (info) => (
+    //     <div className="flex items-center justify-center w-8 h-8 rounded-full bg-Primary text-White">
+    //       {info.getValue()}
+    //     </div>
+    //   ),
+    // }),
     columnHelper.display({
       id: "actions",
-      header: "",
+      header: "Actions",
       cell: () => (
         <Button
           size="icon"
@@ -71,7 +71,7 @@ const TestGroups = () => {
           size="icon"
           variant="outline"
           className="p-2 border border-Secondary_Text"
-          onClick={() => router.push("/test-groups/action")} // Use Next.js router
+          onClick={() => router.push("/test-groups/action/")} // Use Next.js router
         >
           <ArrowRight className="!size-5 stroke-1 stroke-Secondary_Text" />
         </Button>

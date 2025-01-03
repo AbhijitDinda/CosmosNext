@@ -51,12 +51,12 @@ const LoginPage = () => {
           </h4>
         </div>
         <div className="flex flex-col gap-3 md:gap-6 w-[250px] md:w-[440px] items-center">
-          <Button
+          {/* <Button
             variant="outline"
             className="w-full md:px-32 md:py-6 text-sm md:text-base font-semibold border rounded-sm bg-[#0076B2] text-White hover:text-White font-OpenSans hover:bg-[#0076B2]"
           >
             Connect with Linkedin
-          </Button>
+          </Button> */}
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -109,14 +109,14 @@ const LoginPage = () => {
             </form>
           </Form>
         </div>
-        <div className="">
+        {/* <div className="">
           <p className="text-xs md:text-sm text-TEXT_P">
             Already have an account?{" "}
             <Link href="#" className="font-bold">
               Sign in here.
             </Link>
           </p>
-        </div>
+        </div> */}
       </div>
     </div>
   );
