@@ -90,13 +90,13 @@ const Navbar = () => {
             {dropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 shadow-lg rounded-md z-20 overflow-hidden">
                 {/* Profile Option */}
-                <div
+                {/* <div
                   className="flex items-center px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-100 cursor-pointer transition duration-150 ease-in-out"
                   onClick={handleProfile}
                 >
-                  <User className="w-5 h-5 mr-2 text-gray-500" /> {/* Lucide Profile Icon */}
+                  <User className="w-5 h-5 mr-2 text-gray-500" />
                   Profile
-                </div>
+                </div> */}
 
                 {/* Log Out Option */}
                 <div
