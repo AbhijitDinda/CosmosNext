@@ -124,26 +124,32 @@ const router = useRouter();
     {
       id: "actions",
       header: "",
-      cell: () => (
-        <div className="flex justify-end gap-2">
-          <Button
-            size="sm"
-            variant="outline"
-            className="rounded-sm border border-Primary text-Primary hover:text-white hover:bg-Primary"
-          >
-            Select for next stage
-          </Button>
-          <Button
-            size="icon"
-            variant="outline"
-            className="p-2 border border-Secondary_Text"
-            onClick={() => router.push("/candidates/action")}
-          >
-            <ArrowRight className="!size-5 stroke-1 stroke-Secondary_Text" />
-          </Button>
-        </div>
-      ),
-    },
+      cell: ({ row }) => {
+        const candidateName = row.original.name; // Access the candidate's name
+        return (
+          <div className="flex justify-end gap-2">
+            <Button
+              size="sm"
+              variant="outline"
+              className="rounded-sm border border-Primary text-Primary hover:text-white hover:bg-Primary"
+            >
+              Select for next stage
+            </Button>
+            <Button
+              size="icon"
+              variant="outline"
+              className="p-2 border border-Secondary_Text"
+              onClick={() =>
+                router.push(`/candidates/action/${encodeURIComponent(candidateName)}`)
+              }
+            >
+              <ArrowRight className="!size-5 stroke-1 stroke-Secondary_Text" />
+            </Button>
+          </div>
+        );
+      },
+    }
+    
   ];
 
   // Table Initialization
@@ -182,7 +188,7 @@ const router = useRouter();
           ))}
         </div>
         <div className="space-y-2">
-          <label className="font-medium">Score</label>
+          {/* <label className="font-medium">Score</label>
           <Select>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Theme" />
@@ -192,7 +198,7 @@ const router = useRouter();
               <SelectItem value="dark">Dark</SelectItem>
               <SelectItem value="system">System</SelectItem>
             </SelectContent>
-          </Select>
+          </Select> */}
         </div>
       </div>
 
