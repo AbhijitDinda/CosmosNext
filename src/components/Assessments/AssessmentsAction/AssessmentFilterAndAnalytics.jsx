@@ -65,7 +65,7 @@ export function AssessmentFilterAndAnalytics() {
               <DatePickerDemo buttonClassName="text-sm h-12 w-full max-w-40 items-center border px-3 py-2 rounded-sm" />
             </div>
 
-            <div className="flex gap-4">
+            {/* <div className="flex gap-4">
               {["Basic", "Active"].map((label) => (
                 <Badge
                   key={label}
@@ -95,10 +95,10 @@ export function AssessmentFilterAndAnalytics() {
                   )}
                 </Badge>
               ))}
-            </div>
+            </div> */}
           </div>
 
-          <div className="flex gap-5">
+          {/* <div className="flex gap-5">
             <Button
               size="sm"
               variant="outline"
@@ -113,7 +113,7 @@ export function AssessmentFilterAndAnalytics() {
             >
               Edit
             </Button>
-          </div>
+          </div> */}
         </div>
 
         {/* Link of Assessment */}
@@ -158,7 +158,7 @@ export function AssessmentFilterAndAnalytics() {
             </div>
           </div>
 
-          <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-3 p-3 bg-Fourth rounded-sm">
+          {/* <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-3 p-3 bg-Fourth rounded-sm">
             <div className="flex flex-col gap-2">
               <h3 className="font-medium">Average Score</h3>
               <span className="text-sm text-Primary_Text">{stats.averageScore}%</span>
@@ -192,7 +192,7 @@ export function AssessmentFilterAndAnalytics() {
                 />
               ))}
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </Card>
