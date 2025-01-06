@@ -13,9 +13,9 @@ import SvgStars from '@/svgs/SvgStars';
 const tabsConfig = [
     { value: "overview", label: "Overview", component: <OverviewTab /> },
     { value: "tests", label: "Tests", component: <TestsTab /> },
-    { value: "insights", label: "Insights and Visualizations", component: <InsightsTab /> },
-    { value: "analysis", label: "AI Analysis and Matching", component: <AnalysisTab /> },
-    { value: "preferences", label: "Preferences", component: <PreferencesTab /> },
+    // { value: "insights", label: "Insights and Visualizations", component: <InsightsTab /> },
+    // { value: "analysis", label: "AI Analysis and Matching", component: <AnalysisTab /> },
+    // { value: "preferences", label: "Preferences", component: <PreferencesTab /> },
     { value: "personality", label: "Personality", component: <PersonalityTab /> },
 ];
 

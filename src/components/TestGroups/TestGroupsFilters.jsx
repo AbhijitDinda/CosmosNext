@@ -20,14 +20,14 @@ const TestGroupsFilter = ({ table }) => {
               }
               className="w-full md:w-[500px] rounded-sm"
             />
-            <Button
+            {/* <Button
               size="sm"
               variant="outline"
               className="rounded-sm hover:border hover:border-Primary hover:text-Primary text-white bg-Primary"
               onClick={() => router.push("/test-groups/create")} // Use Next.js routing method
             >
               Create Test
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>
