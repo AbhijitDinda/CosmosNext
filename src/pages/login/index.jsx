@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useRouter } from "next/router"; // Next.js router for navigation
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -11,18 +12,21 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import Link  from "next/link";
+import Link from "next/link"; // Replace React Router's Link with Next.js Link
 
 const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+  username: z.string().min(1, {
+    message: "Name is required.",
   }),
-  email: z.string().email({
-    message: "Please enter a valid email address.",
+  password: z.string().min(1, {
+    message: "Password is required.",
   }),
 });
 
+
 const LoginPage = () => {
+  const router = useRouter(); // Next.js router
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,10 +37,11 @@ const LoginPage = () => {
 
   function onSubmit(values) {
     console.log(values);
+    router.push("/dashboard"); // Navigate to the dashboard after form submission
   }
 
   return (
-    <div className="w-full min-h-screen flex justify-center items-center bg-Fourth">
+    <div className="w-full min-h-screen flex justify-center items-center bg-Fourth ">
       <div className="container flex flex-col items-center w-[330px] md:w-[700px] px-5 md:px-8 py-3 md:py-6 border rounded-sm gap-3 md:gap-6 bg-White font-OpenSans">
         <div className="flex flex-col gap-1 md:gap-6 items-center">
           <img src="/svgs/logo.svg" alt="logo" className="size-8 md:size-12" />
@@ -46,12 +51,12 @@ const LoginPage = () => {
           </h4>
         </div>
         <div className="flex flex-col gap-3 md:gap-6 w-[250px] md:w-[440px] items-center">
-          <Button
+          {/* <Button
             variant="outline"
             className="w-full md:px-32 md:py-6 text-sm md:text-base font-semibold border rounded-sm bg-[#0076B2] text-White hover:text-White font-OpenSans hover:bg-[#0076B2]"
           >
-            Connect with Linkedin 1
-          </Button>
+            Connect with Linkedin
+          </Button> */}
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -59,14 +64,14 @@ const LoginPage = () => {
             >
               <FormField
                 control={form.control}
-                name="name"
+                name="username"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm md:text-base">Name</FormLabel>
+                    <label className="text-sm md:text-base">Username</label>
                     <FormControl>
                       <Input
                         className="rounded-sm text-xs md:px-3 md:py-6"
-                        placeholder="Name"
+                        placeholder="username"
                         {...field}
                       />
                     </FormControl>
@@ -76,16 +81,16 @@ const LoginPage = () => {
               />
               <FormField
                 control={form.control}
-                name="email"
+                name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm md:text-base">
-                      Email
-                    </FormLabel>
+                    <label className="text-sm md:text-base">
+                    Password
+                    </label>
                     <FormControl>
-                      <Input
+                      <Input type="password"
                         className="rounded-sm text-xs md:px-3 md:py-6"
-                        placeholder="Email"
+                        placeholder="Password"
                         {...field}
                       />
                     </FormControl>
@@ -94,26 +99,24 @@ const LoginPage = () => {
                 )}
               />
               <div className="py-3 flex justify-center items-center">
-                <Link href={"/dashboard"}>
-                  <Button
-                    type="submit"
-                    className="rounded-sm bg-Lines px-4 md:px-6 py-4 md:py-6 text-White text-sm md:text-base font-semibold"
-                  >
-                    Continue
-                  </Button>
-                </Link>
+                <Button
+                  type="submit"
+                  className="rounded-sm bg-Lines px-4 md:px-6 py-4 md:py-6 text-White text-sm md:text-base font-semibold"
+                >
+                  Continue
+                </Button>
               </div>
             </form>
           </Form>
         </div>
-        <div className="">
+        {/* <div className="">
           <p className="text-xs md:text-sm text-TEXT_P">
             Already have an account?{" "}
-            <Link href={"#"} className="font-bold">
+            <Link href="#" className="font-bold">
               Sign in here.
             </Link>
           </p>
-        </div>
+        </div> */}
       </div>
     </div>
   );
