@@ -11,7 +11,7 @@ export const useSignin = () => {
         onSuccess: (response) => {
             console.log('Scuccessfully signed in', response);
 
-            const userObject = JSON.stringify(response.data);
+            // const userObject = JSON.stringify(response.data);
             
 
             // localStorage.setItem('user', userObject);
