@@ -1,8 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 
 import { signInRequest } from '@/apis/Auth';
+import { useAuth } from "@/hooks/context/uesAuth";
 
 export const useSignin = () => {
+    const { setAuth } = useAuth();
 
     const { isPending, isSuccess, error, mutateAsync: signinMutation } = useMutation({
         mutationFn: signInRequest,
@@ -14,6 +16,9 @@ export const useSignin = () => {
 
             // localStorage.setItem('user', userObject);
             localStorage.setItem('token', response.token);
+            setAuth({
+                token: response.token,
+            });
 
 
         },
