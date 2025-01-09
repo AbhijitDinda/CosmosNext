@@ -27,11 +27,11 @@ export default function App({ Component, pageProps }) {
         {!isNavbarExcluded && <Navbar />}
 
         {/* Main Content */}
-        <div
-          className={`pt-0 md:pt-5 lg:pt-24 bg-Fourth min-h-screen`}
-        >
+        <div className={`pt-0 md:pt-5 lg:pt-24 bg-Fourth min-h-screen`}>
           <Component {...pageProps} />
         </div>
+
+
       </QueryClientProvider>
     </>
   );

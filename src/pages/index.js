@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useRouter } from "next/router"; // Next.js router for navigation
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -51,12 +51,15 @@ const LoginPage = () => {
       });
   
       // Redirect only if sign-in was successful
-      if (isSuccess) {
-        console.log("Sign-in successful, redirecting to dashboard...");
-        router.push("/dashboard");
-      } else {
-        console.log("Sign-in not successful, isSuccess:", isSuccess);
-      }
+      // if (isSuccess) {
+      //   console.log("Sign-in successful, redirecting to dashboard...",isSuccess);
+      //   router.push("/dashboard");
+      // } else {
+      //   console.log("Sign-in not successful, isSuccess:", isSuccess);
+      // }
+
+
+      
     } catch (err) {
       console.error("Sign-in failed:", err);
     }
@@ -70,6 +73,15 @@ const LoginPage = () => {
       [name]: value,
     }));
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      console.log("Sign-in successful, redirecting to dashboard...",isSuccess);
+      router.push("/dashboard");
+    } else {
+      console.log("Sign-in not successful, isSuccess:", isSuccess);
+    }
+  }, [isSuccess]);
 
   return (
     <div className="w-full min-h-screen flex justify-center items-center bg-Fourth">
