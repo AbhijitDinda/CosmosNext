@@ -5,12 +5,17 @@ import { CircleUserRound } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { User, LogOut } from 'lucide-react';
 import Image from "next/image";
+import { useAuth } from "@/hooks/context/uesAuth"
+
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null); // Ref for dropdown
   const router = useRouter();
+
+
+  const {auth,logout } = useAuth();
 
   const handleMenu = () => {
     setOpen(!open);
@@ -24,8 +29,9 @@ const Navbar = () => {
     router.push("/profile");
   };
 
-  const handleLogout = () => {
+  async function handleLogout () {
     console.log("User logged out");
+    await logout();
     router.push("/");
   };
 
