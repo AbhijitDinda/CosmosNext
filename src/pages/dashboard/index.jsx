@@ -8,6 +8,7 @@ import { useGetDashboard } from "@/hooks/apis/dashboard/useGetDashboard";
 const Dashboard = () => {
 
   const {isFetching,isSuccess,error,dashboardData} = useGetDashboard();
+  console.log("Data of Dashboard",dashboardData);
   
   const dummyData = [
     // Dummy data to mimic the example
