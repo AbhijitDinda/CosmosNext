@@ -80,7 +80,7 @@ const CandidateTable = ({data,number,item_per_page }) => {
                 )} */}
               </TableCell>
               <TableCell>
-                <Link href={`/candidates/action/${item.name}`}>
+                <Link href={`/candidates/action/${item.candidate_id}`}>
                   <Button
                     size="icon"
                     variant="outline"
