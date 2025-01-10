@@ -3,7 +3,7 @@ import AssesmentCard from './Cards/AssesmentCard';
 import SvgNotes from '../../../../public/svgs/SvgNotes';
 import SvgUsers from '../../../../public/svgs/SvgUsers';
 
-const DashboardCardsSection = () => {
+const DashboardCardsSection = ({totalUsers,totalTests}) => {
   return (
     <div className="bg-white p-4 flex flex-col gap-4">
       <h2 className="text-xl font-normal">Your recruitment at a glance</h2>
@@ -12,13 +12,13 @@ const DashboardCardsSection = () => {
         <AssesmentCard
           title="Active Assesments"
           action="Go to assesments"
-          amount={12}
+          amount={totalTests}
           icon={<SvgNotes />}
         />
         <AssesmentCard
           title="Total Candidates"
           action="Go to candidates"
-          amount={1200}
+          amount={totalUsers}
           icon={<SvgUsers />}
         />
       </div>

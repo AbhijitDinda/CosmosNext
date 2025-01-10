@@ -14,7 +14,6 @@ export const getDashboardDetails = async ({ token },logout) => {
         if (error.response?.status === 401) {
             unauthorizedErrorResponse(logout);
             return;
-
         } else {
             console.error("meeeeee", error);
             throw error;

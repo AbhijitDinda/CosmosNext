@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/router";
+import { Toaster } from "@/components/ui/toaster";
 
 import Navbar from "@/components/Navbar/Navbar";
 import "@/styles/globals.css";
@@ -40,6 +41,8 @@ export default function App({ Component, pageProps }) {
             )
           )}
         </div>
+        <Toaster />
+        
       </AuthContextProvider>
     </QueryClientProvider>
   );

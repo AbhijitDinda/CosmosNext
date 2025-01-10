@@ -26,19 +26,14 @@ const dummyData = [
   })),
 ];
 
-const CandidateTable = ({ data }) => {
-  const ITEMS_PER_PAGE = 10;
+const CandidateTable = ({data,number,item_per_page }) => {
+  console.log("aaa",data)
+  const displayedData = number ? data.slice(0, number) : data;
 
-  // Use passed `data` or fallback to `dummyData`
-  const initialData = data || dummyData;
   const [currentPageData, setCurrentPageData] = useState(
-    initialData.slice(0, ITEMS_PER_PAGE)
+    displayedData.slice(0, item_per_page)
   );
 
-  useEffect(() => {
-    // Update table data if `data` prop changes
-    setCurrentPageData(initialData.slice(0, ITEMS_PER_PAGE));
-  }, [data]);
 
   return (
     <div className="overflow-auto font-OpenSans p-4">
@@ -57,10 +52,10 @@ const CandidateTable = ({ data }) => {
           {currentPageData.map((item, index) => (
             <TableRow key={index} className="text-nowrap">
               <TableCell className="font-semibold">{index + 1}</TableCell>
-              <TableCell className="font-semibold">{item.name}</TableCell>
-              <TableCell className="font-semibold">{item.CandidateId}</TableCell>
+              <TableCell className="font-semibold">{item.user_name}</TableCell>
+              <TableCell className="font-semibold">{item.candidate_id}</TableCell>
               <TableCell className="font-semibold">{item.designation}</TableCell>
-              <TableCell>{item.email}</TableCell>
+              <TableCell>{item.user_email}</TableCell>
               {/* <TableCell>
                 <select className="border rounded px-2 py-1 text-sm w-full">
                   {item.assessment.map((assessment, idx) => (
@@ -71,7 +66,7 @@ const CandidateTable = ({ data }) => {
                 </select>
               </TableCell> */}
               <TableCell>
-                <StatusBadge status={item.status} />
+                <StatusBadge status={item.test_status} />
               </TableCell>
               <TableCell>
                 {/* Match & Rank (Commented Out) */}
@@ -101,11 +96,15 @@ const CandidateTable = ({ data }) => {
       </Table>
 
       {/* Pagination */}
-      <Pagination
-        paginationData={initialData}
-        setPaginatedData={setCurrentPageData}
-        itemsPerPage={ITEMS_PER_PAGE}
-      />
+      
+      
+      {item_per_page < displayedData.length && (
+        <Pagination
+          paginationData={displayedData}
+          setPaginatedData={setCurrentPageData}
+          itemsPerPage={item_per_page}
+        />
+      )}
     </div>
   );
 };
