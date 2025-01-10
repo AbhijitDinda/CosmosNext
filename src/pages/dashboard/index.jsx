@@ -3,9 +3,12 @@ import DashboardTableSection from "@/components/Dashboard/TableSection/Dashboard
 import CandidateTable from "@/components/Candidate/CandidateTable";
 import Heading from "@/components/Heading";
 import React from "react";
+import { useGetDashboard } from "@/hooks/apis/dashboard/useGetDashboard";
 
 const Dashboard = () => {
 
+  const {isFetching,isSuccess,error,dashboardData} = useGetDashboard();
+  
   const dummyData = [
     // Dummy data to mimic the example
     ...Array(50)
