@@ -11,6 +11,8 @@ const Dashboard = () => {
 
   const {isFetching,isSuccess,error,dashboardData} = useGetDashboard();
   console.log("Data of Dashboard",dashboardData);
+  const { auth,logout } = useAuth();
+  console.log("auth", auth);
   
   const dummyData = [
     // Dummy data to mimic the example
@@ -31,11 +33,9 @@ const Dashboard = () => {
 
   // const { logout } = useAuth();
   // console.log("errorrrrrr", error)
-  // useEffect(() => {
-  //   if (error) {
-  //     unauthorizedErrorResponse(error, logout);
-  //   }
-  // }, [error]);
+  useEffect(() => {
+    console.log("check")
+  }, [error]);
 
   
 

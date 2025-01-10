@@ -1,6 +1,6 @@
 import axios from '@/config/axiosConfig';
 import { unauthorizedErrorResponse } from "@/utils/Responseobj/responseObject";
-export const getDashboardDetails = async ({ token }, logout) => {
+export const getDashboardDetails = async ({ token },logout) => {
     try {
         const response = await axios.get('/admin/dashboard', {
             headers: {
@@ -12,7 +12,7 @@ export const getDashboardDetails = async ({ token }, logout) => {
         return response;
     } catch (error) {
         if (error.response?.status === 401) {
-            await unauthorizedErrorResponse(error, logout);
+            unauthorizedErrorResponse(logout);
             return;
 
         } else {

@@ -26,10 +26,12 @@ export const AuthContextProvider = ({ children }) =>{
 
 
     async function logout() {
-        localStorage.removeItem('token');
         setAuth({
             token: null
         });
+        console.log("logout")
+        localStorage.removeItem('token');
+        
     }
 
     return (
