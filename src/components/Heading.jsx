@@ -6,7 +6,7 @@ import { ArrowLeft } from "lucide-react";
 const Heading = ({ title = "provide title", amount = "" }) => {
   const router = useRouter();
   const role = router?.query?.assesment; // Extract `role` from query params
-  console.log(router.query.assesment)
+  // console.log(router.query.assesment)
 
   return (
     <div className="flex gap-3 items-center px-6 py-2 bg-Primary_Text text-White xl:rounded-t-sm">

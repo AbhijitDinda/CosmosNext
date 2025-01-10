@@ -1,17 +1,24 @@
 import axios from '@/config/axiosConfig';
-
-export const getDashboardDetails = async ({token}) => {
+import { unauthorizedErrorResponse } from "@/utils/Responseobj/responseObject";
+export const getDashboardDetails = async ({ token }, logout) => {
     try {
-        const response = await axios.get('/admin/dashboard',{
+        const response = await axios.get('/admin/dashboard', {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
             }
         });
-        
+
         return response;
-    } catch(error) {
-        console.error(error);
-        throw error;     
+    } catch (error) {
+        if (error.response?.status === 401) {
+            await unauthorizedErrorResponse(error, logout);
+            return;
+
+        } else {
+            console.error("meeeeee", error);
+            throw error;
+        }
+
     }
 };

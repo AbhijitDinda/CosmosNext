@@ -1,15 +1,16 @@
 import {useQuery } from '@tanstack/react-query';
 import { getDashboardDetails } from '@/apis/dashboard';
 import { useAuth } from "@/hooks/context/uesAuth";
-
+import { unauthorizedErrorResponse } from "@/utils/Responseobj/responseObject";
 export const useGetDashboard = () => {
-    const { auth } = useAuth();
+    const { auth, logout} = useAuth();
 
 
     const {isFetching,isSuccess,error,data:dashboardData } = useQuery({
-        queryFn:()=> getDashboardDetails({token:auth?.token}),
-        queryKey:'getDashboard',
-        // staleTime:30000
+        queryFn: () => getDashboardDetails({ token: auth?.token },logout),
+        queryKey: ['getDashboard'],
+        
+
 
     })
 

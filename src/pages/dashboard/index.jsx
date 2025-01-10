@@ -4,7 +4,9 @@ import CandidateTable from "@/components/Candidate/CandidateTable";
 import Heading from "@/components/Heading";
 import React from "react";
 import { useGetDashboard } from "@/hooks/apis/dashboard/useGetDashboard";
-
+import { unauthorizedErrorResponse } from "@/utils/Responseobj/responseObject";
+import { useEffect } from "react";
+import { useAuth } from "@/hooks/context/uesAuth";
 const Dashboard = () => {
 
   const {isFetching,isSuccess,error,dashboardData} = useGetDashboard();
@@ -25,6 +27,15 @@ const Dashboard = () => {
         rank: i % 3 === 0 ? 1 : i % 2 === 0 ? 2 : null,
       })),
   ];
+
+
+  // const { logout } = useAuth();
+  // console.log("errorrrrrr", error)
+  // useEffect(() => {
+  //   if (error) {
+  //     unauthorizedErrorResponse(error, logout);
+  //   }
+  // }, [error]);
 
   
 
