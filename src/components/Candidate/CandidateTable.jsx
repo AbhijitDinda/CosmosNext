@@ -26,12 +26,12 @@ const dummyData = [
   })),
 ];
 
-const CandidateTable = ({data,number,item_per_page }) => {
-  console.log("aaa",data)
-  const displayedData = number ? data.slice(0, number) : data;
+const CandidateTable = ({data,item_per_page,pagination }) => {
+  // console.log("aaa",data);
+  // const displayedData = item_per_page ? data.slice(0, item_per_page) : data;
 
   const [currentPageData, setCurrentPageData] = useState(
-    displayedData.slice(0, item_per_page)
+    data.slice(0, item_per_page)
   );
 
 
@@ -98,9 +98,9 @@ const CandidateTable = ({data,number,item_per_page }) => {
       {/* Pagination */}
       
       
-      {item_per_page < displayedData.length && (
+      {pagination && (
         <Pagination
-          paginationData={displayedData}
+          paginationData={data}
           setPaginatedData={setCurrentPageData}
           itemsPerPage={item_per_page}
         />

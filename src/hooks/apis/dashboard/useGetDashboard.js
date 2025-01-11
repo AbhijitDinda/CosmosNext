@@ -6,7 +6,7 @@ export const useGetDashboard = () => {
     const {auth,logout} = useAuth();
 
 
-    const {isFetching,isSuccess,error,data:dashboardData } = useQuery({
+    const {isFetching,isLoading,isError ,isSuccess,error,data:dashboardData } = useQuery({
         queryFn: () => getDashboardDetails({ token: auth?.token },logout),
         queryKey: ['getDashboard']
         
@@ -16,7 +16,9 @@ export const useGetDashboard = () => {
 
     return{
         isFetching,
+        isLoading,
         isSuccess,
+        isError,
         error,
         dashboardData
     }

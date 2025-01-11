@@ -1,8 +1,8 @@
 import axios from '@/config/axiosConfig';
 import { unauthorizedErrorResponse } from "@/utils/Responseobj/responseObject";
-export const getDashboardDetails = async ({ token },logout) => {
+export const getAllCandidates = async ({ token },logout) => {
     try {
-        const response = await axios.get('/admin/dashboard', {
+        const response = await axios.get('/admin/candidates', {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
@@ -15,7 +15,7 @@ export const getDashboardDetails = async ({ token },logout) => {
             unauthorizedErrorResponse(logout);
             return;
         } else {
-            console.error("error in Get dashboard details", error);
+            console.error("Error in Get all Candidates", error);
             throw error;
         }
 
