@@ -1,35 +1,101 @@
+import React, { useState } from "react";
 import CandidateFilter from "@/components/Candidate/CandidateFilter";
 import CandidateTable from "@/components/Candidate/CandidateTable";
 import Heading from "@/components/Heading";
-import React from "react";
-import { Skeleton } from "@/components/ui/skeleton"
+import { Skeleton } from "@/components/ui/skeleton";
 import { useAllcandidates } from "@/hooks/apis/candidates/useAllcandidates";
+import { useFilterAllCandidates } from "@/hooks/apis/candidates/useFilterAllCandidates";
+
+
 
 const CandidatePage = () => {
-    const { isFetching,isLoading, isSuccess, error, allCandidatesData } = useAllcandidates();
-    console.log("allCandidatesData",allCandidatesData?.data?.data);
+  const [filters, setFilters] = useState({
+    search: "",
+    designation: "",
+    status: "",
+    page: 1, // Add page number to filters
+  });
 
+  console.log("filters", filters);
+
+  // Fetch all candidates (default)
+  const {
+    isFetching: isFetchingAll,
+    isLoading: isLoadingAll,
+    allCandidatesData,
+  } = useAllcandidates(filters.page);
+
+  // Fetch filtered candidates
+  const {
+    isFetching: isFetchingFiltered,
+    isLoading: isLoadingFiltered,
+    filterCandidateData,
+  } = useFilterAllCandidates(filters);
+
+  // Determine whether to use filtered or unfiltered data
+  const isFilteringActive =
+    filters.search || filters.designation || filters.status;
+
+  const candidatesData = isFilteringActive
+    ? filterCandidateData?.data?.data
+    : allCandidatesData?.data?.data?.data;
+
+  const totalPages = isFilteringActive
+    ? filterCandidateData?.data?.last_page
+    : allCandidatesData?.data?.data?.last_page;
+
+  const currentPageNumber = isFilteringActive
+    ? filterCandidateData?.data?.current_page
+    : allCandidatesData?.data?.data?.current_page;
+
+  const isLoading = isLoadingAll || isLoadingFiltered;
+  const isFetching = isFetchingAll || isFetchingFiltered;
+
+  // Handle pagination
+  const handlePageChange = (page) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      page,
+    }));
+  };
+
+  // Handle filter changes
+  const handleFilterChange = (updatedFilters) => {
+    setFilters({
+      ...updatedFilters,
+      page: 1, // Reset to page 1 when filters are applied
+    });
+  };
 
   return (
-    <>
-    {(isLoading) ?
-      <div className="flex items-center space-x-4">
-        <Skeleton className="h-12 w-12 rounded-full" />
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-[250px]" />
-          <Skeleton className="h-4 w-[200px]" />
-        </div>
+    <section className="mx-auto rounded-sm w-full max-w-screen-xl">
+      <Heading title="Candidate" />
+      <div className="p-4 bg-White rounded-sm">
+        <CandidateFilter filters={filters} onFilterChange={handleFilterChange} />
+        {isLoading || isFetching ? (
+          <div className="flex items-center space-x-4">
+            <Skeleton className="h-12 w-12 rounded-full" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-[250px]" />
+              <Skeleton className="h-4 w-[200px]" />
+            </div>
+          </div>
+        ) : candidatesData && candidatesData.length > 0 ? (
+          <CandidateTable
+            data={candidatesData}
+            item_per_page={10}
+            pagination={true}
+            total_page={totalPages}
+            current_page={currentPageNumber}
+            handlePageChange={handlePageChange}
+          />
+        ) : (
+          <div className="text-center text-gray-500 p-4">
+            <p>No candidates found matching the criteria.</p>
+          </div>
+        )}
       </div>
-      :
-      <section className="mx-auto rounded-sm w-full max-w-screen-xl">
-        <Heading title="Candidate" />
-        <div className="p-4 bg-White rounded-sm">
-          <CandidateFilter />
-          <CandidateTable data={allCandidatesData?.data?.data?.data} item_per_page={10} pagination={true}/>
-        </div>
-      </section>
-    }
-    </>
+    </section>
   );
 };
 

@@ -26,7 +26,7 @@ const dummyData = [
   })),
 ];
 
-const CandidateTable = ({data,item_per_page,pagination }) => {
+const CandidateTable = ({data,item_per_page,pagination,total_page = 1,current_page = 1,handlePageChange }) => {
   // console.log("aaa",data);
   // const displayedData = item_per_page ? data.slice(0, item_per_page) : data;
 
@@ -51,7 +51,7 @@ const CandidateTable = ({data,item_per_page,pagination }) => {
         <TableBody>
           {currentPageData.map((item, index) => (
             <TableRow key={index} className="text-nowrap">
-              <TableCell className="font-semibold">{index + 1}</TableCell>
+              <TableCell className="font-semibold">{((current_page-1)*10)+index + 1}</TableCell>
               <TableCell className="font-semibold">{item.user_name}</TableCell>
               <TableCell className="font-semibold">{item.candidate_id}</TableCell>
               <TableCell className="font-semibold">{item.designation}</TableCell>
@@ -100,10 +100,10 @@ const CandidateTable = ({data,item_per_page,pagination }) => {
       
       {pagination && (
         <Pagination
-          paginationData={data}
-          setPaginatedData={setCurrentPageData}
-          itemsPerPage={item_per_page}
-        />
+        totalPages={total_page}
+        currentPage={current_page}
+        onPageChange={handlePageChange}
+      />
       )}
     </div>
   );

@@ -1,30 +1,19 @@
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  ArrowLeft,
-  ArrowRight,
-  ChevronsLeft,
-  ChevronsRight,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronsLeft, ChevronsRight } from "lucide-react";
+import { Button } from "@/components/ui/button"; // Make sure to import your Button component
 
-const Pagination = ({ paginationData, setPaginatedData, itemsPerPage }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(paginationData.length / itemsPerPage);
+const Pagination = ({ totalPages=5, currentPage=1, onPageChange = null }) => {
+  const [numbers, setNumbers] = useState([]);
 
   const handlePageChange = (page) => {
     if (page > 0 && page <= totalPages) {
-      setCurrentPage(page);
-      const newData = paginationData.slice(
-        (page - 1) * itemsPerPage,
-        page * itemsPerPage
-      );
-      setPaginatedData(newData);
+      onPageChange(page);
     }
   };
 
   const renderPageNumbers = () => {
     const numbers = [];
-
+    
     if (totalPages <= 3) {
       for (let i = 1; i <= totalPages; i++) {
         numbers.push(
@@ -88,6 +77,7 @@ const Pagination = ({ paginationData, setPaginatedData, itemsPerPage }) => {
         );
       }
     }
+
     return numbers;
   };
 
