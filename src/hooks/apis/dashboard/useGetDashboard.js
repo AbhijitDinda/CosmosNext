@@ -5,13 +5,9 @@ import { unauthorizedErrorResponse } from "@/utils/Responseobj/responseObject";
 export const useGetDashboard = () => {
     const {auth,logout} = useAuth();
 
-
     const {isFetching,isLoading,isError ,isSuccess,error,data:dashboardData } = useQuery({
         queryFn: () => getDashboardDetails({ token: auth?.token },logout),
         queryKey: ['getDashboard']
-        
-
-
     })
 
     return{

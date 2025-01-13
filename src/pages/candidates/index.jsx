@@ -5,6 +5,7 @@ import Heading from "@/components/Heading";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAllcandidates } from "@/hooks/apis/candidates/useAllcandidates";
 import { useFilterAllCandidates } from "@/hooks/apis/candidates/useFilterAllCandidates";
+import { useAllDesignation } from "@/hooks/apis/designation/useAllDesignation";
 
 
 
@@ -16,7 +17,7 @@ const CandidatePage = () => {
     page: 1, // Add page number to filters
   });
 
-  console.log("filters", filters);
+  // console.log("filters", filters);
 
   // Fetch all candidates (default)
   const {
@@ -31,6 +32,15 @@ const CandidatePage = () => {
     isLoading: isLoadingFiltered,
     filterCandidateData,
   } = useFilterAllCandidates(filters);
+
+  //Fatch Designation 
+  const {
+    isFetching: isFetchingDesignation,
+    isLoading: isLoadingDesignation,
+    designationData,
+  } = useAllDesignation();
+  console.log("designationData list",designationData?.data?.data?.data)
+
 
   // Determine whether to use filtered or unfiltered data
   const isFilteringActive =
@@ -71,7 +81,7 @@ const CandidatePage = () => {
     <section className="mx-auto rounded-sm w-full max-w-screen-xl">
       <Heading title="Candidate" />
       <div className="p-4 bg-White rounded-sm">
-        <CandidateFilter filters={filters} onFilterChange={handleFilterChange} />
+        <CandidateFilter filters={filters} onFilterChange={handleFilterChange} designation={designationData?.data?.data?.data} />
         {isLoading || isFetching ? (
           <div className="flex items-center space-x-4">
             <Skeleton className="h-12 w-12 rounded-full" />

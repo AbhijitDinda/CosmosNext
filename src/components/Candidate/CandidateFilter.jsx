@@ -1,9 +1,9 @@
 import React from "react";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-const CandidateFilter = ({ filters, onFilterChange }) => {
+const CandidateFilter = ({ filters, onFilterChange, designation = [] }) => {
   // Update individual filter fields
   const handleChange = (key, value) => {
     onFilterChange({
@@ -41,18 +41,18 @@ const CandidateFilter = ({ filters, onFilterChange }) => {
             <label htmlFor="">Filter by Designation</label>
             <Select
               onValueChange={(value) => handleChange("designation", value)}
-              value={filters.designation || "All"}
+              value={filters.designation || " "}
             >
               <SelectTrigger className="w-full rounded-sm">
                 <SelectValue placeholder="All" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value=" ">All</SelectItem>
-                <SelectItem value="Programmer">Programmer</SelectItem>
-                <SelectItem value="Full Stack Developer">
-                  Full Stack Developer
-                </SelectItem>
-                <SelectItem value="General Test">General Test</SelectItem>
+                {designation.map((item) => (
+                  <SelectItem key={item.id} value={item.designation_name}>
+                    {item.designation_name}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -62,7 +62,7 @@ const CandidateFilter = ({ filters, onFilterChange }) => {
             <label htmlFor="">Filter by Status</label>
             <Select
               onValueChange={(value) => handleChange("status", value)}
-              value={filters.status || "All"}
+              value={filters.status || " "}
             >
               <SelectTrigger className="w-full rounded-sm">
                 <SelectValue placeholder="All" />
