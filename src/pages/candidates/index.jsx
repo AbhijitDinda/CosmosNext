@@ -82,6 +82,7 @@ const CandidatePage = () => {
       <Heading title="Candidate" />
       <div className="p-4 bg-White rounded-sm">
         <CandidateFilter filters={filters} onFilterChange={handleFilterChange} designation={designationData?.data?.data?.data} />
+        
         {isLoading || isFetching ? (
           <div className="flex items-center space-x-4">
             <Skeleton className="h-12 w-12 rounded-full" />

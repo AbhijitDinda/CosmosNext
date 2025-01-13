@@ -62,31 +62,38 @@ const Dashboard = () => {
 
   return (
     <>
-      {(isLoading) ?
-        <div className="flex items-center space-x-4">
-          <Skeleton className="h-12 w-12 rounded-full" />
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-[250px]" />
-            <Skeleton className="h-4 w-[200px]" />
-          </div>
-        </div>
-        : <section className="mx-auto rounded-sm w-full max-w-screen-xl">
-          <div className="grid grid-cols-1 gap-y-2  py-5 rounded-sm ">
-            <DashboardCardsSection totalUsers={totalUsers} totalTests={totalTests} />
-            {/* {Active Assesments} */}
-            {/* <DashboardTableSection /> */}
-            <div>
-              <div className="bg-slate-800 p-2 rounded-sm">
-                <Heading title="Your Active Candidate" />
+      <section className="mx-auto rounded-sm w-full max-w-screen-xl">
+        <div className="grid grid-cols-1 gap-y-2  py-5 rounded-sm ">
+          {(isLoading) ? (
+            <div className="flex items-center space-x-4">
+              <Skeleton className="h-12 w-12 rounded-full" />
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-[250px]" />
+                <Skeleton className="h-4 w-[200px]" />
               </div>
-              <div className="bg-white flex flex-col gap-4 p-4">
-                {/* <CandidateTable /> */}
-                <CandidateTable data={dashboardData?.data?.data?.list_of_active_users.data.data} item_per_page={10} pagination={false} />
-              </div>
-            </div>
+            </div>) :
+            (
+              <>
+                <DashboardCardsSection totalUsers={totalUsers} totalTests={totalTests} />
+                {/* {Active Assesments} */}
+                {/* <DashboardTableSection /> */}
+                <div>
+                  <div className="bg-slate-800 p-2 rounded-sm">
+                    <Heading title="Your Active Candidate" />
+                  </div>
+                  <div className="bg-white flex flex-col gap-4 p-4">
+                    {/* <CandidateTable /> */}
+                    <CandidateTable data={dashboardData?.data?.data?.list_of_active_users.data.data} item_per_page={10} pagination={false} />
+                  </div>
+                </div>
+              </>
+            )
 
-          </div>
-        </section>}
+
+
+          }
+        </div>
+      </section>
     </>
   );
 
