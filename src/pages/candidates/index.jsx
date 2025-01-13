@@ -58,8 +58,8 @@ const CandidatePage = () => {
     ? filterCandidateData?.data?.current_page
     : allCandidatesData?.data?.data?.current_page;
 
-  const isLoading = isLoadingAll || isLoadingFiltered;
-  const isFetching = isFetchingAll || isFetchingFiltered;
+  const isLoading = isLoadingAll || isLoadingFiltered || isLoadingDesignation;
+  const isFetching = isFetchingAll || isFetchingFiltered || isFetchingDesignation ;
 
   // Handle pagination
   const handlePageChange = (page) => {
