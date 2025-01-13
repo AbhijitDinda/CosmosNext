@@ -1,8 +1,8 @@
 import axios from '@/config/axiosConfig';
 import { unauthorizedErrorResponse } from "@/utils/Responseobj/responseObject";
-export const getListOfAssesments = async ({ token },logout) => {
+export const getListOfAssesments = async ({ token },logout,page) => {
     try {
-        const response = await axios.get('/admin/list-of-assessments', {
+        const response = await axios.get(`/admin/list-of-assessments?page=${page}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'

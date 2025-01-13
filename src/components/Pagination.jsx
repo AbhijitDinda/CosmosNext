@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ArrowLeft, ArrowRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { Button } from "@/components/ui/button"; // Make sure to import your Button component
 
-const Pagination = ({ totalPages=5, currentPage=1, onPageChange = null }) => {
+const Pagination = ({ totalPages=5, currentPage=1, onPageChange }) => {
   const [numbers, setNumbers] = useState([]);
 
   const handlePageChange = (page) => {

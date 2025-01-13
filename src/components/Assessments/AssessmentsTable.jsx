@@ -41,12 +41,13 @@ const dummyData = [
     })),
 ];
 
-const AssessmentsTable = ({ data = [] }) => {
+const AssessmentsTable = ({ data = [] ,current_page,total_page,handlePageChange}) => {
+  console.log("hello",current_page,total_page)
 
   // const [currentPageData, setCurrentPageData] = useState(
   //   data.slice(0, 10)
   // );
-  console.log("assessmentsData",data);
+  // console.log("assessmentsData", JSON.stringify(data));
 
   const router = useRouter();
 
@@ -71,16 +72,16 @@ const AssessmentsTable = ({ data = [] }) => {
         <TableBody>
           {data.map((item, index) => (
             <TableRow key={index} className="text-nowrap">
-              <TableCell className="font-semibold">{item.test_name}</TableCell>
+              <TableCell className="font-semibold">{item?.test_name}</TableCell>
               <TableCell>
                 <div className="flex gap-4">
                   {/* Display the URL (Truncated) */}
                   <a
-                    href={`${item.test_link}`} // Ensures the link is valid with HTTPS
+                    href={`${item?.test_link}`} // Ensures the link is valid with HTTPS
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-Primary hover:text-Primary_Dark flex items-center space-x-2 truncate max-w-xs"
-                    title={`${item.test_link}`} // Show the full URL on hover
+                    title={`${item?.test_link}`} // Show the full URL on hover
                   >
                     <LinkIcon className="w-4 h-4 text-Primary" />
                     <span className="underline">{item.test_link}</span>
@@ -137,11 +138,11 @@ const AssessmentsTable = ({ data = [] }) => {
       </Table>
 
       {/* Pagination Controls */}
-      {/* <Pagination
-        paginationData={dummyData}
-        setPaginatedData={setPaginatedData}
-        itemsPerPage={5}
-      /> */}
+      <Pagination
+        totalPages={total_page}
+        currentPage={current_page}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };
