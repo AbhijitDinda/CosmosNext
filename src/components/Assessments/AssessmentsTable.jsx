@@ -41,9 +41,14 @@ const dummyData = [
     })),
 ];
 
-const AssessmentsTable = () => {
-  const [paginatedData, setPaginatedData] = useState(dummyData.slice(0, 5));
-  const router = useRouter(); // Next.js router for navigation
+const AssessmentsTable = ({ data = [] }) => {
+
+  // const [currentPageData, setCurrentPageData] = useState(
+  //   data.slice(0, 10)
+  // );
+  console.log("assessmentsData",data);
+
+  const router = useRouter();
 
   return (
     <div className="overflow-auto font-OpenSans">
@@ -56,7 +61,6 @@ const AssessmentsTable = () => {
               "Test Link",
               "Assesments",
               "Start Date",
-              "Last Date",
               "Total Candidates",
               "",
             ].map((heading) => (
@@ -65,21 +69,21 @@ const AssessmentsTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {paginatedData.map((item, index) => (
+          {data.map((item, index) => (
             <TableRow key={index} className="text-nowrap">
-              <TableCell className="font-semibold">{item.name}</TableCell>
+              <TableCell className="font-semibold">{item.test_name}</TableCell>
               <TableCell>
                 <div className="flex gap-4">
                   {/* Display the URL (Truncated) */}
                   <a
-                    href={`https://${item.link}`} // Ensures the link is valid with HTTPS
+                    href={`${item.test_link}`} // Ensures the link is valid with HTTPS
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-Primary hover:text-Primary_Dark flex items-center space-x-2 truncate max-w-xs"
-                    title={`https://${item.link}`} // Show the full URL on hover
+                    title={`${item.test_link}`} // Show the full URL on hover
                   >
                     <LinkIcon className="w-4 h-4 text-Primary" />
-                    <span className="underline">{item.link}</span>
+                    <span className="underline">{item.test_link}</span>
                   </a>
 
                   <Button
@@ -87,7 +91,7 @@ const AssessmentsTable = () => {
                     variant="ghost"
                     className="mt-1 text-xs bg-blue-100 text-blue-600 hover:bg-blue-200 px-2 py-1 rounded-md border border-blue-300 flex items-center space-x-1"
                     onClick={() => {
-                      navigator.clipboard.writeText(`https://${item.link}`);
+                      navigator.clipboard.writeText(`${item.test_link}`);
                       alert("Link copied to clipboard!"); // Optional: Feedback for the user
                     }}
                   >
@@ -98,7 +102,7 @@ const AssessmentsTable = () => {
               </TableCell>
               <TableCell>
                 <select className="border rounded px-2 py-1 text-sm w-full">
-                  {item.assessment.map((assessment, idx) => (
+                  {item?.list_of_tests.map((assessment, idx) => (
                     <option key={idx} value={assessment}>
                       {assessment}
                     </option>
@@ -107,9 +111,13 @@ const AssessmentsTable = () => {
               </TableCell>
 
 
-              <TableCell>{item.startDate}</TableCell>
-              <TableCell>{item.lastDate}</TableCell>
-              <TableCell>{item.totalCandidates}</TableCell>
+              <TableCell> {new Date(item.created_at).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}</TableCell>
+              {/* <TableCell>{item.lastDate}</TableCell> */}
+              <TableCell>{item.list_of_candidates}</TableCell>
               {/* <TableCell>
                 <StatusBadge status={item.status} />
               </TableCell> */}
@@ -129,11 +137,11 @@ const AssessmentsTable = () => {
       </Table>
 
       {/* Pagination Controls */}
-      <Pagination
+      {/* <Pagination
         paginationData={dummyData}
         setPaginatedData={setPaginatedData}
         itemsPerPage={5}
-      />
+      /> */}
     </div>
   );
 };

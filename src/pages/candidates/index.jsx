@@ -39,7 +39,7 @@ const CandidatePage = () => {
     isLoading: isLoadingDesignation,
     designationData,
   } = useAllDesignation();
-  console.log("designationData list",designationData?.data?.data?.data)
+  // console.log("designationData list",designationData?.data?.data?.data)
 
 
   // Determine whether to use filtered or unfiltered data
