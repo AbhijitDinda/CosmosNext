@@ -8,103 +8,87 @@ import {
   createColumnHelper,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button"; 
+import { Button } from "@/components/ui/button";
 import { ArrowRight, Settings } from "lucide-react";
 import { useRouter } from "next/navigation"; // Use Next.js router
+import { Skeleton } from "@/components/ui/skeleton";
 
-// Sample Data
-const data = [
-  { testName: "Python Test", questions: 10, attempts: 34, score: 60 },
-  { testName: "Communication Text", questions: 10, attempts: 34, score: 60 },
-  { testName: "Logical Test", questions: 10, attempts: 34, score: 60 },
-  { testName: "Communication Text", questions: 10, attempts: 34, score: 60 },
-  { testName: "Python Test", questions: 10, attempts: 34, score: 60 },
-  { testName: "Python Test", questions: 10, attempts: 34, score: 60 },
-  { testName: "Python Test", questions: 10, attempts: 34, score: 60 },
-  { testName: "Python Test", questions: 10, attempts: 34, score: 60 },
-];
+// useAllDesignation
+import { useAllDesignation } from "@/hooks/apis/test-group/useGetTestGroup";
+
+
 
 // Table Columns
 const TestGroups = () => {
-  const [columnFilters, setColumnFilters] = useState([]);
-  const [paginatedData, setPaginatedData] = useState(data.slice(0, 5));
-  const router = useRouter(); // Use Next.js router
-  
-  const columnHelper = createColumnHelper();
-  const columns = [
-    columnHelper.accessor("testName", {
-      header: "Test Name",
-    }),
-    columnHelper.accessor("questions", {
-      header: "Questions",
-    }),
-    columnHelper.accessor("attempts", {
-      header: "Test Attempts",
-    }),
-    // columnHelper.accessor("score", {
-    //   header: "Average Score",
-    //   cell: (info) => (
-    //     <div className="flex items-center justify-center w-8 h-8 rounded-full bg-Primary text-White">
-    //       {info.getValue()}
-    //     </div>
-    //   ),
-    // }),
-    columnHelper.display({
-      id: "actions",
-      header: "Actions",
-      cell: () => (
-        <Button
-          size="icon"
-          variant="outline"
-          className="p-2 border border-Secondary_Text"
-          onClick={() => router.push("/test-groups/form")} // Use Next.js router
-        >
-          <Settings className="!size-5 stroke-1 stroke-Secondary_Text" />
-        </Button>
-      ),
-    }),
-    columnHelper.display({
-      id: "actions",
-      header: "",
-      cell: (info) => {
-        const rowData = info.row.original; // Access the row's data
-        return (
-          <Button
-            size="icon"
-            variant="outline"
-            className="p-2 border border-Secondary_Text"
-            onClick={() => router.push(`/test-groups/action/${rowData.testName}`)} // Dynamic route
-          >
-            <ArrowRight className="!size-5 stroke-1 stroke-Secondary_Text" />
-          </Button>
-        );
-      },
-    }),
-    
-  ];
 
-  const table = useReactTable({
-    data: paginatedData,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnFiltersChange: setColumnFilters,
-    state: {
-      columnFilters,
-    },
+  const router = useRouter(); // Use Next.js router
+
+  const [filters, setFilters] = useState({
+    page: 1,
+    search: "",
   });
+
+
+  const {
+    isFetching: isFetchingTests,
+    isLoading: isLoadingTests,
+    testsData,
+  } = useAllDesignation(filters.search, filters.page);
+
+
+
+
+
+
+
+
+  console.log("testsData", testsData?.data?.data?.data);
+
+  // Handle filter changes (passed down to AssessmentsFilters)
+  const handleFilterChange = (updatedFilters) => {
+    setFilters((prevFilters) => ({
+      ...updatedFilters,
+      page: 1,
+    }));
+  };
+
+  // Handle pagination (passed to AssessmentsTable)
+  const handlePageChange = (page) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      page, // Only update the page
+    }));
+  };
 
   return (
     <div className="rounded-sm mx-auto w-full max-w-[1300px]">
       <Heading title="Test Groups" />
       <div className="p-4 bg-White rounded-sm">
-        <TestGroupsFilter table={table} />
-        <TestGroupsTableSection
-          data={data}
-          table={table}
-          columns={columns}
-          setPaginatedData={setPaginatedData}
-        />
+      <TestGroupsFilter filters={filters} onFilterChange={handleFilterChange} />
+
+
+        {isLoadingTests || isFetchingTests ? (
+          <div className="flex items-center space-x-4">
+            <Skeleton className="h-12 w-12 rounded-full" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-[250px]" />
+              <Skeleton className="h-4 w-[200px]" />
+            </div>
+          </div>
+        ) : testsData && testsData?.data?.data?.data.length > 0 ?  (
+            <TestGroupsTableSection
+              data={testsData?.data?.data?.data}
+              handlePageChange={handlePageChange}
+              current_page={testsData?.data?.data?.current_page}
+              total_page={testsData?.data?.data?.last_page}
+            />
+        ):(
+          <div className="text-center text-gray-500 p-4">
+              <p>No Assessments found matching the criteria.</p>
+            </div>
+        )}
+
+
       </div>
     </div>
   );

@@ -1,71 +1,86 @@
-import Pagination from "../Pagination";
 import {
   Table,
-  TableHeader,
-  TableRow,
-  TableHead,
   TableBody,
   TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
-import { flexRender } from "@tanstack/react-table";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import Pagination from "../Pagination";
+import { useRouter } from "next/router"; // Next.js router for navigation
 
-// Main Table Component
-export default function TestGroupsTableSection({
-  table,
-  data,
-  setPaginatedData,
-  columns,
-}) {
+import { ArrowRight, Settings } from "lucide-react";
+const AssessmentsTable = ({ data = [], current_page, total_page, handlePageChange }) => {
+  // console.log("hello",current_page,total_page)
+
+  // const [currentPageData, setCurrentPageData] = useState(
+  //   data.slice(0, 10)
+  // );
+  // console.log("assessmentsData", JSON.stringify(data));
+
+  const router = useRouter();
+
   return (
-    <div className="p-2 lg:p-4">
-      <div className="rounded-md font-OpenSans">
-        <Table className="text-nowrap">
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                ))}
-              </TableRow>
+    <div className="overflow-auto font-OpenSans">
+      {/* Table */}
+      <Table>
+        <TableHeader>
+          <TableRow className="font-bold text-sm font-OpenSans">
+            {[
+              "Test Name",
+              "Questions",
+              "Test Attempts",
+              "Actions",
+              "",
+            ].map((heading) => (
+              <TableHead key={heading}>{heading}</TableHead>
             ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="text-center">
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-      {/* Pagination */}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {data.map((item, index) => (
+            <TableRow key={index} className="text-nowrap">
+              <TableCell className="font-semibold">{item?.test_name}</TableCell>
+              <TableCell className="font-semibold">{item?.questions_count}</TableCell>
+              <TableCell className="font-semibold">{item?.usertestcount}</TableCell>
+              <TableCell className="font-semibold">
+                <Button
+                  size="icon"
+                  variant="outline"
+                  className="p-2 border border-Secondary_Text"
+                  onClick={() => router.push("/test-groups/form")} // Use Next.js router
+                >
+                  <Settings className="!size-5 stroke-1 stroke-Secondary_Text" />
+                </Button>
+              </TableCell>
+
+              <TableCell className="font-semibold">
+                <Button
+                  size="icon"
+                  variant="outline"
+                  className="p-2 border border-Secondary_Text"
+                  onClick={() => router.push(`/test-groups/action/${rowData.testName}`)} // Dynamic route
+                >
+                  <ArrowRight className="!size-5 stroke-1 stroke-Secondary_Text" />
+                </Button>
+              </TableCell>
+
+
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+
+      {/* Pagination Controls */}
       <Pagination
-        paginationData={data}
-        setPaginatedData={setPaginatedData}
-        itemsPerPage={5}
+        totalPages={total_page}
+        currentPage={current_page}
+        onPageChange={handlePageChange}
       />
     </div>
   );
-}
+};
+
+export default AssessmentsTable;
