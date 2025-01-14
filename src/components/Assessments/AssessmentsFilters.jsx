@@ -1,72 +1,53 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useState } from "react";
 import { useRouter } from "next/router"; // Next.js router for navigation
-import { DatePickerDemo } from "../DatePicker";
-// import useAssessmentStore from "../store/assessmentStore";
 
-const AssessmentsFilters = () => {
-  const [filters, setFilters] = useState({
-    search: "",
-    status: "All",
-    date: "",
-  });
-
+const AssessmentsFilters = ({ filters, onFilterChange }) => {
   const router = useRouter(); // Next.js router for navigation
+
+  // Handle input changes for filters
+  const handleChange = (key, value) => {
+    onFilterChange({
+      ...filters, // Spread the current filters
+      [key]: value, // Update only the specified key
+    });
+  };
+
+  // Reset all filters
+  const handleReset = () => {
+    onFilterChange({
+      page: 1,
+      search: "", // Reset to default values
+    });
+  };
 
   return (
     <div className="flex flex-col gap-4 justify-between mb-4 font-OpenSans">
       <div className="flex flex-wrap gap-2 justify-between w-full text-Secondary_Text">
+        {/* Search Input */}
         <Input
           placeholder="Search Id, Name, Email"
           value={filters.search}
-          onChange={(e) => setFilters({ search: e.target.value })}
-          className="w-full md:w-[500px] rounded-sm"
+          onChange={(e) => handleChange("search", e.target.value)} // Dynamically update the search filter
+          className="w-full max-w-[500px] rounded-sm"
         />
 
+        {/* Create Assessment Button */}
         <Button
           size="sm"
           variant="outline"
           className="rounded-sm hover:border hover:border-Primary hover:text-Primary text-white bg-Primary"
-          onClick={() => router.push("/assessments/create")} // Adjust navigation for Next.js
+          onClick={() => router.push("/assessments/create")} // Navigate to create assessment page
         >
           Create Assessment
         </Button>
       </div>
 
       <div className="flex flex-wrap gap-3 w-full justify-between text-Secondary_Text items-center">
-        <div className="flex flex-wrap gap-3">
-          <div className="md:w-56 text-base">
-            <label htmlFor="">Status</label>
-            <Select onValueChange={(value) => setFilters({ status: value })}>
-              <SelectTrigger className="w-full rounded-sm">
-                <SelectValue placeholder="Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="All">All</SelectItem>
-                <SelectItem value="Not Started">Not Started</SelectItem>
-                <SelectItem value="Ongoing">Ongoing</SelectItem>
-                <SelectItem value="Completed">Completed</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="flex flex-col justify-center">
-            <label className="">End Date</label>
-            <DatePickerDemo buttonClassName="text-sm w-40 items-center border px-3 py-2 rounded-sm" />
-          </div>
-        </div>
-
+        {/* Reset Filters Button */}
         <Button
           variant="outline"
-          onClick={() => setFilters({ search: "", status: "All", date: "" })}
+          onClick={handleReset} // Reset filters to default values
         >
           Reset Filters
         </Button>

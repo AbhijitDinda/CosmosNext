@@ -16,33 +16,9 @@ import { StatusBadge } from "@/lib/badgeUtils";
 import { Link as LinkIcon } from "lucide-react";
 import { Copy } from "lucide-react";
 
-const dummyData = [
-  // Dummy Data for Testing Pagination
-  ...Array(20)
-    .fill(0)
-    .map((_, i) => ({
-      name: `Business Executive ${i + 1}`,
-      type: i % 2 === 0 ? "Basic" : "Adaptive",
-      link: "http://137.184.46.213/cosmos/public/assessment/VFZSamVVOVVhM2xPYWxFMVQxaFZOR013VWs5T2JFVXhVMFY0Vm1OVlpEVlNSRTE1Vm1wT2RWVlZTa3hhUlVaNlpETlNWRnBuUFQwPQ==/login",
-      assessment: [
-        "List Of Assessment",
-        "Business Executive1",
-        "Business Executive2",
-        "Business Executive3",
-        "Business Executive4",
-      ],
-      startDate: "19 May 2023",
-      lastDate: "19 May 2023",
-      totalCandidates: 23,
-      completed: i % 3 === 0 ? 23 : 12,
-      topScore: i % 3 === 0 ? "94%" : "0%",
-      status:
-        i % 3 === 0 ? "Completed" : i % 2 === 0 ? "Ongoing" : "Not Started",
-    })),
-];
 
 const AssessmentsTable = ({ data = [] ,current_page,total_page,handlePageChange}) => {
-  console.log("hello",current_page,total_page)
+  // console.log("hello",current_page,total_page)
 
   // const [currentPageData, setCurrentPageData] = useState(
   //   data.slice(0, 10)
