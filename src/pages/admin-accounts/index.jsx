@@ -4,6 +4,9 @@ import AdminList from "../../components/Admin/AdminList";
 import AddAdmin from "../../components/Admin/AddAdmin";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
+import { useAllAdminList } from "@/hooks/apis/admin-list/useAllAdminList";
+
+
 
 const allAdminData = [
     { id: 1, organization: "Runtime Solutions", userName: "Anirban Chatterjee", email: "anirban@runtime-solutions.com", testsCreated: 0 },
@@ -25,14 +28,27 @@ const allAdminData = [
 const AdminPage = () => {
     const itemsPerPage = 5; // Number of items per page
 
-    const [paginatedData, setPaginatedData] = useState(allAdminData.slice(0, itemsPerPage));
+    const [page, setPage] = useState(1);
+    console.log("page",page)
 
 
 
+      const {
+        isFetching,
+        isLoading,
+        adminData,
+      } = useAllAdminList(page);
 
-    // useEffect(() => {
-    //     setPaginatedData(allAdminData.slice(0, itemsPerPage));
-    // }, [allAdminData]);
+      console.log("assessmentsData",adminData?.data?.data?.last_page);
+    //   console.log("assessmentsData",adminData?.data?.data?.data);
+
+    // Handle pagination (passed to AssessmentsTable)
+    const handlePageChange = (page) => {
+        setPage(page);
+    };
+
+
+
 
     return (
         <section className="mx-auto rounded-sm w-full max-w-screen-xl">
@@ -57,10 +73,10 @@ const AdminPage = () => {
 
                 {/* Admin List */}
                 <AdminList
-                    paginatedData={paginatedData}
-                    allAdminData={allAdminData}
-                    setPaginatedData={setPaginatedData}
-                    itemsPerPage={itemsPerPage}
+                    data={adminData?.data?.data?.data}
+                    totalPages={adminData?.data?.data?.last_page}
+                    currentPage={adminData?.data?.data?.current_page}
+                    onPageChange={handlePageChange}
                 />
             </div>
         </section>

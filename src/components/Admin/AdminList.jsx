@@ -12,7 +12,8 @@ import Pagination from "../Pagination"; // Adjust path based on your setup
 import { Button } from "../ui/button";
 import { PencilIcon, Trash2 } from "lucide-react";
 
-const AdminList = ({ paginatedData, allAdminData, setPaginatedData, itemsPerPage }) => {
+const AdminList = ({data = [],totalPages,currentPage,onPageChange} ) => {
+    console.log("data",data)
     return (
         <div>
             <Table className="mt-4">
@@ -27,13 +28,13 @@ const AdminList = ({ paginatedData, allAdminData, setPaginatedData, itemsPerPage
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {paginatedData.map((admin) => (
+                    {data.map((admin) => (
                         <TableRow key={admin.id}>
                             <TableCell>{admin.id}</TableCell>
-                            <TableCell>{admin.organization}</TableCell>
-                            <TableCell>{admin.userName}</TableCell>
-                            <TableCell>{admin.email}</TableCell>
-                            <TableCell>{admin.testsCreated}</TableCell>
+                            <TableCell>{admin.organization_name}</TableCell>
+                            <TableCell>{admin.name}</TableCell>
+                            <TableCell>{admin.id}</TableCell>
+                            <TableCell>{admin.test_created}</TableCell>
                             <TableCell className="flex items-center gap-2">
                                 <Button size="icon" variant="outline" className="hover:text-Primary "><PencilIcon /></Button>
                                 <Button size="icon" variant="outline" className="hover:text-Error" ><Trash2 /></Button>
@@ -44,9 +45,9 @@ const AdminList = ({ paginatedData, allAdminData, setPaginatedData, itemsPerPage
             </Table>
             {/* Pagination Component */}
             <Pagination
-                paginationData={allAdminData}
-                setPaginatedData={setPaginatedData}
-                itemsPerPage={itemsPerPage}
+                totalPages={totalPages}
+                currentPage={currentPage}
+                onPageChange={onPageChange}
             />
         </div>
     );
