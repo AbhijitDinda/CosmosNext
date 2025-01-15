@@ -5,6 +5,7 @@ import AddAdmin from "../../components/Admin/AddAdmin";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
 import { useAllAdminList } from "@/hooks/apis/admin-list/useAllAdminList";
+import { Skeleton } from "@/components/ui/skeleton";
 
 
 
@@ -29,17 +30,17 @@ const AdminPage = () => {
     const itemsPerPage = 5; // Number of items per page
 
     const [page, setPage] = useState(1);
-    console.log("page",page)
+    console.log("page", page)
 
 
 
-      const {
+    const {
         isFetching,
         isLoading,
         adminData,
-      } = useAllAdminList(page);
+    } = useAllAdminList(page);
 
-      console.log("assessmentsData",adminData?.data?.data?.last_page);
+    console.log("assessmentsData", adminData?.data?.data?.last_page);
     //   console.log("assessmentsData",adminData?.data?.data?.data);
 
     // Handle pagination (passed to AssessmentsTable)
@@ -72,12 +73,28 @@ const AdminPage = () => {
                 </div>
 
                 {/* Admin List */}
-                <AdminList
-                    data={adminData?.data?.data?.data}
-                    totalPages={adminData?.data?.data?.last_page}
-                    currentPage={adminData?.data?.data?.current_page}
-                    onPageChange={handlePageChange}
-                />
+                {isFetching || isLoading ? (
+                    <div className="flex items-center space-x-4">
+                        <Skeleton className="h-12 w-12 rounded-full" />
+                        <div className="space-y-2">
+                            <Skeleton className="h-4 w-[250px]" />
+                            <Skeleton className="h-4 w-[200px]" />
+                        </div>
+                    </div>
+                ) : adminData && adminData?.data?.data?.data.length > 0? (
+                    <AdminList
+                        data={adminData?.data?.data?.data}
+                        totalPages={adminData?.data?.data?.last_page}
+                        currentPage={adminData?.data?.data?.current_page}
+                        onPageChange={handlePageChange}
+                    />
+                ):(
+                <div className="text-center text-gray-500 p-4">
+                    <p>No Admin found matching the criteria.</p>
+                </div>
+                )
+                 }
+
             </div>
         </section>
     );
