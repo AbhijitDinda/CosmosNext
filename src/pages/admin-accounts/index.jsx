@@ -9,46 +9,22 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 
 
-const allAdminData = [
-    { id: 1, organization: "Runtime Solutions", userName: "Anirban Chatterjee", email: "anirban@runtime-solutions.com", testsCreated: 0 },
-    { id: 2, organization: "DevCorp", userName: "John Doe", email: "john.doe@devcorp.com", testsCreated: 5 },
-    { id: 3, organization: "CodeBase", userName: "Jane Smith", email: "jane.smith@codebase.com", testsCreated: 10 },
-    { id: 4, organization: "TechHive", userName: "Robert Brown", email: "robert.brown@techhive.com", testsCreated: 3 },
-    { id: 5, organization: "InnovateNow", userName: "Emily Johnson", email: "emily.johnson@innnow.com", testsCreated: 7 },
-    { id: 6, organization: "CloudSys", userName: "David Lee", email: "david.lee@cloudsys.com", testsCreated: 2 },
-    { id: 7, organization: "CloudSys", userName: "David Lee", email: "david.lee@cloudsys.com", testsCreated: 2 },
-    { id: 8, organization: "CloudSys", userName: "David Lee", email: "david.lee@cloudsys.com", testsCreated: 2 },
-    { id: 9, organization: "CloudSys", userName: "David Lee", email: "david.lee@cloudsys.com", testsCreated: 2 },
-    { id: 10, organization: "CloudSys", userName: "David Lee", email: "david.lee@cloudsys.com", testsCreated: 2 },
-    { id: 11, organization: "CloudSys", userName: "David Lee", email: "david.lee@cloudsys.com", testsCreated: 2 },
-    { id: 12, organization: "CloudSys", userName: "David Lee", email: "david.lee@cloudsys.com", testsCreated: 2 },
-    { id: 13, organization: "CloudSys", userName: "David Lee", email: "david.lee@cloudsys.com", testsCreated: 2 },
-    // Add more data as required
-];
 
 const AdminPage = () => {
-    const itemsPerPage = 5; // Number of items per page
 
     const [page, setPage] = useState(1);
     console.log("page", page)
-
-
 
     const {
         isFetching,
         isLoading,
         adminData,
     } = useAllAdminList(page);
-
-    console.log("assessmentsData", adminData?.data?.data?.last_page);
-    //   console.log("assessmentsData",adminData?.data?.data?.data);
-
+    
     // Handle pagination (passed to AssessmentsTable)
     const handlePageChange = (page) => {
         setPage(page);
     };
-
-
 
 
     return (
@@ -67,7 +43,9 @@ const AdminPage = () => {
                                 <DialogClose />
                             </DialogHeader>
                             {/* AddAdmin Component */}
+
                             <AddAdmin />
+
                         </DialogContent>
                     </Dialog>
                 </div>
