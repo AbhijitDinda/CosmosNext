@@ -1,31 +1,57 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Heading from "@/components/Heading";
 import AdminList from "../../components/Admin/AdminList";
 import AddAdmin from "../../components/Admin/AddAdmin";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
-import { useAllAdminList } from "@/hooks/apis/admin-list/useAllAdminList";
 import { Skeleton } from "@/components/ui/skeleton";
-
-
-
+import { useAllAdminList } from "@/hooks/apis/admin-list/useAllAdminList";
+import { useAddAdmin } from "@/hooks/apis/admin-list/useAddAdmin";
 
 const AdminPage = () => {
 
     const [page, setPage] = useState(1);
-    console.log("page", page)
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-    const {
-        isFetching,
-        isLoading,
-        adminData,
-    } = useAllAdminList(page);
-    
-    // Handle pagination (passed to AssessmentsTable)
+    // Form state moved to AdminPage
+    const [formData, setFormData] = useState({
+        organization_name: "",
+        name: "",
+        user_id: "",
+        account_status: "1", // Default value
+    });
+
+    const { isFetching, isLoading, adminData } = useAllAdminList(page);
+
+    const { isPending, error, addAdminMutation } = useAddAdmin();
+
     const handlePageChange = (page) => {
+        console.log("fire")
         setPage(page);
     };
 
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleAddAdminSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await addAdminMutation(formData);
+            setIsDialogOpen(false); // Close dialog after success
+            setFormData({
+                organization_name: "",
+                name: "",
+                user_id: "",
+                account_status: "1",
+            }); 
+            handlePageChange(page);
+        } catch (error) {
+            console.error("Failed to add admin:", error);
+            alert("Failed to add admin. Please try again.");
+        }
+    };
 
     return (
         <section className="mx-auto rounded-sm w-full max-w-screen-xl">
@@ -33,19 +59,28 @@ const AdminPage = () => {
             <div className="p-4 bg-White rounded-sm">
                 {/* Add Admin Button with Dialog */}
                 <div className="ml-auto flex items-center justify-end mb-4">
-                    <Dialog>
+                    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                         <DialogTrigger asChild>
-                            <Button variant="outline" className="rounded-sm bg-Primary text-white border-transparent hover:border hover:border-Primary hover:text-Primary hover:bg-white">Add Admin</Button>
+                            <Button
+                                variant="outline"
+                                className="rounded-sm bg-Primary text-white border-transparent hover:border hover:border-Primary hover:text-Primary hover:bg-white"
+                            >
+                                Add Admin
+                            </Button>
                         </DialogTrigger>
                         <DialogContent className="max-w-lg">
                             <DialogHeader>
                                 <DialogTitle>Add Admin</DialogTitle>
                                 <DialogClose />
                             </DialogHeader>
-                            {/* AddAdmin Component */}
-
-                            <AddAdmin />
-
+                            {/* Pass formData, setFormData, and handlers to AddAdmin */}
+                            <AddAdmin
+                                formData={formData}
+                                onInputChange={handleInputChange}
+                                onSubmit={handleAddAdminSubmit}
+                                isPending={isPending}
+                                error={error}
+                            />
                         </DialogContent>
                     </Dialog>
                 </div>
@@ -59,20 +94,18 @@ const AdminPage = () => {
                             <Skeleton className="h-4 w-[200px]" />
                         </div>
                     </div>
-                ) : adminData && adminData?.data?.data?.data.length > 0? (
+                ) : adminData && adminData?.data?.data?.data.length > 0 ? (
                     <AdminList
                         data={adminData?.data?.data?.data}
                         totalPages={adminData?.data?.data?.last_page}
                         currentPage={adminData?.data?.data?.current_page}
                         onPageChange={handlePageChange}
                     />
-                ):(
-                <div className="text-center text-gray-500 p-4">
-                    <p>No Admin found matching the criteria.</p>
-                </div>
-                )
-                 }
-
+                ) : (
+                    <div className="text-center text-gray-500 p-4">
+                        <p>No Admin found matching the criteria.</p>
+                    </div>
+                )}
             </div>
         </section>
     );
