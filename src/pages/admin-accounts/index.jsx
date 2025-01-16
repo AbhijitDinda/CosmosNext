@@ -26,7 +26,6 @@ const AdminPage = () => {
     const { isPending, error, addAdminMutation } = useAddAdmin();
 
     const handlePageChange = (page) => {
-        console.log("fire")
         setPage(page);
     };
 
@@ -48,8 +47,8 @@ const AdminPage = () => {
             }); 
             handlePageChange(page);
         } catch (error) {
-            console.error("Failed to add admin:", error);
-            alert("Failed to add admin. Please try again.");
+            // setFormData({...formData,user_id:""})
+            console.log("Failed to add admin:", error);
         }
     };
 

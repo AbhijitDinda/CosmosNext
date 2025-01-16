@@ -14,7 +14,7 @@ export const useAddAdmin = () => {
             console.log('Scuccessfully Admin Added', response);
         },
         onError: (error) => {
-            console.error('Failed to Add Admin', error);
+            console.log('Failed to Add Admin', error);
 
         }
     });

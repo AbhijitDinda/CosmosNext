@@ -42,7 +42,7 @@ export const addAdmin = async ({ organization_name, name, user_id, account_statu
             unauthorizedErrorResponse(logout);
             return;
         } else {
-            console.error("Error in adding admin:", error);
+            // console.error("Error in adding admin:", error);
             throw error;
         }
     }

@@ -63,7 +63,7 @@ const AddAdmin = ({ formData, onInputChange, onSubmit, isPending, error }) => {
                 {isPending ? "Submitting..." : "Submit"}
             </Button>
             {error && (
-                <p className="text-sm text-red-500 mt-2">Failed to add admin. Please try again.</p>
+                <p className="text-sm text-red-500 mt-2">{error?.response?.data?.message}</p>
             )}
         </form>
     );
