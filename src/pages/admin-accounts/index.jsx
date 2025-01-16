@@ -7,6 +7,7 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAllAdminList } from "@/hooks/apis/admin-list/useAllAdminList";
 import { useAddAdmin } from "@/hooks/apis/admin-list/useAddAdmin";
+import { useDeleteAdmin } from "@/hooks/apis/admin-list/useDeleteAdmin";
 import { useToast } from "@/hooks/use-toast"
 
 const AdminPage = () => {
@@ -27,6 +28,8 @@ const AdminPage = () => {
     const { isFetching, isLoading, adminData } = useAllAdminList(page);
 
     const { isPending, error, addAdminMutation } = useAddAdmin();
+    const { isPending: deleteAdminPending, isSuccess: deleteAdminSuccess, error: deleteAdminError, deleteAdminMutation } = useDeleteAdmin();
+  
 
     const handlePageChange = (page) => {
         setPage(page);
@@ -64,6 +67,25 @@ const AdminPage = () => {
             console.log("Failed to add admin:", error);
         }
     };
+
+    const handleDeleteAdmin = async (e) =>{
+        try {
+            await deleteAdminMutation(e);
+            toast({
+                title: "Admin Deleted Successfully",
+                description: "No des",
+                status: "success",
+              });
+
+        } catch (error) {
+            toast({
+                title: "Something went wrong",
+                description: "No des",
+                status: "error",
+              }); 
+            
+        }
+    }
 
     return (
         <section className="mx-auto rounded-sm w-full max-w-screen-xl">
@@ -112,6 +134,7 @@ const AdminPage = () => {
                         totalPages={adminData?.data?.data?.last_page}
                         currentPage={adminData?.data?.data?.current_page}
                         onPageChange={handlePageChange}
+                        handleDeleteAdmin={handleDeleteAdmin}
                     />
                 ) : (
                     <div className="text-center text-gray-500 p-4">

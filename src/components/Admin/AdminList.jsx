@@ -12,7 +12,7 @@ import Pagination from "../Pagination"; // Adjust path based on your setup
 import { Button } from "../ui/button";
 import { PencilIcon, Trash2 } from "lucide-react";
 
-const AdminList = ({data = [],totalPages,currentPage,onPageChange} ) => {
+const AdminList = ({data = [],totalPages,currentPage,onPageChange,handleDeleteAdmin} ) => {
     console.log("data",data)
     return (
         <div>
@@ -37,7 +37,7 @@ const AdminList = ({data = [],totalPages,currentPage,onPageChange} ) => {
                             <TableCell>{admin.test_created}</TableCell>
                             <TableCell className="flex items-center gap-2">
                                 <Button size="icon" variant="outline" className="hover:text-Primary "><PencilIcon /></Button>
-                                <Button size="icon" variant="outline" className="hover:text-Error" ><Trash2 /></Button>
+                                <Button size="icon" variant="outline" className="hover:text-Error" onClick={() => handleDeleteAdmin(admin.id)}><Trash2 /></Button>
                             </TableCell>
                         </TableRow>
                     ))}

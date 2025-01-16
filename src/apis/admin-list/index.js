@@ -47,3 +47,27 @@ export const addAdmin = async ({ organization_name, name, user_id, account_statu
         }
     }
 };
+
+
+
+export const deleteAdmin = async ({ token,logout,admin_id }) => {
+    try {
+        const response = await axios.delete(`/admin/admin-delete/${admin_id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
+            }
+        });
+
+        return response;
+    } catch (error) {
+        if (error.response?.status === 401) {
+            unauthorizedErrorResponse(logout);
+            return;
+        } else {
+            console.error("Error in Delete Admin", error);
+            throw error;
+        }
+
+    }
+};
