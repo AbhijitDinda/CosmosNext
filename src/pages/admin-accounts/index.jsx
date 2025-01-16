@@ -7,11 +7,14 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAllAdminList } from "@/hooks/apis/admin-list/useAllAdminList";
 import { useAddAdmin } from "@/hooks/apis/admin-list/useAddAdmin";
+import { useToast } from "@/hooks/use-toast"
 
 const AdminPage = () => {
 
     const [page, setPage] = useState(1);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const { toast } = useToast()
+
 
     // Form state moved to AdminPage
     const [formData, setFormData] = useState({
@@ -44,9 +47,19 @@ const AdminPage = () => {
                 name: "",
                 user_id: "",
                 account_status: "1",
-            }); 
+            });
+            toast({
+                title: "Admin Added Successfully",
+                description: "No des",
+                status: "success",
+              }); 
             handlePageChange(page);
         } catch (error) {
+            toast({
+                title: "Something went wrong",
+                description: "No des",
+                status: "error",
+              }); 
             // setFormData({...formData,user_id:""})
             console.log("Failed to add admin:", error);
         }
