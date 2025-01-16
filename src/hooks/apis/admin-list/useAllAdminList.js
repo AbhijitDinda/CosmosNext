@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/context/uesAuth";
 export const useAllAdminList = (page) => {
     const {auth,logout} = useAuth();
 
-    const {isFetching, isLoading, isError ,isSuccess,error,data:adminData } = useQuery({
+    const {isFetching, isLoading, isError ,isSuccess,error,refetch,data:adminData } = useQuery({
         queryFn: () => getAllAdmin({ token: auth?.token },logout,page),
         queryKey: ['getAdmin',page]
     })
@@ -16,6 +16,7 @@ export const useAllAdminList = (page) => {
         isSuccess,
         isError,
         error,
+        refetch,
         adminData
     }
 };

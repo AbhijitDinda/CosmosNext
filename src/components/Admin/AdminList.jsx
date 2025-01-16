@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     Table,
     TableBody,
@@ -13,7 +13,19 @@ import { Button } from "../ui/button";
 import { PencilIcon, Trash2 } from "lucide-react";
 
 const AdminList = ({data = [],totalPages,currentPage,onPageChange,handleDeleteAdmin} ) => {
-    console.log("data",data)
+    console.log("data",data);
+    const [deletingAdminId, setDeletingAdminId] = useState(null);
+
+    const handleClick = async (adminId) => {
+        setDeletingAdminId(adminId); // Mark this admin as being processed
+        try {
+          await handleDeleteAdmin(adminId); // Call the delete function
+        } catch (error) {
+          console.error("Error deleting admin:", error);
+        } finally {
+          setDeletingAdminId(null); // Clear the processing state
+        }
+      };
     return (
         <div>
             <Table className="mt-4">
@@ -37,7 +49,7 @@ const AdminList = ({data = [],totalPages,currentPage,onPageChange,handleDeleteAd
                             <TableCell>{admin.test_created}</TableCell>
                             <TableCell className="flex items-center gap-2">
                                 <Button size="icon" variant="outline" className="hover:text-Primary "><PencilIcon /></Button>
-                                <Button size="icon" variant="outline" className="hover:text-Error" onClick={() => handleDeleteAdmin(admin.id)}><Trash2 /></Button>
+                                <Button size="icon" variant="outline" className="hover:text-Error" disabled={deletingAdminId === admin.id} onClick={() => handleClick(admin.id)}><Trash2 /></Button>
                             </TableCell>
                         </TableRow>
                     ))}

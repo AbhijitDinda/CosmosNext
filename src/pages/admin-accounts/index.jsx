@@ -25,7 +25,7 @@ const AdminPage = () => {
         account_status: "1", // Default value
     });
 
-    const { isFetching, isLoading, adminData } = useAllAdminList(page);
+    const { isFetching,isLoading,isSuccess,isError,error:adminDataError,refetch,adminData } = useAllAdminList(page);
 
     const { isPending, error, addAdminMutation } = useAddAdmin();
     const { isPending: deleteAdminPending, isSuccess: deleteAdminSuccess, error: deleteAdminError, deleteAdminMutation } = useDeleteAdmin();
@@ -56,7 +56,7 @@ const AdminPage = () => {
                 description: "No des",
                 status: "success",
               }); 
-            handlePageChange(page);
+              refetch();
         } catch (error) {
             toast({
                 title: "Something went wrong",
@@ -76,6 +76,7 @@ const AdminPage = () => {
                 description: "No des",
                 status: "success",
               });
+              refetch();
 
         } catch (error) {
             toast({
