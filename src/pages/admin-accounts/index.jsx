@@ -62,6 +62,7 @@ const AdminPage = () => {
                 title: "Something went wrong",
                 description: "No des",
                 status: "error",
+                variant: "destructive",
               }); 
             // setFormData({...formData,user_id:""})
             console.log("Failed to add admin:", error);

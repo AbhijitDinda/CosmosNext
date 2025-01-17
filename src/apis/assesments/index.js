@@ -22,3 +22,27 @@ export const getListOfAssesments = async ({ token },logout,page,search) => {
 
     }
 };
+
+
+
+export const getCreateAssesmentsFieldsData = async ({ token,logout}) => {
+    try {
+        const response = await axios.get(`/admin/create-test`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
+            }
+        });
+
+        return response;
+    } catch (error) {
+        if (error.response?.status === 401) {
+            unauthorizedErrorResponse(logout);
+            return;
+        } else {
+            console.error("Error in Get Create Assesments Fields Data details", error);
+            throw error;
+        }
+
+    }
+};
