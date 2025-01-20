@@ -10,9 +10,13 @@ import { Button } from "../ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useEditAdmin } from "@/hooks/apis/admin-list/useEditAdmin";
+import { useToast } from "@/hooks/use-toast"
+
 
 const EditAdmin = ({ admin, editDialog, setEditDialog,refetch }) => {
     console.log("admin",admin?.id)
+    const { toast } = useToast()
+
     const { isPending,isSuccess,error,EditAdminMutation } = useEditAdmin();
 
     const handleClose = () => {
@@ -33,8 +37,17 @@ const EditAdmin = ({ admin, editDialog, setEditDialog,refetch }) => {
         try {
             await EditAdminMutation(formData); // Call the mutation function
             setEditDialog(false); // Close the dialog after successful update
+            toast({
+                title: "Admin updated Successfully",
+                status: "success",
+              }); 
             refetch();
         } catch (err) {
+            toast({
+                title: "Admin updated Failed",
+                status: "success",
+                variant: "destructive",
+              }); 
             console.error("Failed to update admin:", err);
         }
     };
