@@ -48,8 +48,6 @@ export const addAdmin = async ({ organization_name, name, user_id, account_statu
     }
 };
 
-
-
 export const deleteAdmin = async ({ token,logout,admin_id }) => {
     try {
         const response = await axios.delete(`/admin/admin-delete/${admin_id}`, {
@@ -69,5 +67,30 @@ export const deleteAdmin = async ({ token,logout,admin_id }) => {
             throw error;
         }
 
+    }
+};
+
+
+export const editAdmin = async ({ token, logout, admin_id, organization_name, name, account_status }) => {
+    try {
+        const response = await axios.patch(
+            `/admin/update-admin/${admin_id}`,
+            { organization_name, name, account_status },
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json',
+                },
+            }
+        );
+        return response;
+    } catch (error) {
+        if (error.response?.status === 401) {
+            unauthorizedErrorResponse(logout);
+            return;
+        } else {
+            console.error("Error in Edit Admin", error);
+            throw error;
+        }
     }
 };

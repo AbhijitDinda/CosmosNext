@@ -137,6 +137,7 @@ const AdminPage = () => {
                         currentPage={adminData?.data?.data?.current_page}
                         onPageChange={handlePageChange}
                         handleDeleteAdmin={handleDeleteAdmin}
+                        refetch={refetch}
                     />
                 ) : (
                     <div className="text-center text-gray-500 p-4">
