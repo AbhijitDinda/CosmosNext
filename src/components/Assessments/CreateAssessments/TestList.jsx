@@ -33,7 +33,7 @@ const TestList = ({ cosmos_tests = [], expert_rating_tests = [] }) => {
     const testExists = selectedTests.some((t) => t.test_id === test.test_id);
 
     if (testExists) {
-      // Optional: Show a message or highlight to indicate the test is already added
+      // show toast
       console.warn("Test is already added.");
       return;
     }
