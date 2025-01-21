@@ -7,7 +7,7 @@ import { useAuth } from "@/hooks/context/uesAuth";
 export const useCreateAssessment = () => {
     const {auth,logout} = useAuth();
 
-    const { isLoading, isSuccess, error, mutateAsync: createAssessmentMutation } = useMutation({
+    const { isLoading, mutateAsync: createAssessmentMutation } = useMutation({
         mutationFn: (assessmentData) => CreateAssessment({ ...assessmentData, token: auth?.token ,logout }),
         onSuccess: (response) => {
             console.log('Successfully Assessment Created', response);
@@ -19,8 +19,6 @@ export const useCreateAssessment = () => {
 
     return {
         isLoading,
-        isSuccess,
-        error,
         createAssessmentMutation
     };
 };
