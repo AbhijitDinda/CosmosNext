@@ -14,7 +14,7 @@ import React, { useState } from "react";
 import { nanoid } from "nanoid";
 
 
-const TestList = ({ cosmos_tests=[], expert_rating_tests=[] }) => {
+const TestList = ({ cosmos_tests = [], expert_rating_tests = [] }) => {
   // Methods for handling data
 
 
@@ -26,14 +26,26 @@ const TestList = ({ cosmos_tests=[], expert_rating_tests=[] }) => {
 
   const [selectedTests, setSelectedTests] = useState([]);
   // const [searchQuery, setSearchQuery] = useState("");
+  console.log("selectedTests",selectedTests)
 
   const handleAddTest = (test) => {
-    if (selectedTests.find((t) => t.testId === test.testId)) return;
+    // Check if the test already exists in the selectedTests array
+    const testExists = selectedTests.some((t) => t.test_id === test.test_id);
+
+    if (testExists) {
+      // Optional: Show a message or highlight to indicate the test is already added
+      console.warn("Test is already added.");
+      return;
+    }
+
+    // Add the test if it doesn't exist
     setSelectedTests((prev) => [
       ...prev,
       { ...test, testId: nanoid() }, // Add a unique testId
     ]);
+
   };
+
 
   const handleRemoveTest = (test) => {
     setSelectedTests((prev) => prev.filter((t) => t.testId !== test.testId));
@@ -96,28 +108,34 @@ const TestList = ({ cosmos_tests=[], expert_rating_tests=[] }) => {
               <h3 className="font-medium text-sm text-gray-600 mb-2">
                 {category.category}
               </h3>
-              {category.data.map((test) => (
-                <div
-                  key={test.id}
-                  className="flex items-center justify-between p-3 border rounded-sm mb-2 hover:bg-gray-50"
-                >
-                  <div className="flex items-center gap-2">
-                    <span>{test.test_name}</span>
-                    <div className="flex items-center text-label font-bold text-sm">
-                      <Clock className="w-4 h-4 mr-1" />
-                      {test.total_time}
-                    </div>
-                  </div>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => handleAddTest(test)}
-                    className="h-8 w-8 shadow-none text-Primary border-Primary rounded-sm"
+              {category.data.map((test) => {
+                const isTestSelected = selectedTests.some((t) => t.test_id === test.test_id); // Check if test is already selected
+                return (
+                  <div
+                    key={test.test_id}
+                    className="flex items-center justify-between p-3 border rounded-sm mb-2 hover:bg-gray-50"
                   >
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
+                    <div className="flex items-center gap-2">
+                      <span>{test.test_name}</span>
+                      <div className="flex items-center text-label font-bold text-sm">
+                        <Clock className="w-4 h-4 mr-1" />
+                        {test.total_time}
+                      </div>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => handleAddTest(test)}
+                      className={`h-8 w-8 shadow-none text-Primary border-Primary rounded-sm ${isTestSelected ? "cursor-not-allowed opacity-50" : ""
+                        }`}
+                      disabled={isTestSelected} // Disable the button if test is already selected
+                    >
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                );
+              })}
+
             </div>
           ))}
         </div>
@@ -168,7 +186,7 @@ const TestList = ({ cosmos_tests=[], expert_rating_tests=[] }) => {
           <div className="space-y-2">
             {selectedTests.map((test) => (
               <div
-                key={test.testId}
+                key={test.test_id}
                 className="flex items-center justify-between p-3 border rounded-lg"
               >
                 <div className="flex w-full flex-wrap justify-between items-center gap-2">
