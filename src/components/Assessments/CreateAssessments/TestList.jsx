@@ -7,6 +7,7 @@ import {
   ChevronUp,
   ChevronDown,
   StarIcon,
+  Check
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -14,8 +15,7 @@ import React, { useState } from "react";
 import { nanoid } from "nanoid";
 
 
-const TestList = ({ cosmos_tests = [], expert_rating_tests = [] }) => {
-  // Methods for handling data
+const TestList = ({ cosmos_tests = [], expert_rating_tests = [],selectedTests,setSelectedTests }) => {
 
 
   const availableTests = [
@@ -24,9 +24,9 @@ const TestList = ({ cosmos_tests = [], expert_rating_tests = [] }) => {
   ];
 
 
-  const [selectedTests, setSelectedTests] = useState([]);
+  // const [selectedTests, setSelectedTests] = useState([]);
   // const [searchQuery, setSearchQuery] = useState("");
-  console.log("selectedTests",selectedTests)
+  // console.log("selectedTests",selectedTests)
 
   const handleAddTest = (test) => {
     // Check if the test already exists in the selectedTests array
@@ -126,11 +126,12 @@ const TestList = ({ cosmos_tests = [], expert_rating_tests = [] }) => {
                       variant="outline"
                       size="icon"
                       onClick={() => handleAddTest(test)}
-                      className={`h-8 w-8 shadow-none text-Primary border-Primary rounded-sm ${isTestSelected ? "cursor-not-allowed opacity-50" : ""
-                        }`}
+                      className={`h-8 w-8 shadow-none text-Primary border-Primary rounded-sm `}
                       disabled={isTestSelected} // Disable the button if test is already selected
                     >
-                      <Plus className="h-4 w-4" />
+                    {isTestSelected? <Check className="h-4 w-4"/> : <Plus className="h-4 w-4"/>}
+                    
+                    
                     </Button>
                   </div>
                 );
