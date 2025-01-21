@@ -23,8 +23,6 @@ export const getListOfAssesments = async ({ token },logout,page,search) => {
     }
 };
 
-
-
 export const getCreateAssesmentsFieldsData = async ({ token,logout}) => {
     try {
         const response = await axios.get(`/admin/create-test`, {
@@ -44,5 +42,30 @@ export const getCreateAssesmentsFieldsData = async ({ token,logout}) => {
             throw error;
         }
 
+    }
+};
+
+
+export const CreateAssessment = async ({ token, logout,test_variant,dataObj }) => {
+    try {
+        const response = await axios.post(
+            `/admin/create-test/${test_variant}`,
+            dataObj,
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json',
+                },
+            }
+        );
+        return response;
+    } catch (error) {
+        if (error.response?.status === 401) {
+            unauthorizedErrorResponse(logout);
+            return;
+        } else {
+            console.error("Error in craete Assessment", error);
+            throw error;
+        }
     }
 };
