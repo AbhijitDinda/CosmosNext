@@ -11,7 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 export default function CreateAssessment() {
   const { toast } = useToast();
   const { AssesmentsFieldsData } = useCreateAssessmentData();
-  const { isLoading, createAssessmentMutation } = useCreateAssessment();
+  const { isPending, createAssessmentMutation } = useCreateAssessment();
 
   const [selectedTests, setSelectedTests] = useState([]);
   const [formData, setFormData] = useState({
@@ -42,6 +42,14 @@ export default function CreateAssessment() {
         toast({ description: "All fields for Single Candidate are required.", variant: "destructive" });
         return false;
       }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const trimmedEmail = email_id.trim(); // Remove leading and trailing spaces
+      if (!emailRegex.test(trimmedEmail)) {
+        toast({ description: "Invalid email format.", variant: "destructive" });
+        return false;
+      }
+
     } else {
       const { designation } = formData.multiCandidate;
       if (!designation) {
@@ -110,9 +118,9 @@ export default function CreateAssessment() {
           variant="outline"
           className="rounded-sm hover:border hover:border-Primary hover:text-Primary text-white bg-Primary"
           onClick={handleSubmit}
-          disabled={isLoading}
+          disabled={isPending}
         >
-          {isLoading ? "Creating..." : "Create Assessment"}
+          {isPending ? "Creating..." : "Create Assessment"}
         </Button>
       </div>
     </div>
