@@ -13,6 +13,9 @@ import {
 import { Input } from "@/components/ui/input";
 import Heading from "@/components/Heading";
 import TextEditor from "@/components/TextEditor";
+import { useTestById } from "@/hooks/apis/test-group/useTestById";
+import { useParams } from 'next/navigation';
+import { useEffect } from 'react';
 
 const formSchema = z.object({
   description1: z.string().min(5, {
@@ -29,6 +32,8 @@ const formSchema = z.object({
 });
 
 const TestGroupForm = () => {
+
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,6 +44,12 @@ const TestGroupForm = () => {
       file: "",
     },
   });
+
+  // const { slug } = useParams();
+  // console.log(slug);
+
+  // const { testsDataById } = useTestById(slug);
+
 
   function onSubmit(values) {
     console.log(values);

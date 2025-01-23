@@ -13,8 +13,8 @@ import { ArrowRight, Settings } from "lucide-react";
 import { useRouter } from "next/navigation"; // Use Next.js router
 import { Skeleton } from "@/components/ui/skeleton";
 
-// useAllDesignation
-import { useAllDesignation } from "@/hooks/apis/test-group/useGetTestGroup";
+// useGetTestGroup
+import { useGetTestGroup } from "@/hooks/apis/test-group/useGetTestGroup";
 
 
 
@@ -33,7 +33,7 @@ const TestGroups = () => {
     isFetching: isFetchingTests,
     isLoading: isLoadingTests,
     testsData,
-  } = useAllDesignation(filters.search, filters.page);
+  } = useGetTestGroup(filters.search, filters.page);
 
 
 
