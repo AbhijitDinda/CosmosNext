@@ -50,7 +50,7 @@ const AssessmentsTable = ({ data = [], current_page, total_page, handlePageChang
                   size="icon"
                   variant="outline"
                   className="p-2 border border-Secondary_Text"
-                  onClick={() => router.push("/test-groups/form")} // Use Next.js router
+                  onClick={() => router.push(`/test-groups/form/${item.id}`)} // Use Next.js router
                 >
                   <Settings className="!size-5 stroke-1 stroke-Secondary_Text" />
                 </Button>
@@ -61,7 +61,7 @@ const AssessmentsTable = ({ data = [], current_page, total_page, handlePageChang
                   size="icon"
                   variant="outline"
                   className="p-2 border border-Secondary_Text"
-                  onClick={() => router.push(`/test-groups/action/${rowData.testName}`)} // Dynamic route
+                  onClick={() => router.push(`/test-groups/action/${item.id}`)} // Dynamic route
                 >
                   <ArrowRight className="!size-5 stroke-1 stroke-Secondary_Text" />
                 </Button>
