@@ -37,8 +37,29 @@ export const fatchTestGroupById = async ({ token, logout, test_id }) => {
             unauthorizedErrorResponse(logout);
             return;
         } else {
-            console.error("Error in Get list of Designation details", error);
+            console.error("Error in Fatch Test group details", error);
             throw error;
         }
     }
 }
+
+export const updateTestsById = async ({ token, logout, test_id, data }) => {
+    try {
+        const response = await axios.post(`/admin/test/settings/update/${test_id}`, data, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json', // Ensure the request has the correct content type
+            },
+        });
+        return response.data; // Return only the response data for simplicity
+    } catch (error) {
+        if (error.response?.status === 401) {
+            unauthorizedErrorResponse(logout);
+            return;
+        } else {
+            console.error("Error in updating Test Group details", error);
+            throw error; // Rethrow the error to be caught in the `useMutation` onError
+        }
+    }
+};

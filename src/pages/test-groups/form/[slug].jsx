@@ -16,6 +16,7 @@ import TextEditor from "@/components/TextEditor";
 import { useTestById } from "@/hooks/apis/test-group/useTestById";
 import { useParams } from 'next/navigation';
 import { useEffect } from 'react';
+import { useUpdateTestById } from "@/hooks/apis/test-group/useUpdateTestById";
 
 const formSchema = z.object({
   description1: z.string().min(5, {
@@ -59,8 +60,16 @@ const TestGroupForm = () => {
     }
   }, [testsDataById, form]);
 
+  const {isPending,updateTestsDataMutation} = useUpdateTestById(params?.slug);
+
   function onSubmit(values) {
     console.log(values);
+    updateTestsDataMutation({
+      test_description: values.description1,
+      test_instruction: values.description2,
+      test_objective: values.description3,
+      test_time: values.testTimer,
+    });
   }
 
   return (
