@@ -7,7 +7,7 @@ export const useTestById = (test_id) => {
 
     const {isFetching, isLoading, isError ,isSuccess,error,data:testsDataById } = useQuery({
         queryFn: () => fatchTestGroupById({ token: auth?.token ,logout,test_id }),
-        queryKey: ['getTestById']
+        queryKey: ['getTestById', test_id]
     })
 
     return{

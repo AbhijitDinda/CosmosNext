@@ -32,24 +32,32 @@ const formSchema = z.object({
 });
 
 const TestGroupForm = () => {
-
+  const params = useParams();
+  const { testsDataById } = useTestById(params?.slug);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       description1: "",
       description2: "",
-      description3:"",
+      description3: "",
       testTimer: "",
       file: "",
     },
   });
 
-  // const { slug } = useParams();
-  // console.log(slug);
-
-  // const { testsDataById } = useTestById(slug);
-
+  // Update form with API data when it's available
+  useEffect(() => {
+    if (testsDataById?.data?.data) {
+      form.reset({
+        description1: testsDataById.data.data.test_description,
+        description2: testsDataById.data.data.test_instruction,
+        description3: testsDataById.data.data.test_objective,
+        testTimer: testsDataById.data.data.test_time,
+        file: "", // You can handle file upload separately if needed
+      });
+    }
+  }, [testsDataById, form]);
 
   function onSubmit(values) {
     console.log(values);
@@ -74,7 +82,6 @@ const TestGroupForm = () => {
                   </FormLabel>
                   <FormControl>
                     <TextEditor
-                      className=""
                       placeholder="Assesment Description"
                       value={field.value}
                       onChange={field.onChange}
@@ -95,7 +102,6 @@ const TestGroupForm = () => {
                   </FormLabel>
                   <FormControl>
                     <TextEditor
-                      className=""
                       placeholder="Assesment Instructions"
                       value={field.value}
                       onChange={field.onChange}
@@ -115,7 +121,6 @@ const TestGroupForm = () => {
                   </FormLabel>
                   <FormControl>
                     <TextEditor
-                      className=""
                       placeholder="Assesment Objective"
                       value={field.value}
                       onChange={field.onChange}
@@ -141,7 +146,6 @@ const TestGroupForm = () => {
                 </FormItem>
               )}
             />
-            
 
             <FormField
               control={form.control}
