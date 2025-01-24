@@ -103,7 +103,7 @@ const AssessmentsTable = ({ data = [] ,current_page,total_page,handlePageChange}
                   size="icon"
                   variant="outline"
                   className="p-2 border border-Secondary_Text"
-                  onClick={() => router.push(`/assessments/action/${item.name}`)} // Updated navigation for Next.js
+                  onClick={() => router.push(`/assessments/action/${item.id}`)} // Updated navigation for Next.js
                 >
                   <ArrowRight className="!size-5 stroke-1 stroke-Secondary_Text" />
                 </Button>
