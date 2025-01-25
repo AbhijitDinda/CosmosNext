@@ -6,7 +6,8 @@ import { AssessmentsTests } from "./AssessmentTestsTab/AssessmentsTests";
 // import { useNavigate } from "react-router-dom";
 import { useRouter } from "next/navigation";
 
-export default function AssessmentsActionTabs() {
+export default function AssessmentsActionTabs({data}) {
+  console.log("first",data)
   // const navigate = useNavigate();
   const router = useRouter();
   return (
@@ -41,7 +42,7 @@ export default function AssessmentsActionTabs() {
         </div>
       </div>
       <TabsContent value="candidates">
-        <AssessmentsCandidateList />
+        <AssessmentsCandidateList user={data} />
       </TabsContent>
       <TabsContent value="tests">
         <AssessmentsTests />

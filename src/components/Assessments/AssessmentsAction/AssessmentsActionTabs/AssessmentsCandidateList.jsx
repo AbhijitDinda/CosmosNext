@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -38,7 +38,6 @@ const candidates = [
     name: "Adam Smith",
     email: "adamsmith@gmail.com",
     status: "Completed",
-    matchPercentage: 99,
   },
   {
     id: "2",
@@ -63,11 +62,15 @@ const candidates = [
   },
 ];
 
-export function AssessmentsCandidateList() {
+export function AssessmentsCandidateList({user }) {
+  
   const [selectedFilter, setSelectedFilter] = useState("All");
 // const navigate = useNavigate();
+console.log("user",user)
 const router = useRouter();
   // Table Columns
+
+
   const columns = [
     {
       id: "select",
@@ -94,17 +97,20 @@ const router = useRouter();
       enableHiding: false,
     },
     {
-      accessorKey: "name",
+      accessorKey: "user_name",
       header: "Name",
-      cell: (info) => info.getValue(),
+      // cell: (info) =>{ 
+      //   console.log("info.getValue()",info.getValue())
+      //   return info.getValue();
+      // },
     },
     {
-      accessorKey: "email",
+      accessorKey: "user_email",
       header: "Email",
-      cell: (info) => info.getValue(),
+      // cell: (info) => info.getValue(),
     },
     {
-      accessorKey: "status",
+      accessorKey: "test_status",
       header: "Status",
       cell: (info) => (
         <div
@@ -116,25 +122,14 @@ const router = useRouter();
         </div>
       ),
     },
-    {
-      accessorKey: "matchPercentage",
-      header: "Match % (With AI)",
-      cell: (info) => `${info.getValue() ?? "--"}%`,
-    },
+    
     {
       id: "actions",
       header: "",
       cell: ({ row }) => {
-        const candidateName = row.original.name; // Access the candidate's name
+        const candidateName = row.original.candidate_id; // Access the candidate's name
         return (
           <div className="flex justify-end gap-2">
-            <Button
-              size="sm"
-              variant="outline"
-              className="rounded-sm border border-Primary text-Primary hover:text-white hover:bg-Primary"
-            >
-              Select for next stage
-            </Button>
             <Button
               size="icon"
               variant="outline"
@@ -151,10 +146,13 @@ const router = useRouter();
     }
     
   ];
-
+  const [userdata,setUserData] = useState([]);
+useEffect(()=>{
+  user && setUserData(user)
+},[user])
   // Table Initialization
   const table = useReactTable({
-    data: candidates,
+    data: userdata,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
