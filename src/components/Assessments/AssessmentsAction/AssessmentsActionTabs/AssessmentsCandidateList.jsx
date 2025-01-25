@@ -25,52 +25,30 @@ import {
 // import { useNavigate } from "react-router-dom";
 import { useRouter } from "next/navigation";
 
-const statusColors = {
-  Completed: "bg-Primary/15 text-Primary",
-  Invited: "bg-Label_Background text-label",
-  Ongoing: "bg-Third/15 text-Third",
-};
-
-// Sample Candidate Data
-const candidates = [
-  {
-    id: "1",
-    name: "Adam Smith",
-    email: "adamsmith@gmail.com",
-    status: "Completed",
-  },
-  {
-    id: "2",
-    name: "Adam Smith",
-    email: "adamsmith@gmail.com",
-    status: "Invited",
-    matchPercentage: null,
-  },
-  {
-    id: "3",
-    name: "Adam Smith",
-    email: "adamsmith@gmail.com",
-    status: "Completed",
-    matchPercentage: 99,
-  },
-  {
-    id: "4",
-    name: "Adam Smith",
-    email: "adamsmith@gmail.com",
-    status: "Ongoing",
-    matchPercentage: null,
-  },
-];
-
-export function AssessmentsCandidateList({user }) {
-  
+export function AssessmentsCandidateList({ user }) {
   const [selectedFilter, setSelectedFilter] = useState("All");
-// const navigate = useNavigate();
-console.log("user",user)
-const router = useRouter();
+  const router = useRouter();
+  const [userdata, setUserData] = useState([]);
+
+  const statusColors = {
+    Completed: "bg-Primary/15 text-Primary",
+    Invited: "bg-Label_Background text-label",
+    Ongoing: "bg-Third/15 text-Third",
+  };
+
+  // Update userdata based on filter
+  useEffect(() => {
+    if (user) {
+      const filteredData =
+        selectedFilter === "All"
+          ? user
+          : user.filter((candidate) => candidate.test_status === selectedFilter);
+
+      setUserData(filteredData);
+    }
+  }, [user, selectedFilter]);
+
   // Table Columns
-
-
   const columns = [
     {
       id: "select",
@@ -99,15 +77,10 @@ const router = useRouter();
     {
       accessorKey: "user_name",
       header: "Name",
-      // cell: (info) =>{ 
-      //   console.log("info.getValue()",info.getValue())
-      //   return info.getValue();
-      // },
     },
     {
       accessorKey: "user_email",
       header: "Email",
-      // cell: (info) => info.getValue(),
     },
     {
       accessorKey: "test_status",
@@ -122,7 +95,6 @@ const router = useRouter();
         </div>
       ),
     },
-    
     {
       id: "actions",
       header: "",
@@ -143,13 +115,9 @@ const router = useRouter();
           </div>
         );
       },
-    }
-    
+    },
   ];
-  const [userdata,setUserData] = useState([]);
-useEffect(()=>{
-  user && setUserData(user)
-},[user])
+
   // Table Initialization
   const table = useReactTable({
     data: userdata,
@@ -165,8 +133,7 @@ useEffect(()=>{
           <label className="font-medium">Filter</label>
           {[
             "All",
-            "Passed",
-            "Failed",
+            "Completed",
             "Invited",
             "Ongoing",
             "Disqualified",
@@ -184,19 +151,6 @@ useEffect(()=>{
               </label>
             </div>
           ))}
-        </div>
-        <div className="space-y-2">
-          {/* <label className="font-medium">Score</label>
-          <Select>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Theme" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
-            </SelectContent>
-          </Select> */}
         </div>
       </div>
 
@@ -244,3 +198,4 @@ useEffect(()=>{
     </div>
   );
 }
+
