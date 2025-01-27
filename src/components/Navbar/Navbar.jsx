@@ -58,6 +58,7 @@ const Navbar = () => {
     { name: "Assessments", path: "/assessments" },
     { name: "Test Groups", path: "/test-groups" },
     { name: "Admin Accounts", path: "/admin-accounts" },
+    { name: "Designation", path: "/designation" },
   ];
 
   const username = "Hi User";

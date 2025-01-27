@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Heading from "@/components/Heading";
-import AdminList from "../../components/Admin/AdminList";
-import AddAdmin from "../../components/Admin/AddAdmin";
+import DesignationList from "../../components/Designation/DesignationList";
+import AddDesignation from "../../components/Designation/AddDesignation";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -92,7 +92,7 @@ const AdminPage = () => {
 
     return (
         <section className="mx-auto rounded-sm w-full max-w-screen-xl">
-            <Heading title="Admin Accounts" />
+            <Heading title="Designation" />
             <div className="p-4 bg-White rounded-sm">
                 {/* Add Admin Button with Dialog */}
                 <div className="ml-auto flex items-center justify-end mb-4">
@@ -102,7 +102,7 @@ const AdminPage = () => {
                                 variant="outline"
                                 className="rounded-sm bg-Primary text-white border-transparent hover:border hover:border-Primary hover:text-Primary hover:bg-white"
                             >
-                                Add Admin
+                                Add Designation
                             </Button>
                         </DialogTrigger>
                         <DialogContent className="max-w-lg">
@@ -111,7 +111,7 @@ const AdminPage = () => {
                                 <DialogClose />
                             </DialogHeader>
                             {/* Pass formData, setFormData, and handlers to AddAdmin */}
-                            <AddAdmin
+                            <AddDesignation
                                 formData={formData}
                                 onInputChange={handleInputChange}
                                 onSubmit={handleAddAdminSubmit}
@@ -132,7 +132,7 @@ const AdminPage = () => {
                         </div>
                     </div>
                 ) : adminData && adminData?.data?.data?.data.length > 0 ? (
-                    <AdminList
+                    <DesignationList
                         data={adminData?.data?.data?.data}
                         totalPages={adminData?.data?.data?.last_page}
                         currentPage={adminData?.data?.data?.current_page}
