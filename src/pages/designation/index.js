@@ -10,6 +10,7 @@ import { useAllDesignationPagination } from "@/hooks/apis/designation/useAllDesi
 
 
 import { useAddAdmin } from "@/hooks/apis/admin-list/useAddAdmin";
+import { useAddDesignation } from "@/hooks/apis/designation/useAddDesignation";
 import { useDeleteAdmin } from "@/hooks/apis/admin-list/useDeleteAdmin";
 import { useToast } from "@/hooks/use-toast"
 
@@ -22,15 +23,12 @@ const AdminPage = () => {
 
     // Form state moved to AdminPage
     const [formData, setFormData] = useState({
-        organization_name: "",
-        name: "",
-        user_id: "",
-        account_status: "1", // Default value
+        designation_name:"",
     });
 
     const { isFetching,isLoading,isSuccess,isError,error:designationDataError,refetch,designationDataWithPagination } = useAllDesignationPagination(page);
 
-    const { isPending, error, addAdminMutation } = useAddAdmin();
+    const { isPending, error, addDesignationMutation } = useAddDesignation();
     
     const { isPending: deleteAdminPending, isSuccess: deleteAdminSuccess, error: deleteAdminError, deleteAdminMutation } = useDeleteAdmin();
   
@@ -47,16 +45,13 @@ const AdminPage = () => {
     const handleAddAdminSubmit = async (e) => {
         e.preventDefault();
         try {
-            await addAdminMutation(formData);
+            await addDesignationMutation(formData);
             setIsDialogOpen(false); // Close dialog after success
             setFormData({
-                organization_name: "",
-                name: "",
-                user_id: "",
-                account_status: "1",
+                designation_name: "",
             });
             toast({
-                title: "Admin Added Successfully",
+                title: "designation Added Successfully",
                 description: "No des",
                 status: "success",
               }); 

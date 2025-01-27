@@ -75,3 +75,25 @@ export const getListOfDesignation = async ({ token, logout }) => {
         }
     }
 };
+
+
+export const addDesignation = async ({designationData , token, logout }) => {
+    try {
+        const response = await axios.post('/admin/add-designation', designationData, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
+            }
+        });
+
+        return response;
+    } catch (error) {
+        if (error.response?.status === 401) {
+            unauthorizedErrorResponse(logout);
+            return;
+        } else {
+            console.error("Error adding designation", error);
+            throw error;
+        }
+    }
+};

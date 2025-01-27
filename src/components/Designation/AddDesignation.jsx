@@ -6,33 +6,19 @@ import { Label } from "../ui/label";
 const AddDesignation = ({ formData, onInputChange, onSubmit, isPending, error }) => {
     return (
         <form className="space-y-4" onSubmit={onSubmit}>
+            
             <div className="space-y-2">
-                <Label htmlFor="organization_name" className="block text-sm font-medium">
-                Designation Name
-                </Label>
-                <Input
-                    id="organization_name"
-                    name="organization_name"
-                    type="text"
-                    value={formData.organization_name}
-                    onChange={onInputChange}
-                    className="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary"
-                    placeholder="Enter organization name"
-                    required
-                />
-            </div>
-            <div className="space-y-2">
-                <Label htmlFor="name" className="block text-sm font-medium">
+                <Label htmlFor="designation_name" className="block text-sm font-medium">
                 Organization Name
                 </Label>
                 <Input
-                    id="name"
-                    name="name"
+                    id="designation_name"
+                    name="designation_name"
                     type="text"
-                    value={formData.name}
+                    value={formData.designation_name}
                     onChange={onInputChange}
                     className="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary"
-                    placeholder="Enter user name"
+                    placeholder="Enter designation name"
                     required
                 />
             </div>
