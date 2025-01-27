@@ -39,7 +39,7 @@ const CandidatePage = () => {
     isLoading: isLoadingDesignation,
     designationData,
   } = useAllDesignation();
-  // console.log("designationData list",designationData?.data?.data?.data)
+  console.log("designationData list",designationData)
 
 
   // Determine whether to use filtered or unfiltered data
@@ -81,7 +81,7 @@ const CandidatePage = () => {
     <section className="mx-auto rounded-sm w-full max-w-screen-xl">
       <Heading title="Candidate" />
       <div className="p-4 bg-White rounded-sm">
-        <CandidateFilter filters={filters} onFilterChange={handleFilterChange} designation={designationData?.data?.data?.data} />
+        <CandidateFilter filters={filters} onFilterChange={handleFilterChange} designation={designationData} />
         
         {isLoading || isFetching ? (
           <div className="flex items-center space-x-4">
