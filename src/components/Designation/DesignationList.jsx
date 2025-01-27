@@ -14,7 +14,7 @@ import { PencilIcon, Trash2 } from "lucide-react";
 import EditAdmin from "./EditDesignation";
 
 const DesignationList = ({data = [],totalPages,currentPage,onPageChange,handleDeleteAdmin,refetch} ) => {
-    console.log("data",data);
+    console.log("data",totalPages,currentPage);
     const [deletingAdminId, setDeletingAdminId] = useState(null);
 
     const handleClick = async (adminId) => {
@@ -57,10 +57,11 @@ const DesignationList = ({data = [],totalPages,currentPage,onPageChange,handleDe
                     {data.map((admin) => (
                         <TableRow key={admin.id}>
                             <TableCell>{admin.id}</TableCell>
+                            <TableCell>{admin.designation_name}</TableCell>
+                            <TableCell>{admin.admin_id}</TableCell>
                             <TableCell>{admin.organization_name}</TableCell>
-                            <TableCell>{admin.name}</TableCell>
-                            <TableCell>{admin.id}</TableCell>
-                            <TableCell>{admin.test_created}</TableCell>
+                            <TableCell>{admin.created_at}</TableCell>
+                            <TableCell>{admin.status}</TableCell>
                             <TableCell className="flex items-center gap-2">
 
                                 <Button size="icon" variant="outline" className="hover:text-Primary" onClick={() => handleEditAdmin(admin)}>

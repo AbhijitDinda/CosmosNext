@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAllAdminList } from "@/hooks/apis/admin-list/useAllAdminList";
+import { useAllDesignationPagination } from "@/hooks/apis/designation/useAllDesignationPagination";
+
+
 import { useAddAdmin } from "@/hooks/apis/admin-list/useAddAdmin";
 import { useDeleteAdmin } from "@/hooks/apis/admin-list/useDeleteAdmin";
 import { useToast } from "@/hooks/use-toast"
@@ -25,7 +28,7 @@ const AdminPage = () => {
         account_status: "1", // Default value
     });
 
-    const { isFetching,isLoading,isSuccess,isError,error:adminDataError,refetch,adminData } = useAllAdminList(page);
+    const { isFetching,isLoading,isSuccess,isError,error:designationDataError,refetch,designationDataWithPagination } = useAllDesignationPagination(page);
 
     const { isPending, error, addAdminMutation } = useAddAdmin();
     
@@ -131,11 +134,11 @@ const AdminPage = () => {
                             <Skeleton className="h-4 w-[200px]" />
                         </div>
                     </div>
-                ) : adminData && adminData?.data?.data?.data.length > 0 ? (
+                ) : designationDataWithPagination && designationDataWithPagination?.data?.data?.data.length > 0 ? (
                     <DesignationList
-                        data={adminData?.data?.data?.data}
-                        totalPages={adminData?.data?.data?.last_page}
-                        currentPage={adminData?.data?.data?.current_page}
+                        data={designationDataWithPagination?.data?.data?.data}
+                        totalPages={designationDataWithPagination?.data?.data?.last_page}
+                        currentPage={designationDataWithPagination?.data?.data?.current_page}
                         onPageChange={handlePageChange}
                         handleDeleteAdmin={handleDeleteAdmin}
                         refetch={refetch}
