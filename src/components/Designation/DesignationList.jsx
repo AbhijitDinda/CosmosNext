@@ -11,29 +11,32 @@ import {
 import Pagination from "../Pagination"; // Adjust path based on your setup
 import { Button } from "../ui/button";
 import { PencilIcon, Trash2 } from "lucide-react";
-import EditAdmin from "./EditDesignation";
+import EditDesignation from "./EditDesignation";
 
-const DesignationList = ({data = [],totalPages,currentPage,onPageChange,handleDeleteAdmin,refetch} ) => {
+const DesignationList = ({data = [],totalPages,currentPage,onPageChange,handleDeleteDesignation,refetch} ) => {
     console.log("data",totalPages,currentPage);
-    const [deletingAdminId, setDeletingAdminId] = useState(null);
+    const [deletingDesignationId, setDeletingDesignationId] = useState(null);
 
-    const handleClick = async (adminId) => {
-        setDeletingAdminId(adminId); // Mark this admin as being processed
+    const handleClick = async (designationId) => {
+        setDeletingDesignationId(designationId); // Mark this designation as being deleted
         try {
-            await handleDeleteAdmin(adminId); // Call the delete function
+            await handleDeleteDesignation(designationId); // Call the delete function
+            console.log("Designation deleted successfully:", designationId);
+            refetch(); // Re-fetch the data to reflect the changes
         } catch (error) {
-            console.error("Error deleting admin:", error);
+            console.error("Error deleting designation:", error);
         } finally {
-            setDeletingAdminId(null); // Clear the processing state
+            setDeletingDesignationId(null); // Clear the deleting state
         }
     };
+    
 
     const [editDialog,setEditDialog] = useState(false);
-    const [selectedAdmin, setSelectedAdmin] = useState(null);
+    const [selectedDesignation, setSelectedDesignation] = useState(null);
 
-    const handleEditAdmin = (admin) => {
-        console.log(admin);
-        setSelectedAdmin(admin); // Set the selected admin
+    const handleEditDesignation = (designation) => {
+        console.log(designation);
+        setSelectedDesignation(designation); 
         setEditDialog(true); // Open the dialog
     };
 
@@ -54,21 +57,21 @@ const DesignationList = ({data = [],totalPages,currentPage,onPageChange,handleDe
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {data.map((admin) => (
-                        <TableRow key={admin.id}>
-                            <TableCell>{admin.id}</TableCell>
-                            <TableCell>{admin.designation_name}</TableCell>
-                            <TableCell>{admin.admin_id}</TableCell>
-                            <TableCell>{admin.organization_name}</TableCell>
-                            <TableCell>{admin.created_at}</TableCell>
-                            <TableCell>{admin.status}</TableCell>
+                    {data.map((designation) => (
+                        <TableRow key={designation.id}>
+                            <TableCell>{designation.id}</TableCell>
+                            <TableCell>{designation.designation_name}</TableCell>
+                            <TableCell>{designation.admin_id}</TableCell>
+                            <TableCell>{designation.organization_name}</TableCell>
+                            <TableCell>{designation.created_at}</TableCell>
+                            <TableCell>{designation.status}</TableCell>
                             <TableCell className="flex items-center gap-2">
 
-                                <Button size="icon" variant="outline" className="hover:text-Primary" onClick={() => handleEditAdmin(admin)}>
+                                <Button size="icon" variant="outline" className="hover:text-Primary" onClick={() => handleEditDesignation(designation)}>
                                 <PencilIcon />
                                 </Button>
 
-                                <Button size="icon" variant="outline" className="hover:text-Error" disabled={deletingAdminId === admin.id} onClick={() => handleClick(admin.id)}><Trash2 /></Button>
+                                <Button size="icon" variant="outline" className="hover:text-Error" disabled={deletingDesignationId === designation.id} onClick={() => handleClick(designation.id)}><Trash2 /></Button>
 
                             </TableCell>
                         </TableRow>
@@ -82,10 +85,10 @@ const DesignationList = ({data = [],totalPages,currentPage,onPageChange,handleDe
                 onPageChange={onPageChange}
             />
 
-            {/* EditAdmin Dialog */}
+            
             {editDialog && (
-                <EditAdmin
-                    admin={selectedAdmin}
+                <EditDesignation
+                    designation={selectedDesignation}
                     editDialog={editDialog}
                     setEditDialog={setEditDialog}
                     refetch={refetch}

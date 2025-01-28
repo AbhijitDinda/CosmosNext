@@ -9,7 +9,7 @@ const AddDesignation = ({ formData, onInputChange, onSubmit, isPending, error })
             
             <div className="space-y-2">
                 <Label htmlFor="designation_name" className="block text-sm font-medium">
-                Organization Name
+                Designation Name
                 </Label>
                 <Input
                     id="designation_name"

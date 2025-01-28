@@ -9,15 +9,14 @@ import {
 import { Button } from "../ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useEditAdmin } from "@/hooks/apis/admin-list/useEditAdmin";
+import { useEditDesignation } from "@/hooks/apis/designation/useEditDesignation";
 import { useToast } from "@/hooks/use-toast"
 
 
-const EditDesignation = ({ admin, editDialog, setEditDialog,refetch }) => {
-    console.log("admin",admin?.id)
+const EditDesignation = ({ designation, editDialog, setEditDialog,refetch }) => {
     const { toast } = useToast()
 
-    const { isPending,isSuccess,error,EditAdminMutation } = useEditAdmin();
+    const { isPending,isSuccess,error,EditDesignationMutation } = useEditDesignation();
 
     const handleClose = () => {
         setEditDialog(false); // Close the dialog
@@ -27,28 +26,25 @@ const EditDesignation = ({ admin, editDialog, setEditDialog,refetch }) => {
         event.preventDefault();
 
         const formData = {
-            admin_id: admin?.id, // Ensure the admin ID is passed for updating
-            organization_name: event.target.organization_name.value,
-            name: event.target.name.value,
-            // email: event.target.user_id.value,
-            "account_status": "1"
+            designation_id: designation?.id,
+            designation_name: event.target.designation_name.value,
         };
 
         try {
-            await EditAdminMutation(formData); // Call the mutation function
+            await EditDesignationMutation(formData); // Call the mutation function
             setEditDialog(false); // Close the dialog after successful update
             toast({
-                title: "Admin updated Successfully",
+                title: "Designation updated Successfully",
                 status: "success",
               }); 
             refetch();
         } catch (err) {
             toast({
-                title: "Admin updated Failed",
+                title: "Designation updated Failed",
                 status: "success",
                 variant: "destructive",
               }); 
-            console.error("Failed to update admin:", err);
+            console.error("Failed to update Designation:", err);
         }
     };
 
@@ -65,26 +61,12 @@ const EditDesignation = ({ admin, editDialog, setEditDialog,refetch }) => {
                         Designation Name
                         </Label>
                         <Input
-                            id="organization_name"
-                            name="organization_name"
+                            id="designation_name"
+                            name="designation_name"
                             type="text"
-                            defaultValue={admin?.organization_name || ""}
+                            defaultValue={designation?.designation_name || ""}
                             className="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary"
                             placeholder="Enter organization name"
-                            required
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="name" className="block text-sm font-medium">
-                        Organization Name
-                        </Label>
-                        <Input
-                            id="name"
-                            name="name"
-                            type="text"
-                            defaultValue={admin?.name || ""}
-                            className="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary"
-                            placeholder="Enter user name"
                             required
                         />
                     </div>
@@ -99,7 +81,7 @@ const EditDesignation = ({ admin, editDialog, setEditDialog,refetch }) => {
                     </Button>
                     {error && (
                         <p className="text-sm text-red-500 mt-2">
-                            {error?.response?.data?.message || "Failed to update admin."}
+                            {error?.response?.data?.message || "Failed to update Designation."}
                         </p>
                     )}
                 </form>

@@ -5,16 +5,14 @@ import AddDesignation from "../../components/Designation/AddDesignation";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useAllAdminList } from "@/hooks/apis/admin-list/useAllAdminList";
 import { useAllDesignationPagination } from "@/hooks/apis/designation/useAllDesignationPagination";
 
 
-import { useAddAdmin } from "@/hooks/apis/admin-list/useAddAdmin";
 import { useAddDesignation } from "@/hooks/apis/designation/useAddDesignation";
-import { useDeleteAdmin } from "@/hooks/apis/admin-list/useDeleteAdmin";
+import { useDeleteDesignation } from "@/hooks/apis/designation/useDeleteDesignation";
 import { useToast } from "@/hooks/use-toast"
 
-const AdminPage = () => {
+const DesignationPage = () => {
 
     const [page, setPage] = useState(1);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -30,7 +28,7 @@ const AdminPage = () => {
 
     const { isPending, error, addDesignationMutation } = useAddDesignation();
     
-    const { isPending: deleteAdminPending, isSuccess: deleteAdminSuccess, error: deleteAdminError, deleteAdminMutation } = useDeleteAdmin();
+    const { isPending: deleteDesignationPending, isSuccess: deleteDesignationSuccess, error: deleteDesignationError, deleteDesignation } = useDeleteDesignation();
   
 
     const handlePageChange = (page) => {
@@ -42,7 +40,7 @@ const AdminPage = () => {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleAddAdminSubmit = async (e) => {
+    const handleAddDesignationSubmit = async (e) => {
         e.preventDefault();
         try {
             await addDesignationMutation(formData);
@@ -52,14 +50,12 @@ const AdminPage = () => {
             });
             toast({
                 title: "designation Added Successfully",
-                description: "No des",
                 status: "success",
               }); 
               refetch();
         } catch (error) {
             toast({
                 title: "Something went wrong",
-                description: "No des",
                 status: "error",
                 variant: "destructive",
               }); 
@@ -68,9 +64,10 @@ const AdminPage = () => {
         }
     };
 
-    const handleDeleteAdmin = async (e) =>{
+    const handleDeleteDesignation = async (e) =>{
+        console.log("check 1",e)
         try {
-            await deleteAdminMutation(e);
+            await deleteDesignation(e);
             toast({
                 title: "Admin Deleted Successfully",
                 description: "No des",
@@ -105,14 +102,14 @@ const AdminPage = () => {
                         </DialogTrigger>
                         <DialogContent className="max-w-lg">
                             <DialogHeader>
-                                <DialogTitle>Add Admin</DialogTitle>
+                                <DialogTitle>Add Designation</DialogTitle>
                                 <DialogClose />
                             </DialogHeader>
                             {/* Pass formData, setFormData, and handlers to AddAdmin */}
                             <AddDesignation
                                 formData={formData}
                                 onInputChange={handleInputChange}
-                                onSubmit={handleAddAdminSubmit}
+                                onSubmit={handleAddDesignationSubmit}
                                 isPending={isPending}
                                 error={error}
                             />
@@ -135,12 +132,12 @@ const AdminPage = () => {
                         totalPages={designationDataWithPagination?.data?.data?.last_page}
                         currentPage={designationDataWithPagination?.data?.data?.current_page}
                         onPageChange={handlePageChange}
-                        handleDeleteAdmin={handleDeleteAdmin}
+                        handleDeleteDesignation={handleDeleteDesignation}
                         refetch={refetch}
                     />
                 ) : (
                     <div className="text-center text-gray-500 p-4">
-                        <p>No Admin found matching the criteria.</p>
+                        <p>No Designation found matching the criteria.</p>
                     </div>
                 )}
             </div>
@@ -148,4 +145,4 @@ const AdminPage = () => {
     );
 };
 
-export default AdminPage;
+export default DesignationPage;

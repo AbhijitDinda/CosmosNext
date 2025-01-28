@@ -1,7 +1,6 @@
 import axios from '@/config/axiosConfig';
 import { unauthorizedErrorResponse } from "@/utils/Responseobj/responseObject";
 
-
 export const getListOfDesignationpagination = async ({ token,logout,page}) => {
     try {
         const response = await axios.get(`/admin/list-of-designation?page=${page}`, {
@@ -93,6 +92,49 @@ export const addDesignation = async ({designationData , token, logout }) => {
             return;
         } else {
             console.error("Error adding designation", error);
+            throw error;
+        }
+    }
+};
+
+export const deleteDesignationapi = async ({ designationId, token, logout}) => {
+    try {
+        const response = await axios.delete(`/admin/delete-designation/${designationId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
+            }
+        });
+
+        return response;
+    } catch (error) {
+        if (error.response?.status === 401) {
+            unauthorizedErrorResponse(logout);
+            return;
+        } else {
+            console.error("Error deleting designation", error);
+            throw error;
+        }
+    }
+};
+
+export const updateDesignation = async ({ designation_id, designation_name, token, logout }) => {
+    console.log("khanki chudi data",designation_name)
+    try {
+        const response = await axios.patch(`/admin/update-designation/${designation_id}`, {designation_name}, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
+            }
+        });
+
+        return response;
+    } catch (error) {
+        if (error.response?.status === 401) {
+            unauthorizedErrorResponse(logout);
+            return;
+        } else {
+            console.error("Error updating designation", error);
             throw error;
         }
     }
