@@ -9,8 +9,8 @@ import {
 } from "@/components/ui/table";
 
 export default function CandidateComparisonTable({ apiResponse }) {
-  console.log("assessment_data",apiResponse);
-  
+  console.log("assessment_data", apiResponse);
+
   const { assessment_data, users_data } = apiResponse?.data;
 
   const testNames = assessment_data?.test_names; // Extract test names dynamically
@@ -30,75 +30,80 @@ export default function CandidateComparisonTable({ apiResponse }) {
 
       {/* Responsive Table */}
       <div className="overflow-x-auto bg-white rounded-lg shadow-md">
-        <table className="min-w-full divide-y divide-gray-200">
-          {/* Table Header */}
-          <thead className="bg-gray-100">
-            <tr>
-            <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-xl text-gray-700 uppercase tracking-wider"
-              >
-                Candidate Id
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-xl text-gray-700 uppercase tracking-wider"
-              >
-                Candidate Name
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-xl text-gray-700 uppercase tracking-wider"
-              >
-                Email
-              </th>
-              {testNames.map((testName, index) => (
+        {users && users.length > 0 ? (
+          <table className="min-w-full divide-y divide-gray-200">
+            {/* Table Header */}
+            <thead className="bg-gray-100">
+              <tr>
                 <th
-                  key={index}
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-xl text-gray-700 uppercase tracking-wider"
                 >
-                  {testName}
+                  Candidate Id
                 </th>
-              ))}
-            </tr>
-          </thead>
-          {/* Table Body */}
-          <tbody className="bg-white divide-y divide-gray-200">
-            {users.map((user) => (
-              <tr key={user.candidate_id} className="hover:bg-gray-50">
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black text-left">
-                  {user.candidate_id}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black text-left">
-                  {user.user_name}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-black text-left">
-                  {user.user_email}
-                </td>
-                {assessment_data.test_ids.map((testId, index) => (
-                  <td
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-xl text-gray-700 uppercase tracking-wider"
+                >
+                  Candidate Name
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-xl text-gray-700 uppercase tracking-wider"
+                >
+                  Email
+                </th>
+                {testNames.map((testName, index) => (
+                  <th
                     key={index}
-                    className="px-6 py-4 whitespace-nowrap text-sm text-black text-left"
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-xl text-gray-700 uppercase tracking-wider"
                   >
-                    <ul>
-                      {user[`test_${testId}_result`]
-                        ? user[`test_${testId}_result`]
-                          .split(", ") // Split the string by ", "
-                          .map((result, i) => (
-                            <li key={i} className="mb-1">
-                              <span ></span> {result}
-                            </li>
-                          ))
-                        : "N/A"}
-                    </ul>
-
-                  </td>
+                    {testName}
+                  </th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            {/* Table Body */}
+            <tbody className="bg-white divide-y divide-gray-200">
+              {users.map((user) => (
+                <tr key={user.candidate_id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black text-left">
+                    {user.candidate_id}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black text-left">
+                    {user.user_name}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-black text-left">
+                    {user.user_email}
+                  </td>
+                  {assessment_data.test_ids.map((testId, index) => (
+                    <td
+                      key={index}
+                      className="px-6 py-4 whitespace-nowrap text-sm text-black text-left"
+                    >
+                      <ul>
+                        {user[`test_${testId}_result`]
+                          ? user[`test_${testId}_result`]
+                              .split(", ") // Split the string by ", "
+                              .map((result, i) => (
+                                <li key={i} className="mb-1">
+                                  <span></span> {result}
+                                </li>
+                              ))
+                          : "N/A"}
+                      </ul>
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div className="text-center py-4 text-gray-500">
+            No candidates found.
+          </div>
+        )}
       </div>
     </div>
   );
