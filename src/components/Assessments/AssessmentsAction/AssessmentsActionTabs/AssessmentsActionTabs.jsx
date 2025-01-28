@@ -6,7 +6,7 @@ import { AssessmentsTests } from "./AssessmentTestsTab/AssessmentsTests";
 // import { useNavigate } from "react-router-dom";
 import { useRouter } from "next/navigation";
 
-export default function AssessmentsActionTabs({data}) {
+export default function AssessmentsActionTabs({data,token}) {
   console.log("first",data)
   // const navigate = useNavigate();
   const router = useRouter();
@@ -32,7 +32,7 @@ export default function AssessmentsActionTabs({data}) {
             size="sm"
             variant="outline"
             className="rounded-sm hover:border hover:border-Primary hover:text-Primary text-white bg-Primary"
-            onClick={() => router.push("/assessments/candidate-comparison")}
+            onClick={() => router.push(`/assessments/candidate-comparison/${token}`)}
           >
             Compare
           </Button>

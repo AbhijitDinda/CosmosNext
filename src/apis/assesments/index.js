@@ -93,3 +93,23 @@ export const getAssessmentsAllUser = async ({ token,logout,assessment_id}) => {
 
     }
 };
+
+export const compareAssessmentUser = async ({ token, logout, assessment_id }) => {
+    try {
+        const response = await axios.get(`/admin/assessment-compare-results/${assessment_id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
+            }
+        });
+        return response;
+    } catch (error) {
+        if (error.response?.status === 401) {
+            unauthorizedErrorResponse(logout);
+            return;
+        } else {
+            console.error("Error in Compare Assessment User", error);
+            throw error;
+        }
+    }
+};
