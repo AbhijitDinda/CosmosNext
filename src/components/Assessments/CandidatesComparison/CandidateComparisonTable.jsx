@@ -101,7 +101,7 @@ export default function CandidateComparisonTable({ apiResponse }) {
           </table>
         ) : (
           <div className="text-center py-4 text-gray-500">
-            No candidates found.
+            No Complete candidates found.
           </div>
         )}
       </div>
