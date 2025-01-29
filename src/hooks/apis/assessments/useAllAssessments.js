@@ -7,7 +7,8 @@ export const useAllAssessments = (page,search) => {
 
     const {isFetching, isLoading, isError ,isSuccess,error,data:assessmentsData } = useQuery({
         queryFn: () => getListOfAssesments({ token: auth?.token },logout,page,search),
-        queryKey: ['getAssesments',page,search]
+        queryKey: ['getAssesments',page,search],
+        refetchOnWindowFocus: false,
     })
 
     return{

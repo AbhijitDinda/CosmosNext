@@ -16,6 +16,7 @@ export const useAllUserOfAssesment = (assessment_id) => {
         queryFn: () => getAssessmentsAllUser({ token: auth?.token, logout, assessment_id }),
         queryKey: ['getUserOfAssesments', assessment_id],
         enabled: !!assessment_id, // Fetch only if `assessment_id` is valid
+        retry: false, // Stop retrying on error
     });
 
     return {

@@ -23,8 +23,8 @@ const CandidatesComparison = () => {
             <p className="ml-3 text-sm text-gray-600">Loading data...</p>
           </div>
         ) : isError ? (
-          <p className="text-sm text-red-500">
-            Error fetching data: {error?.message || "Unknown error"}
+          <p className="text-lg text-red-500">
+            Error fetching data
           </p>
         ) : (
           isSuccess && compareUserOfAssesments?.data && (
