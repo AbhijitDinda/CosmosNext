@@ -1,14 +1,18 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import TestList from "@/components/Assessments/CreateAssessments/TestList";
 import CreateAssessmentFilters from "@/components/Assessments/CreateAssessments/CreateAssessmentFilters";
 import Heading from "@/components/Heading";
 import { useCreateAssessmentData } from "@/hooks/apis/assessments/useCreateAssessmentData";
 import { useCreateAssessment } from "@/hooks/apis/assessments/useCreateAssessment";
 import { useToast } from "@/hooks/use-toast";
+import { useRouter } from 'next/navigation'; 
 
 export default function CreateAssessment() {
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const router = useRouter();
+
   const { toast } = useToast();
   const { AssesmentsFieldsData } = useCreateAssessmentData();
   const { isPending, createAssessmentMutation } = useCreateAssessment();
@@ -88,8 +92,29 @@ export default function CreateAssessment() {
       console.log("Prepared Form Data:", dataObj);
 
       // Call the mutation with prepared data
-      await createAssessmentMutation({ dataObj, test_variant: testVariant });
-      toast({ description: "Assessment created successfully!", variant: "success" });
+      const response = await createAssessmentMutation({ dataObj, test_variant: testVariant });
+      console.log("response",response?.data?.data?.test_data?.id)
+
+
+      // toast({ description: "Assessment created successfully!", variant: "success" });
+      setSelectedTests([]);
+      setFormData({
+        type: "singleCandidate",
+        singleCandidate: { candidate_name: "", email_id: "", designation: "" },
+        multiCandidate: { designation: "" },
+      });
+
+      setShowSuccessDialog(true);
+
+      const RedirectAssessmentId = response?.data?.data?.test_data?.id 
+      
+      if (RedirectAssessmentId) {
+        // Delay redirection by 2 seconds (2000ms)
+        setTimeout(() => {
+          router.push(`/assessments/action/${RedirectAssessmentId}`);
+        }, 2000);
+      }
+      
     } catch (error) {
       console.error("Failed to create Assessment:", error);
       toast({ description: "Failed to create Assessment.", variant: "destructive" });
@@ -123,6 +148,24 @@ export default function CreateAssessment() {
           {isPending ? "Creating..." : "Create Assessment"}
         </Button>
       </div>
+
+      {/* Success Dialog */}
+      <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Assessment Created</DialogTitle>
+            <DialogDescription>
+              Your assessment has been successfully created.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end">
+            <Button onClick={() => setShowSuccessDialog(false)} variant="primary">
+              OK
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
     </div>
   );
 }

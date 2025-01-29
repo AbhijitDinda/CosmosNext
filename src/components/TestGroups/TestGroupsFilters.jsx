@@ -40,9 +40,9 @@ const router = useRouter(); // Next.js router for navigation
           size="sm"
           variant="outline"
           className="rounded-sm hover:border hover:border-Primary hover:text-Primary text-white bg-Primary"
-          onClick={() => router.push("/assessments/create")} // Navigate to create assessment page
+          onClick={() => router.push("/test-groups/create")} // Navigate to create assessment page
         >
-          Create Assessment
+          Create Test
         </Button>
       </div>
 
