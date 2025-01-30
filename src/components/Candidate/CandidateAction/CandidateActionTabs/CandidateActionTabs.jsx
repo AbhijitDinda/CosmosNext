@@ -1,22 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import OverviewTab from './OverviewTab'
-import TestsTab from './TestTabs/TestsTab'
-import InsightsTab from './InsightsTab'
-import PreferencesTab from './PreferencesTab'
-import AnalysisTab from './AnalysisTab'
-import PersonalityTab from './PersonalityTab'
+import ApproachAssessment from './ApproachAssessment'
 import { Button } from '@/components/ui/button'
 import AskAi from '@/components/AskAi'
 import SvgStars from '@/svgs/SvgStars';
 
 const tabsConfig = [
-    { value: "overview", label: "Overview", component: <OverviewTab /> },
-    { value: "tests", label: "Tests", component: <TestsTab /> },
-    { value: "insights", label: "Insights and Visualizations", component: <InsightsTab /> },
-    { value: "analysis", label: "AI Analysis and Matching", component: <AnalysisTab /> },
-    { value: "preferences", label: "Preferences", component: <PreferencesTab /> },
-    { value: "personality", label: "Personality", component: <PersonalityTab /> },
+    { value: "overview", label: "Approach Assessment (AA)", component: <ApproachAssessment /> },
 ];
 
 const CandidateActionTabs = () => {
