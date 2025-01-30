@@ -22,6 +22,7 @@ export default function App({ Component, pageProps }) {
 
   const navbarExcludedRoutes = publicRoutes; // Same as publicRoutes for now
   const isNavbarExcluded = router ? navbarExcludedRoutes.includes(router.pathname) : false;
+  
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -29,20 +30,26 @@ export default function App({ Component, pageProps }) {
         {/* Conditionally render Navbar */}
         {!isNavbarExcluded && isClient && <Navbar />}
 
+
+
         {/* Main Content */}
-        <div className={`pt-0 md:pt-5 lg:pt-24 bg-Fourth min-h-screen`}>
-          {isClient && isPublicRoute ? (
-            <Component {...pageProps} />
-          ) : (
-            isClient && (
-              <ProtectedRoute>
+        {isClient && isPublicRoute ? (
+          <Component {...pageProps} />
+        ) : (
+          isClient && (
+            <ProtectedRoute>
+              <div className={`pt-0 md:pt-5 lg:pt-24 bg-Fourth min-h-screen`}>
                 <Component {...pageProps} />
-              </ProtectedRoute>
-            )
-          )}
-        </div>
+              </div>
+            </ProtectedRoute>
+          )
+        )}
+        {/* Main Content end */}
+
+
+
         <Toaster />
-        
+
       </AuthContextProvider>
     </QueryClientProvider>
   );

@@ -38,10 +38,6 @@ const TestGroups = () => {
 
 
 
-
-
-
-
   console.log("testsData", testsData?.data?.data?.data);
 
   // Handle filter changes (passed down to AssessmentsFilters)
