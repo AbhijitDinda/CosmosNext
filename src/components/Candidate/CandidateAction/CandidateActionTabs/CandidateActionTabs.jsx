@@ -2,6 +2,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ApproachAssessment from './ApproachAssessment'
 import MotivationDriveAssessment from './MotivationDriveAssessment'
+import NumericalLogicalReasoningAssessment from './NumericalLogicalReasoningAssessment'
+
+import LogicalReasoningEvaluation from './LogicalReasoningEvaluation'
+
 import { Button } from '@/components/ui/button'
 import AskAi from '@/components/AskAi'
 import SvgStars from '@/svgs/SvgStars';
@@ -9,6 +13,9 @@ import SvgStars from '@/svgs/SvgStars';
 const tabsConfig = [
     { value: "AA", label: "Approach Assessment (AA)", component: <ApproachAssessment /> },
     { value: "MDA", label: "Motivation Drive Assessment", component: <MotivationDriveAssessment /> },
+    { value: "PT", label: "TestNumerical and Logical Reasoning Assessment (NLA)", component: <NumericalLogicalReasoningAssessment /> },
+
+    { value: "LRV", label: "Logical Reasoning Evaluation (LRV)", component: <LogicalReasoningEvaluation /> },
 ];
 
 const CandidateActionTabs = () => {
