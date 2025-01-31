@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ApproachAssessment from './ApproachAssessment'
+import MotivationDriveAssessment from './MotivationDriveAssessment'
 import { Button } from '@/components/ui/button'
 import AskAi from '@/components/AskAi'
 import SvgStars from '@/svgs/SvgStars';
 
 const tabsConfig = [
-    { value: "overview", label: "Approach Assessment (AA)", component: <ApproachAssessment /> },
+    { value: "AA", label: "Approach Assessment (AA)", component: <ApproachAssessment /> },
+    { value: "MDA", label: "Motivation Drive Assessment", component: <MotivationDriveAssessment /> },
 ];
 
 const CandidateActionTabs = () => {

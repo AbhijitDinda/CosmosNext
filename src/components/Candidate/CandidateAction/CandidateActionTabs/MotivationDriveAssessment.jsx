@@ -24,6 +24,7 @@ const InsightsTab = () => {
 
     return (
         <div className="container w-full flex">
+            {/* //changable content which is change to every Assessment */}
             <div className="w-4/6">
                 <div className="bg-gray-100 p-4 rounded-lg mb-6">
                     <h2 className="text-xl font-bold">Trait: {data.trait_name}</h2>
@@ -60,6 +61,9 @@ const InsightsTab = () => {
                 </div>
             </div>
 
+
+
+            {/* //keep this section for suggestion question */}
             <div className="w-2/6 pl-6">
                 <div className="bg-gray-100 p-4 rounded-lg mb-6">
                     <h3 className="text-lg font-bold">Suggestive Questions</h3>
