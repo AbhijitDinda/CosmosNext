@@ -42,7 +42,7 @@ export default function AssessmentsActionTabs({data,token}) {
         </div>
       </div>
       <TabsContent value="candidates">
-        <AssessmentsCandidateList user={data} />
+        <AssessmentsCandidateList user={data} token={token} />
       </TabsContent>
       <TabsContent value="tests">
         <AssessmentsTests />

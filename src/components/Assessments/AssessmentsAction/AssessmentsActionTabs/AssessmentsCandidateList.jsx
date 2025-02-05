@@ -25,7 +25,7 @@ import {
 // import { useNavigate } from "react-router-dom";
 import { useRouter } from "next/navigation";
 
-export function AssessmentsCandidateList({ user }) {
+export function AssessmentsCandidateList({ user,token }) {
   const [selectedFilter, setSelectedFilter] = useState("All");
   const router = useRouter();
   const [userdata, setUserData] = useState([]);
@@ -36,6 +36,7 @@ export function AssessmentsCandidateList({ user }) {
     Ongoing: "bg-Third/15 text-Third",
   };
 
+  console.log("user",user,token)
   // Update userdata based on filter
   useEffect(() => {
     if (user) {
@@ -99,7 +100,8 @@ export function AssessmentsCandidateList({ user }) {
       id: "actions",
       header: "",
       cell: ({ row }) => {
-        const candidateName = row.original.candidate_id; // Access the candidate's name
+        const candidateId = row?.original?.candidate_id; // Access the candidate's name
+        // const assessmentToken = 
         return (
           <div className="flex justify-end gap-2">
             <Button
@@ -107,7 +109,7 @@ export function AssessmentsCandidateList({ user }) {
               variant="outline"
               className="p-2 border border-Secondary_Text"
               onClick={() =>
-                router.push(`/candidates/action/${encodeURIComponent(candidateName)}`)
+                router.push(`/candidates/action/${token}&${encodeURIComponent(candidateId)}`)
               }
             >
               <ArrowRight className="!size-5 stroke-1 stroke-Secondary_Text" />
