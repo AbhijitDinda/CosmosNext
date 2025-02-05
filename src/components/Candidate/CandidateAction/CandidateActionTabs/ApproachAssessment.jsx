@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import TestTimeStats from './components/TestTimeStats'
 
 const data = {
     id: 3,
@@ -23,6 +24,8 @@ const InsightsTab = () => {
     };
 
     return (
+        <>
+        <TestTimeStats/>
         <div className="container w-full flex">
             <div className="w-4/6">
                 <div className="bg-gray-100 p-4 rounded-lg mb-6">
@@ -84,6 +87,7 @@ const InsightsTab = () => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
 
