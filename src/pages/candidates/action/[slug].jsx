@@ -18,7 +18,7 @@ const CandidateAction = () => {
                 <CandidateFilterAndAnalytics />
             </div>
             <div className='mt-4'>
-                <CandidateActionTabs />
+                <CandidateActionTabs data={TestReport} isLoading={isLoading}  />
             </div>
         </section>
     )

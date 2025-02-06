@@ -1,24 +1,24 @@
 import React from 'react';
-
 import CompetenceMotivation from './components/CompetenceMotivation';
 import SuggestiveQuestions from './components/SuggestiveQuestions';
-import TestTimeStats from './components/TestTimeStats'
+import TestTimeStats from './components/TestTimeStats';
 
-const CompetenceMotivationSection = () => {
+const CompetenceMotivationSection = ({ data }) => {
+    console.log("inner data", data);
+
     return (
         <>
-        <TestTimeStats/>
-            <div className="w-full flex pb-10">
-                <CompetenceMotivation title={"Self"} type={"type"} description={["type"]} examples={["a", "v"]} />
-                <SuggestiveQuestions questions={["How can the Implementer adapt to sudden changes?","How can the Implementer adapt to sudden changes?"]}/>
-            </div>
-            <div className="w-full flex pb-10">
-                <CompetenceMotivation />
-                <SuggestiveQuestions questions={["How can the Implementer adapt to sudden changes?","How can the Implementer adapt to sudden changes?"]}/>
-            </div>
+            <TestTimeStats time_taken={data?.total_time} avg_time={data?.average_time} />
 
+            {data?.data?.map((item, index) => (
+                <div key={index} className="w-full flex pb-10">
+                    <CompetenceMotivation title={`${item.name} Motivation`} type={item.behavioral_style}
+                        description={item.description} behaviors={item.behaviors} challenges={item.challenges}/>
+                    <SuggestiveQuestions questions={item.questions || ["No questions available"]} />
+                </div>
+
+            ))}
         </>
-        
     );
 };
 
