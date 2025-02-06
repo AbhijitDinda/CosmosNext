@@ -8,6 +8,9 @@ import LeadershipReadinessAssessment from './LeadershipReadinessAssessment';
 import LeadershipStyleAssessment from './LeadershipStyleAssessment';
 import NumericalLogicalReasoningAssessment from './NumericalLogicalReasoningAssessment';
 import LogicalReasoningEvaluation from './LogicalReasoningEvaluation';
+import SituationalJudgementAssessment from './SituationalJudgementAssessment';
+import NumericalandLogicalReasoningAssessment from './NumericalandLogicalReasoningAssessment';
+
 import { Button } from '@/components/ui/button';
 import AskAi from '@/components/AskAi';
 import SvgStars from '@/svgs/SvgStars';
@@ -16,12 +19,13 @@ import SvgStars from '@/svgs/SvgStars';
 const tabsConfig = [
     { value: "AA", label: "Approach Assessment (AA)", component: ApproachAssessment },
     { value: "MDA", label: "Motivation Drive Assessment", component: MotivationDriveAssessment },
-    { value: "PT", label: "TestNumerical and Logical Reasoning Assessment (NLA)", component: NumericalLogicalReasoningAssessment },
     { value: "LRV", label: "Logical Reasoning Evaluation (LRV)", component: LogicalReasoningEvaluation },
     { value: "TIA", label: "Team Inventory Assessment", component: TeamInventoryAssessment },
     { value: "EIA", label: "Emotional Intelligence Assessment (EIA)", component: EmotionalIntelligenceAssessment },
     { value: "LRA", label: "Leadership Readiness Assessment", component: LeadershipReadinessAssessment },
     { value: "LSA", label: "Leadership Style Assessment", component: LeadershipStyleAssessment },
+    { value: "SJA", label: "Situational Judgement Assessment", component: SituationalJudgementAssessment },
+    { value: "NLA", label: "Numerical and Logical Reasoning Assessment (NLA)", component: NumericalandLogicalReasoningAssessment },
 ];
 
 const CandidateActionTabs = ({ data, isLoading }) => {
