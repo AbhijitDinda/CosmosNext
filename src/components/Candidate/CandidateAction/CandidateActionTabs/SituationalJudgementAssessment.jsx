@@ -50,6 +50,6 @@ const SituationalJudgementAssessment = ({ data }) => {
       </div>
     </>
   );
-};
+}; 
 
 export default SituationalJudgementAssessment; 
