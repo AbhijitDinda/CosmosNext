@@ -4,6 +4,7 @@ import ApproachAssessment from './ApproachAssessment';
 import TeamInventoryAssessment from './TeamInventoryAssessment';
 import MotivationDriveAssessment from './MotivationDriveAssessment';
 import EmotionalIntelligenceAssessment from './EmotionalIntelligenceAssessment';
+import LeadershipReadinessAssessment from './LeadershipReadinessAssessment';
 import NumericalLogicalReasoningAssessment from './NumericalLogicalReasoningAssessment';
 import LogicalReasoningEvaluation from './LogicalReasoningEvaluation';
 import { Button } from '@/components/ui/button';
@@ -18,6 +19,7 @@ const tabsConfig = [
     { value: "LRV", label: "Logical Reasoning Evaluation (LRV)", component: LogicalReasoningEvaluation },
     { value: "TIA", label: "Team Inventory Assessment", component: TeamInventoryAssessment },
     { value: "EIA", label: "Emotional Intelligence Assessment (EIA)", component: EmotionalIntelligenceAssessment },
+    { value: "LRA", label: "Leadership Readiness Assessment", component: LeadershipReadinessAssessment },
 ];
 
 const CandidateActionTabs = ({ data, isLoading }) => {
