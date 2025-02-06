@@ -5,6 +5,7 @@ import TeamInventoryAssessment from './TeamInventoryAssessment';
 import MotivationDriveAssessment from './MotivationDriveAssessment';
 import EmotionalIntelligenceAssessment from './EmotionalIntelligenceAssessment';
 import LeadershipReadinessAssessment from './LeadershipReadinessAssessment';
+import LeadershipStyleAssessment from './LeadershipStyleAssessment';
 import NumericalLogicalReasoningAssessment from './NumericalLogicalReasoningAssessment';
 import LogicalReasoningEvaluation from './LogicalReasoningEvaluation';
 import { Button } from '@/components/ui/button';
@@ -20,6 +21,7 @@ const tabsConfig = [
     { value: "TIA", label: "Team Inventory Assessment", component: TeamInventoryAssessment },
     { value: "EIA", label: "Emotional Intelligence Assessment (EIA)", component: EmotionalIntelligenceAssessment },
     { value: "LRA", label: "Leadership Readiness Assessment", component: LeadershipReadinessAssessment },
+    { value: "LSA", label: "Leadership Style Assessment", component: LeadershipStyleAssessment },
 ];
 
 const CandidateActionTabs = ({ data, isLoading }) => {
