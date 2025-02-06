@@ -11,6 +11,8 @@ import LogicalReasoningEvaluation from './LogicalReasoningEvaluation';
 import SituationalJudgementAssessment from './SituationalJudgementAssessment';
 import NumericalandLogicalReasoningAssessment from './NumericalandLogicalReasoningAssessment';
 
+import ExpertRating from './ExpertRating';
+
 import { Button } from '@/components/ui/button';
 import AskAi from '@/components/AskAi';
 import SvgStars from '@/svgs/SvgStars';
@@ -26,6 +28,10 @@ const tabsConfig = [
     { value: "LSA", label: "Leadership Style Assessment", component: LeadershipStyleAssessment },
     { value: "SJA", label: "Situational Judgement Assessment", component: SituationalJudgementAssessment },
     { value: "NLA", label: "Numerical and Logical Reasoning Assessment (NLA)", component: NumericalandLogicalReasoningAssessment },
+    { value: "DSC", label: "Demo Editing Skills Certification (Expert Ratings)", component: ExpertRating },
+    { value: "ER", label: "Demo Adobe Photoshop CS3 Test (Expert Ratings)", component: ExpertRating },
+    { value: "ERC++", label: "Demo Programming with C++ Test (Expert Ratings)", component: ExpertRating },
+    { value: "ERCHTML", label: "Demo HTML 4.01 Test (Expert Ratings)", component: ExpertRating },
 ];
 
 const CandidateActionTabs = ({ data, isLoading }) => {
