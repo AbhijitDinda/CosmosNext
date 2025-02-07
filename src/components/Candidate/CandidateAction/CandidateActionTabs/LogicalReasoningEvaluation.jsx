@@ -1,17 +1,20 @@
 import React from 'react';
-import { CheckCircleIcon, XCircleIcon } from 'lucide-react';
+import { CheckCircleIcon, CloudCog, XCircleIcon } from 'lucide-react';
 
 const PreferencesTab = ({ data }) => {
     return (
         <div className="flex flex-col bg-white rounded-sm border border-gray-200 p-4">
             <div className="space-y-4">
                 {data?.data?.data?.map((item, index) => {
+                    
                     const correctOption = item[`option_${item.right_option}`];
-                    const chosenOption = item[item.user_answer];
+                    const chosenOption = item.user_answer;
+                    console.log("gg",correctOption,chosenOption)
 
                     return (
                         <div key={index} className="p-4 border rounded-md">
-                            <div className="pb-2">
+                            <div className="pb-2 flex">
+                            <p className='font-semibold text-lg'>{index+1}.</p>
                                 <img
                                     src={`https://uat.cteval.com/backoffice/assets/upload/${item.question_name}`}
                                     alt={`Question ${index + 1}`}
@@ -28,8 +31,9 @@ const PreferencesTab = ({ data }) => {
                                     if (!option) return null; // Skip if option is null
 
                                     const isCorrect = option === correctOption;
-                                    const isChosen = option === chosenOption;
+                                    const isChosen = chosenOption;
                                     const isWrongChoice = isChosen && !isCorrect;
+                                    console.log(`isWrongChoice ${optNum}`,isWrongChoice)
 
                                     return (
                                         <div
@@ -50,6 +54,7 @@ const PreferencesTab = ({ data }) => {
                                             ) : (
                                                 <div className="w-5 h-5" />
                                             )}
+                                            
 
                                             <img
                                                 src={`https://uat.cteval.com/backoffice/assets/upload/${option}`}
