@@ -10,6 +10,7 @@ import NumericalLogicalReasoningAssessment from './NumericalLogicalReasoningAsse
 import LogicalReasoningEvaluation from './LogicalReasoningEvaluation';
 import SituationalJudgementAssessment from './SituationalJudgementAssessment';
 import NumericalandLogicalReasoningAssessment from './NumericalandLogicalReasoningAssessment';
+import VerbalReasoningEvaluation from './VerbalReasoningEvaluation';
 
 import ExpertRating from './ExpertRating';
 
@@ -26,10 +27,11 @@ const tabsConfig = [
     { value: "EIA", label: "Emotional Intelligence Assessment (EIA)", component: EmotionalIntelligenceAssessment },
     { value: "LRA", label: "Leadership Readiness Assessment", component: LeadershipReadinessAssessment },
     { value: "LSA", label: "Leadership Style Assessment", component: LeadershipStyleAssessment },
-    
+
     { value: "SJAE", label: "Situational Judgement Assessment For Executive Leadership roles", component: SituationalJudgementAssessment },
     { value: "SJAM", label: "Situational Judgement Assessment For Junior-Mid Level Roles", component: SituationalJudgementAssessment },
     { value: "SJAO", label: "Situational Judgement Assessment For Sales oriented roles", component: SituationalJudgementAssessment },
+    { value: "VRE", label: "Verbal Reasoning Evaluation (VRE)", component: VerbalReasoningEvaluation },
 
 
     { value: "NLA", label: "Numerical and Logical Reasoning Assessment (NLA)", component: NumericalandLogicalReasoningAssessment },
