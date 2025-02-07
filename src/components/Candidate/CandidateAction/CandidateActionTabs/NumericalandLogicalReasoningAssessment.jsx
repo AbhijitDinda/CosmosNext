@@ -9,24 +9,29 @@ const NumericalandLogicalReasoningAssessment = ({ data }) => {
       <div className="flex flex-col bg-white rounded-sm border-gray-200">
         <div className="space-y-4">
           {data?.data?.data?.map((item, index) => {
-            const options = [item.option1, item.option2, item.option3, item.option4];
-            const correctOption = item[`option${item.right_option}`];
-            const chosenOption = item[item.user_answer];
+            const options = item.options; // options is an array now
+            const correctOptionIndex = Number(item.right_option) - 1; // Adjusting to zero-based index
+            const chosenOptionIndex = Number(item.user_answer) - 1; // Adjusting to zero-based index
+            const correctOption = options[correctOptionIndex];
+            const chosenOption = options[chosenOptionIndex];
+            console.log(options, correctOption, chosenOption);
 
             return (
               <div key={index} className="p-4 border rounded-md">
-                <h4 className="text-sm font-semibold text-gray-700 pb-2">{index+1}. {item.question_name}</h4>
+                <h4 className="text-sm font-semibold text-gray-700 pb-2">{index + 1}. {item.question_name}</h4>
                 <div className="space-y-2">
                   {options.map((option, i) => {
-                    const isChosen = option === chosenOption;
-                    const isCorrect = option === correctOption;
+                    const isChosen = i === chosenOptionIndex;
+                    const isCorrect = i === correctOptionIndex;
+
+                    if(!option){return null}
 
                     return (
                       <div
                         key={i}
                         className={`flex items-center gap-2 p-2 rounded-md border 
                           ${isCorrect ? 'bg-green-100 border-green-500' : ''} 
-                          ${isChosen && !isCorrect ? 'bg-red-100 border-red-500' : ''}
+                          ${isChosen && !isCorrect ? 'bg-red-100 border-red-500' : ''} 
                           ${!isChosen && !isCorrect ? 'border-gray-300' : ''}`}
                       >
                         {isChosen ? (
@@ -52,4 +57,5 @@ const NumericalandLogicalReasoningAssessment = ({ data }) => {
   );
 };
 
-export default NumericalandLogicalReasoningAssessment; 
+export default NumericalandLogicalReasoningAssessment;
+
