@@ -3,9 +3,10 @@ import { CheckCircleIcon, XCircleIcon } from 'lucide-react';
 import TestTimeStats from './components/TestTimeStats';
 
 const NumericalandLogicalReasoningAssessment = ({ data }) => {
+  console.log(data)
   return (
     <>
-      <TestTimeStats time_taken={data?.total_time} avg_time={data?.average_time} />
+      <TestTimeStats time_taken={data?.data?.time_taken} avg_time={data?.average_time} />
       <div className="flex flex-col bg-white rounded-sm border-gray-200">
         <div className="space-y-4">
           {data?.data?.data?.map((item, index) => {
@@ -14,7 +15,7 @@ const NumericalandLogicalReasoningAssessment = ({ data }) => {
             const chosenOptionIndex = Number(item.user_answer) - 1; // Adjusting to zero-based index
             const correctOption = options[correctOptionIndex];
             const chosenOption = options[chosenOptionIndex];
-            console.log(options, correctOption, chosenOption);
+            
 
             return (
               <div key={index} className="p-4 border rounded-md">
