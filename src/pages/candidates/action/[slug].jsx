@@ -11,11 +11,14 @@ const CandidateAction = () => {
 
     const shouldFetch = test_token && candidate_id; // Ensure valid params before API call
     const { isLoading, TestReport } = useTestReport({ test_token, candidate_id, enabled: shouldFetch });
+
+    // console.log(isLoading,TestReport?.data?.data?.testData)
+
     return (
         <section className='w-full max-w-screen-xl mx-auto rounded-sm'>
             <Heading title="Candidate Action" />
             <div className='bg-white flex items-center rounded-b-sm justify-between gap-4 p-4'>
-                <CandidateFilterAndAnalytics />
+                <CandidateFilterAndAnalytics name={TestReport?.data?.data?.testData?.user_name} email={TestReport?.data?.data?.testData?.user_email} />
             </div>
             <div className='mt-4'>
                 <CandidateActionTabs data={TestReport} isLoading={isLoading}  />

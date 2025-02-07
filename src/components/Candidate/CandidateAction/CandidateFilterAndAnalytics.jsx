@@ -64,20 +64,8 @@ const testResults = [
   }
 ];
 
-// const listOfAssessment =["Team Inventory Assessment (TIA)","Motivation Drive Assessment (MDA),","Approach Assessment (AA)","Emotional Intelligence Assessment (EIA)","Team Inventory Assessment (TIA)","Emotional Intelligence Assessment (EIA)"]
+const CandidateFilterAndAnalytics = ({name,email}) => {
 
-const CandidateFilterAndAnalytics = () => {
-  const form = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-    },
-  });
-
-  function onSubmit(values) {
-    console.log(values);
-  }
 
   return (
     <div className="w-full space-y-4">
@@ -88,7 +76,7 @@ const CandidateFilterAndAnalytics = () => {
             <div
               className="rounded-sm p-3 w-full lg:w-80 border border-Lines text-start"
             >
-              Abhijit Dinda
+              {name}
             </div>
           </div>
           <div>
@@ -96,7 +84,7 @@ const CandidateFilterAndAnalytics = () => {
             <div
               className="rounded-sm p-3 w-full lg:w-80 border border-Lines text-start"
             >
-              abhijitdinda228@gmail.com
+              {email}
             </div>
           </div>
           <Button

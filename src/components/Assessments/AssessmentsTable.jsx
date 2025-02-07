@@ -36,7 +36,7 @@ const AssessmentsTable = ({ data = [] ,current_page,total_page,handlePageChange}
             {[
               "Designations",
               "Test Link",
-              "Assesments",
+              "Tests",
               "Start Date",
               "Total Candidates",
               "",
