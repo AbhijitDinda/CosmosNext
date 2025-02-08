@@ -16,6 +16,7 @@ export const useFilterAllCandidates = ( {search = "", designation = "", status =
         queryFn: () => filterAllCandidates({ token: auth?.token}, logout, search, designation, status,page ),
         queryKey: ["getCandidates", search, designation, status,page], // Add parameters to the query key to refetch on changes
         keepPreviousData: true,
+        refetchOnWindowFocus: false,
     });
 
     return {

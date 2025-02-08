@@ -7,6 +7,8 @@ export const useAllcandidates = (page) => {
     const {isFetching,isLoading,isSuccess,error,data:allCandidatesData } = useQuery({
         queryFn: () => getAllCandidates({ token: auth?.token },logout,page),
         queryKey: ["getCandidates", page],
+        retry: false,
+        refetchOnWindowFocus: false,
         keepPreviousData: true,
         
     });
