@@ -123,7 +123,7 @@ const CandidateActionTabs = ({ data, isLoading }) => {
                     {tabsConfigTab.map((tab) => (
                         <TabsTrigger
                             key={tab.id}
-                            className="border border-Secondary_Text data-[state=active]:bg-Primary data-[state=active]:text-white focus-within:border-Primary rounded-none"
+                            className="border border-Secondary_Text data-[state=active]:bg-Primary data-[state=active]:text-white focus-within:border-Primary rounded-none px-4 py-2"
                             value={tab.value}
                         >
                             {tab.label}

@@ -102,20 +102,26 @@ export function AssessmentsCandidateList({ user,token }) {
       cell: ({ row }) => {
         const candidateId = row?.original?.candidate_id; // Access the candidate's name
         // const assessmentToken = 
-        return (
-          <div className="flex justify-end gap-2">
-            <Button
-              size="icon"
-              variant="outline"
-              className="p-2 border border-Secondary_Text"
-              onClick={() =>
-                router.push(`/candidates/action/${token}&${encodeURIComponent(candidateId)}`)
-              }
-            >
-              <ArrowRight className="!size-5 stroke-1 stroke-Secondary_Text" />
-            </Button>
-          </div>
-        );
+        const candidateStatus = row?.original?.test_status;
+        if(candidateStatus === "Completed"){
+          return (
+            <div className="flex justify-end gap-2">
+  
+              <Button
+                size="icon"
+                variant="outline"
+                className="p-2 border border-Secondary_Text"
+                onClick={() =>
+                  router.push(`/candidates/action/${token}&${encodeURIComponent(candidateId)}`)
+                }
+              >
+                <ArrowRight className="!size-5 stroke-1 stroke-Secondary_Text" />
+              </Button>
+  
+            </div>
+          );
+        }
+        
       },
     },
   ];
