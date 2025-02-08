@@ -1,8 +1,11 @@
 import React from 'react';
 import { CheckCircleIcon, XCircleIcon } from 'lucide-react';
+import TestTimeStats from './components/TestTimeStats';
 
 const PreferencesTab = ({ data }) => {
     return (
+        <>
+        <TestTimeStats time_taken={data?.data?.time_taken} avg_time={data?.data?.average_time} />
         <div className="flex flex-col bg-white rounded-sm border border-gray-200 p-4">
             <div className="space-y-4">
                 {data?.data?.data?.map((item, index) => {
@@ -67,6 +70,7 @@ const PreferencesTab = ({ data }) => {
                 })}
             </div>
         </div>
+        </>
     );
 };
 

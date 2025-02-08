@@ -6,7 +6,7 @@ const NumericalandLogicalReasoningAssessment = ({ data }) => {
   console.log(data)
   return (
     <>
-      <TestTimeStats time_taken={data?.data?.time_taken} avg_time={data?.average_time} />
+      <TestTimeStats time_taken={data?.data?.time_taken} avg_time={data?.data?.average_time} />
       <div className="flex flex-col bg-white rounded-sm border-gray-200">
         <div className="space-y-4">
           {data?.data?.data?.map((item, index) => {
