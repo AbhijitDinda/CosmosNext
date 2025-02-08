@@ -27,19 +27,24 @@ const tabsConfig = [
     { value: "EIA", label: "Emotional Intelligence Assessment (EIA)", component: EmotionalIntelligenceAssessment },
     { value: "LRA", label: "Leadership Readiness Assessment", component: LeadershipReadinessAssessment },
     { value: "LSA", label: "Leadership Style Assessment", component: LeadershipStyleAssessment },
-
     { value: "SJAE", label: "Situational Judgement Assessment For Executive Leadership roles", component: SituationalJudgementAssessment },
     { value: "SJAM", label: "Situational Judgement Assessment For Junior-Mid Level Roles", component: SituationalJudgementAssessment },
     { value: "SJAO", label: "Situational Judgement Assessment For Sales oriented roles", component: SituationalJudgementAssessment },
     { value: "VRE", label: "Verbal Reasoning Evaluation (VRE)", component: VerbalReasoningEvaluation },
-
-
     { value: "NLA", label: "Numerical and Logical Reasoning Assessment (NLA)", component: NumericalandLogicalReasoningAssessment },
-    { value: "DSC", label: "Demo Editing Skills Certification (Expert Ratings)", component: ExpertRating },
-    { value: "ER", label: "Demo Adobe Photoshop CS3 Test (Expert Ratings)", component: ExpertRating },
-    { value: "ERC++", label: "Demo Programming with C++ Test (Expert Ratings)", component: ExpertRating },
-    { value: "ERCHTML", label: "Demo HTML 4.01 Test (Expert Ratings)", component: ExpertRating },
 ];
+
+const getComponentForTest = (test) => {
+    const testId = String(test?.test || '').toLowerCase();
+    if (testId.endsWith('exp')) {
+        return ExpertRating;
+    }
+    const matchedTab = tabsConfig.find(tab =>
+        normalize(tab.label).includes(normalize(test.test_name)) ||
+        normalize(test.test_name).includes(normalize(tab.label))
+    );
+    return matchedTab ? matchedTab.component : null;
+};
 
 const CandidateActionTabs = ({ data, isLoading }) => {
     const [activeAI, setActiveAI] = useState(false);
@@ -71,7 +76,16 @@ const CandidateActionTabs = ({ data, isLoading }) => {
     // Dynamically generating tabs based on testReport
     const tabsConfigTab = data?.data?.data?.testReport?.map((test) => {
         const testName = test?.test_name || test?.data?.test_name;
-        const testId = test?.test;
+        const testId = String(test?.test || '');
+
+        if (testId.toLowerCase().endsWith('exp')) {
+            return {
+                id: testId,
+                label: testName,
+                value: `expert-${testId}`,
+                component: <ExpertRating data={test} />,
+            };
+        }
 
         const matchedTab = tabsConfig.find(tab =>
             normalize(tab.label).includes(normalize(testName)) ||
