@@ -32,7 +32,7 @@ export function DesignationChart({ data }) {
         <BarChart
           data={topDesignations}
           layout="vertical"
-          margin={{ left: 0 }}
+          margin={{ left: 30 }}
           width={400}
           height={300}
         >
@@ -43,7 +43,7 @@ export function DesignationChart({ data }) {
             tickMargin={10}
             axisLine={false}
           />
-          <XAxis dataKey="count" type="number" hide />
+          <XAxis dataKey="count" type="number" show />
           <Tooltip
             cursor={false}
             content={({ payload }) =>

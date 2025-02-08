@@ -109,8 +109,8 @@ export function AssessmentChart({ data }) {
               data={chartData}
               dataKey="value"
               nameKey="status"
-              innerRadius={60}
-              outerRadius={100}
+              innerRadius={70}
+              outerRadius={110}
               strokeWidth={5}
             >
               <Label
