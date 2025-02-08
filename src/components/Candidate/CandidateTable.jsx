@@ -29,7 +29,7 @@ const dummyData = [
 const CandidateTable = ({data,item_per_page,pagination,total_page = 1,current_page = 1,handlePageChange }) => {
   // console.log("aaa",data);
   // const displayedData = item_per_page ? data.slice(0, item_per_page) : data;
-  console.log("Hello DAta",data[0]?.test_token)
+  // console.log("Hello DAta",data[0]?.test_token)
 
   const [currentPageData, setCurrentPageData] = useState(
     data.slice(0, item_per_page)

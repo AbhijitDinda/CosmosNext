@@ -16,25 +16,10 @@ const Dashboard = () => {
 
   const totalUsers = dashboardData?.data?.data?.total_users;
   const totalTests = dashboardData?.data?.data?.total_tests;
+  const designationChart = dashboardData?.data?.data?.top_designations;
+  const testsDataChart = dashboardData?.data?.data?.total_tests_data;
+  // console.log(testsDataChart)
 
-  // console.log(dashboardData?.data?.data?.list_of_active_users);
-
-
-  const dummyData = [
-    // Dummy data to mimic the example
-    ...Array(50)
-      .fill(0)
-      .map((_, i) => ({
-        name: "Adam Smith",
-        CandidateId: `CG_173520759${i}`,
-        designation: `SDE${i + 1}`,
-        email: "adamsmith@gmail.com",
-        assessment: ["List Of Assessment", "Business Executive1", "Business Executive2", "Business Executive3", "Business Executive4"],
-        status: i % 3 === 0 ? "Ongoing" : "Invited",
-        match: i % 3 === 0 ? "99%" : i % 2 === 0 ? "50%" : "",
-        rank: i % 3 === 0 ? 1 : i % 2 === 0 ? 2 : null,
-      })),
-  ];
 
   useEffect(() => {
     if (error) {
@@ -74,7 +59,7 @@ const Dashboard = () => {
             </div>) :
             (
               <>
-                <DashboardCardsSection totalUsers={totalUsers} totalTests={totalTests} />
+                <DashboardCardsSection totalUsers={totalUsers} totalTests={totalTests} designationChart={designationChart} testsDataChart={testsDataChart} />
                 {/* {Active Assesments} */}
                 {/* <DashboardTableSection /> */}
                 <div>
