@@ -11,14 +11,11 @@ import LogicalReasoningEvaluation from './LogicalReasoningEvaluation';
 import SituationalJudgementAssessment from './SituationalJudgementAssessment';
 import NumericalandLogicalReasoningAssessment from './NumericalandLogicalReasoningAssessment';
 import VerbalReasoningEvaluation from './VerbalReasoningEvaluation';
-
 import ExpertRating from './ExpertRating';
-
 import { Button } from '@/components/ui/button';
 import AskAi from '@/components/AskAi';
 import SvgStars from '@/svgs/SvgStars';
 
-// Static tab configuration with corresponding components
 const tabsConfig = [
     { value: "AA", label: "Approach Assessment (AA)", component: ApproachAssessment },
     { value: "MDA", label: "Motivation Drive Assessment", component: MotivationDriveAssessment },
@@ -34,25 +31,13 @@ const tabsConfig = [
     { value: "NLA", label: "Numerical and Logical Reasoning Assessment (NLA)", component: NumericalandLogicalReasoningAssessment },
 ];
 
-const getComponentForTest = (test) => {
-    const testId = String(test?.test || '').toLowerCase();
-    if (testId.endsWith('exp')) {
-        return ExpertRating;
-    }
-    const matchedTab = tabsConfig.find(tab =>
-        normalize(tab.label).includes(normalize(test.test_name)) ||
-        normalize(test.test_name).includes(normalize(tab.label))
-    );
-    return matchedTab ? matchedTab.component : null;
-};
+const normalize = (str) => str?.toLowerCase().replace(/[^a-z0-9]/g, '');
 
 const CandidateActionTabs = ({ data, isLoading }) => {
     const [activeAI, setActiveAI] = useState(false);
     const askAiRef = useRef(null);
 
-    const handleAI = () => {
-        setActiveAI(!activeAI);
-    };
+    const handleAI = () => setActiveAI(!activeAI);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -70,10 +55,6 @@ const CandidateActionTabs = ({ data, isLoading }) => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [activeAI]);
 
-    // Normalize function for better matching
-    const normalize = (str) => str?.toLowerCase().replace(/[^a-z0-9]/g, '');
-
-    // Dynamically generating tabs based on testReport
     const tabsConfigTab = data?.data?.data?.testReport?.map((test) => {
         const testName = test?.test_name || test?.data?.test_name;
         const testId = String(test?.test || '');
@@ -111,34 +92,36 @@ const CandidateActionTabs = ({ data, isLoading }) => {
     }
 
     return (
-        <div className="bg-white p-4 rounded-sm flex justify-between relative">
+        <div className="bg-white p-4 rounded-sm flex relative h-full">
             {activeAI && (
-                <div id="ask-ai" ref={askAiRef}>
+                <div id="ask-ai" ref={askAiRef} className=" absolute top-0 right-0 z-10">
                     <AskAi state={activeAI} />
                 </div>
             )}
 
-            <Tabs defaultValue={tabsConfigTab[0]?.value || "overview"} className="items-center w-full">
-                <TabsList className="!h-auto bg-white justify-start gap-1 flex flex-wrap">
+            <Tabs defaultValue={tabsConfigTab[0]?.value || "overview"} className="flex w-full h-full">
+                <TabsList className="flex bg-white flex-col  w-80 h-screen overflow-y-scroll gap-y-4 ">
                     {tabsConfigTab.map((tab) => (
                         <TabsTrigger
                             key={tab.id}
-                            className="border border-Secondary_Text data-[state=active]:bg-Primary data-[state=active]:text-white focus-within:border-Primary rounded-none px-4 py-2"
+                            className=" border border-gray-300 data-[state=active]:bg-Primary data-[state=active]:text-white px-4 py-2 text-left w-full hover:bg-blue-00 "
                             value={tab.value}
                         >
-                            {tab.label}
+                            <span className='w-[80%]  truncate'>{tab.label}</span>
                         </TabsTrigger>
                     ))}
-                    <Button onClick={handleAI} size="sm" className="text-xs sm:ms-auto">
+                    <Button onClick={handleAI} size="sm" className="my-4 text-xs">
                         <SvgStars /> Ask AI
                     </Button>
                 </TabsList>
 
-                {tabsConfigTab.map((tab) => (
-                    <TabsContent key={tab.id} value={tab.value}>
-                        {tab.component}
-                    </TabsContent>
-                ))}
+                <div className="flex-1 px-4 overflow-y-auto">
+                    {tabsConfigTab.map((tab) => (
+                        <TabsContent key={tab.id} value={tab.value} className="h-screen overflow-y-scroll">
+                            {tab.component}
+                        </TabsContent>
+                    ))}
+                </div>
             </Tabs>
         </div>
     );

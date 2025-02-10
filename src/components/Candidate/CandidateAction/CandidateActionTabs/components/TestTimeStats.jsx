@@ -2,7 +2,7 @@ import React from "react";
 
 const TestTimeStats = ({time_taken,avg_time}) => {
   return (
-    <div className="w-full bg-gray-400 text-white py-6 mb-6">
+    <div className="w-full bg-gray-400 text-white py-6 mb-6 rounded-md">
       <div className="max-w-6xl mx-auto flex justify-between items-center px-8">
         {/* Total Time Taken */}
         <div className="flex flex-col items-center">
