@@ -22,6 +22,7 @@ const PreferencesTab = ({ data }) => {
             return (
               <div key={index} className="p-4 border rounded-md">
                 <div className="pb-2">
+                <span className="font-semibold">{`Question ${index + 1}`}</span>
                   <img
                     src={`https://uat.cteval.com/backoffice/assets/upload/${item.question_name}`}
                     alt={`Question ${index + 1}`}
