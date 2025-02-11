@@ -20,7 +20,7 @@ const tabsConfig = [
     { value: "AA", label: "Approach Assessment (AA)", component: ApproachAssessment },
     { value: "MDA", label: "Motivation Drive Assessment", component: MotivationDriveAssessment },
     { value: "LRV", label: "Logical Reasoning Evaluation (LRV)", component: LogicalReasoningEvaluation },
-    { value: "TIA", label: "Team Inventory Assessment", component: TeamInventoryAssessment },
+    { value: "TIA", label: "Team Inventory Assessment(TIA)", component: TeamInventoryAssessment },
     { value: "EIA", label: "Emotional Intelligence Assessment (EIA)", component: EmotionalIntelligenceAssessment },
     { value: "LRA", label: "Leadership Readiness Assessment", component: LeadershipReadinessAssessment },
     { value: "LSA", label: "Leadership Style Assessment", component: LeadershipStyleAssessment },
@@ -34,6 +34,7 @@ const tabsConfig = [
 const normalize = (str) => str?.toLowerCase().replace(/[^a-z0-9]/g, '');
 
 const CandidateActionTabs = ({ data, isLoading }) => {
+    console.log(data)
     const [activeAI, setActiveAI] = useState(false);
     const askAiRef = useRef(null);
 
@@ -100,7 +101,7 @@ const CandidateActionTabs = ({ data, isLoading }) => {
             )}
 
             <Tabs defaultValue={tabsConfigTab[0]?.value || "overview"} className="flex w-full h-full">
-                <TabsList className="flex bg-white flex-col  w-80 h-screen overflow-y-scroll gap-y-4 ">
+                <TabsList className="flex bg-white flex-col  w-80 h-full overflow-y-scroll gap-y-4 ">
                     {tabsConfigTab.map((tab) => (
                         <TabsTrigger
                             key={tab.id}

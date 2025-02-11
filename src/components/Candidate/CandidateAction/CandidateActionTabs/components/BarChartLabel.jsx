@@ -1,18 +1,9 @@
-"use client"
+"use client";
 
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-const prepareChartData = (data) => {
-  return ["A", "B", "C", "D"].map((option) => ({
-    option,
-    count: data[option] || 0,
-  }));
-};
-
 export function BarChartLabel({ data }) {
-  const chartData = prepareChartData(data);
-
   return (
     <Card className="mb-2">
       <CardHeader>
@@ -20,7 +11,7 @@ export function BarChartLabel({ data }) {
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={chartData}>
+          <BarChart data={data}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
             <XAxis dataKey="option" />
             <Tooltip />
