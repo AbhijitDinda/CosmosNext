@@ -23,7 +23,7 @@ const CompetenceMotivationSection = ({ data }) => {
     return (
         <>
             <TestTimeStats time_taken={data?.total_time} avg_time={data?.average_time} />
-            <PieChartLabelList namePercentageData={namePercentageData} />
+            <PieChartLabelList namePercentageData={namePercentageData} title={"Motivation style"} />
 
             {data?.data?.map((item, index) => (
                 <div key={index} className="w-full flex pb-10">

@@ -31,7 +31,7 @@ const SituationalJudgementAssessment = ({ data }) => {
   return (
     <>
       <TestTimeStats time_taken={data?.total_time} avg_time={data?.average_time} />
-      <BarChartLabel data={chartData} />
+      <BarChartLabel data={chartData} title={"Option Distribution"} />
       <div className="flex flex-col bg-white rounded-sm border-gray-200">
         <div className="space-y-4">
           {data?.data?.data?.map((item, index) => {

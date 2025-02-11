@@ -24,7 +24,7 @@ const LeadershipStyleAssessment = ({ data }) => {
     return (
         <>
             <TestTimeStats time_taken={data?.total_time} avg_time={data?.average_time} />
-            <PieChartLabelList namePercentageData={namePercentageData} />
+            <PieChartLabelList namePercentageData={namePercentageData} title={"Leadership style"} />
 
             <div>
                 {data?.data?.map((item, index) => (

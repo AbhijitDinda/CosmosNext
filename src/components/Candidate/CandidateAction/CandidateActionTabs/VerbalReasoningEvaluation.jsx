@@ -68,8 +68,8 @@ const chartData2 = [
     <>
       <TestTimeStats time_taken={data?.data?.time_taken} avg_time={data?.data?.average_time} />
 
-      <BarChartLabel data={chartData1} />
-      <BarChartLabel data={chartData2} />
+      <BarChartLabel data={chartData1} title={"Questions Attempted"} />
+      <BarChartLabel data={chartData2} title={"Questions Answered Correctly"}/>
       <div className="flex flex-col bg-white rounded-sm border-gray-200">
         <div className="space-y-4">
           {data?.data?.data?.map((item, index) => {

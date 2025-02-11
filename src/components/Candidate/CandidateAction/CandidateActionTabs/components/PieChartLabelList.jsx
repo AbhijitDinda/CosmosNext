@@ -14,7 +14,7 @@ const generateColor = (index, totalItems) => {
   return `hsl(${hue}, 70%, 60%)`; // Adjust saturation & lightness as needed
 };
 
-export function PieChartLabelList({ namePercentageData }) {
+export function PieChartLabelList({ namePercentageData,title = "Pie Chart" }) {
   const dynamicChartData = namePercentageData?.map((item, index) => ({
     name: item.name,
     percentage: parseFloat(item.percentage),
@@ -24,7 +24,7 @@ export function PieChartLabelList({ namePercentageData }) {
   return (
     <Card className="flex flex-col mb-2">
       <CardHeader className="items-center pb-0">
-        {/* <CardTitle>Motivation Style</CardTitle> */}
+        <CardTitle>{title}</CardTitle>
       </CardHeader>
 
       <CardContent className="flex-1 pb-0">
