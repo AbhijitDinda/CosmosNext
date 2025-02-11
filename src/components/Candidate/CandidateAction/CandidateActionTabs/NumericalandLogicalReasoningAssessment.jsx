@@ -3,9 +3,10 @@ import { CheckCircleIcon, XCircleIcon } from 'lucide-react';
 import TestTimeStats from './components/TestTimeStats';
 import { BarChartLabel } from './components/BarChartLabel';
 import PercentileTable from './components/PercentileTable';
+import ResultTable from './components/ResultTable';
 
 const NumericalandLogicalReasoningAssessment = ({ data }) => {
-  console.log("data",data);
+  console.log("data 1",data?.rankings);
 
 // Total Attempts
   const totalAttempts = (data?.data?.counts?.first_half_attempts || 0) +
@@ -63,12 +64,17 @@ const chartData2 = [
   }
 ];
 
-console.log(chartData1);
+// console.log(chartData1);
 
 const percentileData = [
-  { category: 'Questions Attempted', total: '29th', firstHalf: '29th', secondHalf: '29th' },
-  { category: 'Accuracy Rate %', total: '21st', firstHalf: '18th', secondHalf: '24th' },
-  { category: 'Overall', total: '21st', firstHalf: '18th', secondHalf: '24th' },
+  { category: 'Questions Attempted', total: data?.rankings?.total_attempt_rank, firstHalf: data?.rankings?.first_half_attempts_rank, secondHalf: data?.rankings?.second_half_attempts_rank },
+  { category: 'Accuracy Rate %', total: data?.rankings?.total_accuracy_rank, firstHalf: data?.rankings?.first_half_accuracy_rank, secondHalf: data?.rankings?.second_half_accuracy_rank },
+  { category: 'Overall', total: data?.rankings?.total_right_percentage_rank, firstHalf: data?.rankings?.first_half_right_percentage_rank, secondHalf: data?.rankings?.second_half_percentage_rank },
+];
+
+const resultTableData = [
+  { category: 'Attempts', total: totalAttempts, firstHalf:data?.data?.counts?.first_half_attempts, secondHalf: data?.data?.counts?.second_half_attempts },
+  { category: 'Correct', total: totalCorrect, firstHalf: data?.data?.counts?.first_half_right, secondHalf: data?.data?.counts?.second_half_right },
 ];
 
 
@@ -78,6 +84,7 @@ const percentileData = [
       <BarChartLabel data={chartData1} title={"Questions Attempted"} />
       <BarChartLabel data={chartData2} title={"Questions Answered Correctly"} />
       <PercentileTable data={percentileData} />
+      <ResultTable data={resultTableData}/>
       
       <div className="flex flex-col bg-white rounded-sm border-gray-200">
         <div className="space-y-4">

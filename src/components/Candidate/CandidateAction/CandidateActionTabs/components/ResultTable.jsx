@@ -1,12 +1,12 @@
 import React from 'react';
 
-const PercentileTable = ({ data }) => {
+const ResultTable = ({ data }) => {
   return (
     <div className="overflow-x-auto mt-4 rounded-lg mb-4">
       <table className="min-w-full border border-gray-300 text-sm text-center">
         <thead className="bg-gray-100">
           <tr>
-            <th className="border p-2">Percentile</th>
+            <th className="border p-2"></th>
             <th className="border p-2">Total</th>
             <th className="border p-2">1st Half</th>
             <th className="border p-2">2nd Half</th>
@@ -27,4 +27,4 @@ const PercentileTable = ({ data }) => {
   );
 };
 
-export default PercentileTable;
+export default ResultTable;

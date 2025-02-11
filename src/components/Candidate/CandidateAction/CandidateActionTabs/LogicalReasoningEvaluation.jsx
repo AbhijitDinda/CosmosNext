@@ -2,6 +2,9 @@ import React from "react";
 import { CheckCircleIcon, XCircleIcon } from "lucide-react";
 import TestTimeStats from "./components/TestTimeStats";
 import { BarChartLabel } from './components/BarChartLabel';
+import PercentileTable from './components/PercentileTable';
+import ResultTable from './components/ResultTable';
+
 
 
 const PreferencesTab = ({ data }) => {
@@ -62,6 +65,17 @@ const chartData2 = [
   }
 ];
 
+const percentileData = [
+  { category: 'Questions Attempted', total: data?.rankings?.total_attempt_rank, firstHalf: data?.rankings?.first_half_attempts_rank, secondHalf: data?.rankings?.second_half_attempts_rank },
+  { category: 'Accuracy Rate %', total: data?.rankings?.total_accuracy_rank, firstHalf: data?.rankings?.first_half_accuracy_rank, secondHalf: data?.rankings?.second_half_accuracy_rank },
+  { category: 'Overall', total: data?.rankings?.total_right_percentage_rank, firstHalf: data?.rankings?.first_half_right_percentage_rank, secondHalf: data?.rankings?.second_half_percentage_rank },
+];
+
+const resultTableData = [
+  { category: 'Attempts', total: totalAttempts, firstHalf:data?.data?.counts?.first_half_attempts, secondHalf: data?.data?.counts?.second_half_attempts },
+  { category: 'Correct', total: totalCorrect, firstHalf: data?.data?.counts?.first_half_right, secondHalf: data?.data?.counts?.second_half_right },
+];
+
   return (
     <>
       <TestTimeStats
@@ -70,6 +84,8 @@ const chartData2 = [
       />
       <BarChartLabel data={chartData1} title={"Questions Attempted"}/>
       <BarChartLabel data={chartData2} title={"Questions Answered Correctly"}/>
+      <PercentileTable data={percentileData} />
+      <ResultTable data={resultTableData}/>
       <div className="flex flex-col bg-white rounded-sm border border-gray-200 p-4">
         <div className="space-y-4">
           {data?.data?.data?.map((item, index) => {
