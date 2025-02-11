@@ -1,15 +1,75 @@
 import React from 'react';
 import { CheckCircleIcon, XCircleIcon } from 'lucide-react';
 import TestTimeStats from './components/TestTimeStats';
+import { BarChartLabel } from './components/BarChartLabel';
 
 const options = ["True", "False", "Cannot Say"];
 
 const SituationalJudgementAssessment = ({ data }) => {
   console.log(data);
 
+  // Total Attempts
+  const totalAttempts = (data?.data?.counts?.first_half_attempts || 0) +
+    (data?.data?.counts?.second_half_attempts || 0);
+
+// Total Attempts
+  const totalCorrect = (data?.data?.counts?.first_half_right || 0) +
+  (data?.data?.counts?.second_half_right || 0);
+
+
+  
+// Chart Data with Percentage Calculation
+const chartData1 = [
+  {
+    option: "Total",
+    count: totalAttempts,
+    percentage: totalAttempts ? ((totalAttempts / totalAttempts) * 100).toFixed(2) : 0,
+  },
+  {
+    option: "1st Half",
+    count: data?.data?.counts?.first_half_attempts || 0,
+    percentage: totalAttempts 
+      ? ((data?.data?.counts?.first_half_attempts / totalAttempts) * 100).toFixed(2) 
+      : 0,
+  },
+  {
+    option: "2nd Half",
+    count: data?.data?.counts?.second_half_attempts || 0,
+    percentage: totalAttempts 
+      ? ((data?.data?.counts?.second_half_attempts / totalAttempts) * 100).toFixed(2) 
+      : 0,
+  }
+];
+
+
+const chartData2 = [
+  {
+    option: "Total",
+    count: totalCorrect,
+    percentage: totalCorrect ? ((totalCorrect / totalCorrect) * 100).toFixed(2) : 0,
+  },
+  {
+    option: "1st Half",
+    count: data?.data?.counts?.first_half_right || 0,
+    percentage: totalCorrect 
+      ? ((data?.data?.counts?.first_half_right / totalCorrect) * 100).toFixed(2) 
+      : 0,
+  },
+  {
+    option: "2nd Half",
+    count: data?.data?.counts?.second_half_right || 0,
+    percentage: totalCorrect 
+      ? ((data?.data?.counts?.second_half_right / totalCorrect) * 100).toFixed(2) 
+      : 0,
+  }
+];
+
   return (
     <>
       <TestTimeStats time_taken={data?.data?.time_taken} avg_time={data?.data?.average_time} />
+
+      <BarChartLabel data={chartData1} />
+      <BarChartLabel data={chartData2} />
       <div className="flex flex-col bg-white rounded-sm border-gray-200">
         <div className="space-y-4">
           {data?.data?.data?.map((item, index) => {
