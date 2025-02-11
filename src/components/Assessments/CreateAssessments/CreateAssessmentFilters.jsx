@@ -38,7 +38,7 @@ const CreateAssessmentFilters = ({ designations, formData, onTabChange, onFieldC
                   <SelectGroup>
                     <SelectLabel>Designation</SelectLabel>
                     {designations.map((designation) => (
-                      <SelectItem key={designation.id} value={designation.slug}>
+                      <SelectItem key={designation.id} value={designation.designation_name}>
                         {designation.designation_name}
                       </SelectItem>
                     ))}
