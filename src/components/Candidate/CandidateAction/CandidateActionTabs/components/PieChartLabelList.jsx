@@ -22,9 +22,9 @@ export function PieChartLabelList({ namePercentageData }) {
   }));
 
   return (
-    <Card className="flex flex-col">
+    <Card className="flex flex-col mb-2">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Motivation Style</CardTitle>
+        {/* <CardTitle>Motivation Style</CardTitle> */}
       </CardHeader>
 
       <CardContent className="flex-1 pb-0">

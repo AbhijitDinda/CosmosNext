@@ -5,11 +5,11 @@ import TestTimeStats from './components/TestTimeStats';
 import {PieChartLabelList} from "./components/PieChartLabelList"
 
 const CompetenceMotivationSection = ({ data }) => {
-    console.log("inner data", data?.data);
+    // console.log("inner data", data?.data);
     
     // Step 1: Calculate the Total Score
     const totalScore = data?.data?.reduce((acc, item) => acc + (item.score || 0), 0);
-    console.log("Total Score:", totalScore);
+    // console.log("Total Score:", totalScore);
 
     // Step 2: Generate Name & Percentage JSON
     const namePercentageData = data?.data?.map(item => ({
@@ -17,7 +17,7 @@ const CompetenceMotivationSection = ({ data }) => {
         percentage: totalScore ? ((item.score / totalScore) * 100).toFixed(2) : 0 // Rounded to 2 decimal places
     }));
 
-    console.log("Name & Percentage JSON:", namePercentageData);
+    // console.log("Name & Percentage JSON:", namePercentageData);
     
 
     return (
