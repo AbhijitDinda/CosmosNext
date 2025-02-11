@@ -26,6 +26,7 @@ const SituationalJudgementAssessment = ({ data }) => {
     option,
     count: optionCount[option] || 0,
   }));
+  console.log("chartData",chartData);
 
   return (
     <>
