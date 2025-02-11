@@ -6,7 +6,7 @@ const CompetenceMotivation = ({
   challenges,
 }) => {
   return (
-    <div className="w-full md:w-4/6 mx-auto">
+    <div className="w-full ">
       <h2 className="text-2xl font-bold text-gray-800">{title}</h2>
       <p className="text-gray-700 font-semibold mt-2">
         <span className="font-bold">Type:</span> {type}

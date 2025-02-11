@@ -13,8 +13,8 @@ const InsightsTab = ({data}) => {
     return (
         <>
         <TestTimeStats time_taken={data?.total_time} avg_time={data?.average_time} />
-        <div className="container w-full flex">
-            <div className="w-4/6">
+        <div className="w-full flex flex-col gap-4">
+            <div className="w-full">
                 <div className="bg-gray-100 p-4 rounded-lg mb-6">
                     <h2 className="text-xl font-bold">Trait: {data?.data?.name}</h2>
                     <p className="text-gray-700">{""}</p>
@@ -50,7 +50,7 @@ const InsightsTab = ({data}) => {
                 </div>
             </div>
 
-            <div className="w-2/6 pl-6">
+            <div className="w-full">
                 <div className="bg-gray-100 p-4 rounded-lg mb-6">
                     <h3 className="text-lg font-bold">Suggestive Questions</h3>
                     <ul className="list-disc pl-5 text-gray-700">

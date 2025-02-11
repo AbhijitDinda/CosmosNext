@@ -19,7 +19,7 @@ import React from 'react';
 
 const SuggestiveQuestions = ({ questions }) => {
     return (
-        <div className="w-full md:w-2/6 pl-0 md:pl-6 mt-6 md:mt-0">
+        <div className="w-full mt-8 md:mt-0">
             <div className="bg-gray-100 p-4 rounded-lg mb-6">
                 <h3 className="text-lg font-bold">Suggestive Questions</h3>
                 <ul className="list-disc pl-5 text-gray-700">

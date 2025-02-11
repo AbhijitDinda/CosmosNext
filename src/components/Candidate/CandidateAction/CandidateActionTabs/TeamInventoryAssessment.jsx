@@ -13,8 +13,8 @@ const TeamInventoryAssessment = ({data}) => {
     return (
         <>
         <TestTimeStats time_taken={data?.total_time} avg_time={data?.average_time} />
-        <div className="container w-full flex">
-            <div className="w-4/6">
+        <div className="container w-full flex flex-col">
+            <div className="w-full">
                 <div className="bg-gray-100 p-4 rounded-lg mb-6">
                     <h2 className="text-xl font-bold">{data?.data?.trait_name}</h2>
                     <h4 className="text-lg font-semibold">Trait:{data?.data?.trait_name} </h4>
@@ -57,9 +57,9 @@ const TeamInventoryAssessment = ({data}) => {
 
             </div>
 
-            <div className="w-2/6 pl-6">
-                <div className="bg-gray-100 p-4 rounded-lg mb-6">
-                    <h3 className="text-lg font-bold">Suggestive Questions</h3>
+            <div className="w-full ">
+                <div className="bg-gray-100 p-4 rounded-lg mb-6 ">
+                    <h3 className="text-lg font-bold text-left pl-5">Suggestive Questions</h3>
                     <ul className="list-disc pl-5 text-gray-700">
                         <li>How can the Implementer adapt to sudden changes?</li>
                         <li>What strategies can help mitigate their weaknesses?</li>

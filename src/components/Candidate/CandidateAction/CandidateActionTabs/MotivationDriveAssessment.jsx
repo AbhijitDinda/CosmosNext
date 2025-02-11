@@ -26,7 +26,7 @@ const CompetenceMotivationSection = ({ data }) => {
             <PieChartLabelList namePercentageData={namePercentageData} title={"Motivation style"} />
 
             {data?.data?.map((item, index) => (
-                <div key={index} className="w-full flex pb-10">
+                <div key={index} className="w-full flex flex-col pb-10">
                     <CompetenceMotivation title={`${item.name} Motivation`} type={item.behavioral_style}
                         description={item.description} behaviors={item.behaviors} challenges={item.challenges}/>
                     <SuggestiveQuestions questions={item.questions || ["No questions available"]} />

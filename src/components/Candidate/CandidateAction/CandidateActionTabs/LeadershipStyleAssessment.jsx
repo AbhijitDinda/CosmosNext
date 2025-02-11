@@ -29,7 +29,7 @@ const LeadershipStyleAssessment = ({ data }) => {
             <div>
                 {data?.data?.map((item, index) => (
                     <>
-                        <div key={index} className="w-full flex pb-10">
+                        <div key={index} className="w-full flex flex-col gap-4 pb-10">
                             <LeaderShip title={`${item.name}`} type={item.behavioral_style}
                                 description={item.description} behaviors={item.behaviors} challenges={item.challenges} characteristics={item.characteristics} key_strengths={item.key_strengths} communication={item.communication} motivation_techniques={item.motivation_techniques} />
                             <SuggestiveQuestions questions={item.questions || ["No questions available"]} />
