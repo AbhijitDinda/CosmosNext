@@ -2,6 +2,7 @@ import React from 'react';
 import { CheckCircleIcon, XCircleIcon } from 'lucide-react';
 import TestTimeStats from './components/TestTimeStats';
 import { BarChartLabel } from './components/BarChartLabel';
+import PercentileTable from './components/PercentileTable';
 
 const NumericalandLogicalReasoningAssessment = ({ data }) => {
   console.log("data",data);
@@ -64,12 +65,19 @@ const chartData2 = [
 
 console.log(chartData1);
 
+const percentileData = [
+  { category: 'Questions Attempted', total: '29th', firstHalf: '29th', secondHalf: '29th' },
+  { category: 'Accuracy Rate %', total: '21st', firstHalf: '18th', secondHalf: '24th' },
+  { category: 'Overall', total: '21st', firstHalf: '18th', secondHalf: '24th' },
+];
+
 
   return (
     <>
       <TestTimeStats time_taken={data?.data?.time_taken} avg_time={data?.data?.average_time} />
       <BarChartLabel data={chartData1} title={"Questions Attempted"} />
       <BarChartLabel data={chartData2} title={"Questions Answered Correctly"} />
+      <PercentileTable data={percentileData} />
       
       <div className="flex flex-col bg-white rounded-sm border-gray-200">
         <div className="space-y-4">
