@@ -4,7 +4,7 @@ import TestTimeStats from './components/TestTimeStats';
 import { BarChartLabel } from './components/BarChartLabel';
 
 const NumericalandLogicalReasoningAssessment = ({ data }) => {
-  console.log(data?.data?.counts);
+  console.log("data",data);
 
 // Total Attempts
   const totalAttempts = (data?.data?.counts?.first_half_attempts || 0) +
