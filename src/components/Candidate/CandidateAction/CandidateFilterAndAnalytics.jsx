@@ -169,10 +169,11 @@ const CandidateFilterAndAnalytics = ({name,email,report_url}) => {
           <Button
             variant="outline"
             size="icon"
-            className="bg-white hover:bg-white border border-Primary p-2 rounded-sm"
+            className="bg-white hover:bg-white border border-Primary w-max p-2 rounded-sm"
             onClick={handleDownload}
             disabled={!isLinkAvailable}
           >
+          <span className="text-Primary"> Download Report</span>
             <DownloadIcon className="text-Primary" />
           </Button>
 
