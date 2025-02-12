@@ -1,4 +1,5 @@
 import React from "react";
+import { useState,useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -64,7 +65,29 @@ const testResults = [
   }
 ];
 
-const CandidateFilterAndAnalytics = ({name,email}) => {
+
+
+const CandidateFilterAndAnalytics = ({name,email,report_url}) => {
+  
+  
+  const [isLinkAvailable, setIsLinkAvailable] = useState(false);
+
+  useEffect(() => {
+    if (report_url) {
+      setIsLinkAvailable(true);
+    } else {
+      setIsLinkAvailable(false);
+    }
+  }, [report_url]);
+
+  const handleDownload = () => {
+    if (report_url) {
+      const link = document.createElement('a');
+      link.href = report_url;
+      link.target = '_blank';
+      link.click();
+    }
+  };
 
 
   return (
@@ -87,14 +110,14 @@ const CandidateFilterAndAnalytics = ({name,email}) => {
               {email}
             </div>
           </div>
-          <Button
+          {/* <Button
             type="submit"
             variant="outline"
             className="rounded-sm border border-Primary text-Primary hover:text-white hover:bg-Primary
                                                       "
           >
             Select for next stage
-          </Button>
+          </Button> */}
         </div>
 
         {/* <Form {...form}>
@@ -146,10 +169,14 @@ const CandidateFilterAndAnalytics = ({name,email}) => {
           <Button
             variant="outline"
             size="icon"
-            className="bg-white hover:bg-white border border-gray-200 p-2 rounded-sm"
+            className="bg-white hover:bg-white border border-Primary p-2 rounded-sm"
+            onClick={handleDownload}
+            disabled={!isLinkAvailable}
           >
-            <DownloadIcon className="text-gray-400" />
+            <DownloadIcon className="text-Primary" />
           </Button>
+
+          
           {/* <Button className="bg-white hover:bg-white border border-gray-200 p-2 rounded-sm">
             <PencilIcon className="text-gray-400" />
           </Button> */}
