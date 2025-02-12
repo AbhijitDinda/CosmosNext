@@ -65,3 +65,26 @@ export const updateTestsById = async ({ token, logout, test_id, data }) => {
         }
     }
 };
+
+
+export const fatchAssessmentById = async ( {token}, logout, assessment_id ) => {
+    try {
+        // console.log("inside assessment_id",assessment_id)
+        const response = await axios.get(`/admin/test-modules/${assessment_id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
+            }
+        });
+        return response;
+    } catch (error) {
+        if (error.response?.status === 401) {
+            unauthorizedErrorResponse(logout);
+            return;
+        } else {
+            console.error("Error in Fatch Assessment details", error);
+            throw error;
+        }
+    }
+}
+

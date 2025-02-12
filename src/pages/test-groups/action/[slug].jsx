@@ -2,6 +2,9 @@ import Heading from "@/components/Heading";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { PencilIcon, TrashIcon } from "lucide-react";
+import { useGetAssessmentById } from "@/hooks/apis/test-group/useGetAssessmentById";
+import { useParams } from "next/navigation";
+
 
 const questions = [
   {
@@ -97,6 +100,12 @@ const questions = [
 ];
 
 const TestGroupAction = () => {
+  const params = useParams();
+  const assessmentId = params?.slug;
+  const shouldFetch = Boolean(assessmentId);
+
+  const { isLoading,assessmentByIdData } = useGetAssessmentById(assessmentId,shouldFetch);
+console.log("assessmentByIdData",assessmentByIdData?.data?.modules_data);
   return (
     <div className="rounded-sm mx-auto w-full max-w-[1300px]">
       <Heading title="Test Options" />
