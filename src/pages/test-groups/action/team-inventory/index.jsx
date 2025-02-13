@@ -105,15 +105,17 @@ const TestGroupAction = () => {
     };
 
     const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-        await addQuestionTeamInventoryMutation(questionData);
-        setIsDialogOpen(false); // Close the dialog after successful submission
-        setQuestionData({ question: "", status: "1", order_id: "1" }); // Reset form fields
-    } catch (error) {
-        console.error("Submission failed:", error);
-    }
-};
+        e.preventDefault();
+        if (activeModule === "Questions") {
+            try {
+                await addQuestionTeamInventoryMutation(questionData);
+                setIsDialogOpen(false); // Close the dialog after successful submission
+                setQuestionData({ question: "", status: "1", order_id: "1" }); // Reset form fields
+            } catch (error) {
+                console.error("Submission failed:", error);
+            }
+        }
+    };
 
     
 
