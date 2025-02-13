@@ -1,3 +1,4 @@
+'use client'
 import {
   Table,
   TableBody,
@@ -64,7 +65,7 @@ const AssessmentsTable = ({ data = [], current_page, total_page, handlePageChang
                   variant="outline"
                   className="p-2 border border-Secondary_Text"
                   onClick={() => {
-                    router.push(`/test-groups/action/${item.id}`);
+                    router.push('/test-groups/action/team-inventory');
                   }} // Dynamic route
                 >
                   <ArrowRight className="!size-5 stroke-1 stroke-Secondary_Text" />
