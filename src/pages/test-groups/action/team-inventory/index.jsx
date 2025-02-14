@@ -69,6 +69,8 @@ const Table = ({ moduleType, moduleData }) => {
 const TestGroupAction = () => {
 
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+     // Error states
+     const [errors, setErrors] = useState({});
 
     const assessmentId = 1;
     const shouldFetch = Boolean(assessmentId);
@@ -143,8 +145,37 @@ const TestGroupAction = () => {
         setTraitsData({ ...traitsData, [e.target.name]: e.target.value });
     };
 
+    // Validation Function
+    const validateForm = () => {
+        let tempErrors = {};
+
+        if (activeModule === "Questions") {
+            if (!questionData.question) tempErrors.question = "Question is required";
+            if (!questionData.status) tempErrors.status = "Status is required";
+            if (!questionData.order_id) tempErrors.order_id = "Order ID is required";
+        }
+
+        if (activeModule === "Sub Questions") {
+            if (!subQuestionData.question_id) tempErrors.question_id = "Question ID is required";
+            if (!subQuestionData.question_name) tempErrors.question_name = "Question Name is required";
+            if (!subQuestionData.traits_category) tempErrors.traits_category = "Traits Category is required";
+            if (!subQuestionData.display) tempErrors.display = "Display is required";
+        }
+
+        if (activeModule === "Traits") {
+            Object.keys(traitsData).forEach((key) => {
+                if (!traitsData[key]) tempErrors[key] = `${key.replace("_", " ")} is required`;
+            });
+        }
+
+        setErrors(tempErrors);
+        return Object.keys(tempErrors).length === 0; // Returns true if no errors
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!validateForm()) return;
+
         if (activeModule === "Questions") {
             try {
                 await addQuestionTeamInventoryMutation(questionData);
@@ -173,8 +204,7 @@ const TestGroupAction = () => {
 
         }
     };
-    // console.log("This is list of Question where id and question_name are there",assessmentByIdData?.data?.modules_data[2].module_data.data);
-    // console.log("This is list of Traits where id and trait_name are there",assessmentByIdData?.data?.modules_data[0].module_data.data);
+
 
     const questionsList = assessmentByIdData?.data?.modules_data[2]?.module_data?.data || [];
     const traitsList = assessmentByIdData?.data?.modules_data[0]?.module_data?.data || [];
@@ -203,7 +233,7 @@ const TestGroupAction = () => {
                         </TabsList>
                         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                             <DialogTrigger asChild>
-                                <Button className="bg-Primary text-white p-2 rounded-md">{getAddButtonText(activeModule)}</Button>
+                                <Button className="bg-Primary text-white  rounded-md">{getAddButtonText(activeModule)}</Button>
                             </DialogTrigger>
                             <DialogContent>
                                 <DialogHeader>
@@ -212,33 +242,50 @@ const TestGroupAction = () => {
                                 <form className="space-y-4" onSubmit={handleSubmit}>
                                     {activeModule === "Traits" && (
                                         <>
-                                            <Input name="trait_name" value={traitsData.trait_name} onChange={handleTraitsInputChange} placeholder="Enter Trait Name" />
+                                            <label className="block text-sm font-medium text-gray-700">Trait Name</label>
+                                            <Input className="" name="trait_name" value={traitsData.trait_name} onChange={handleTraitsInputChange} placeholder="Enter Trait Name" />
+                                            {errors.trait_name && <p className="text-red-500">{errors.trait_name}</p>}
 
+                                            <label className="block text-sm font-medium text-gray-700">Trait Code</label>
                                             <Input name="trait_code" value={traitsData.trait_code} onChange={handleTraitsInputChange} placeholder="Enter Trait Code" />
+                                            {errors.trait_code && <p className="text-red-500">{errors.trait_code}</p>}
 
+                                            <label className="block text-sm font-medium text-gray-700">Key Traits</label>
                                             <Input name="key_traits" value={traitsData.key_traits} onChange={handleTraitsInputChange} placeholder="Enter Key Traits" />
+                                            {errors.key_traits && <p className="text-red-500">{errors.key_traits}</p>}
 
+                                            <label className="block text-sm font-medium text-gray-700">Description</label>
                                             <Input name="description" value={traitsData.description} onChange={handleTraitsInputChange} placeholder="Enter Description" />
+                                            {errors.description && <p className="text-red-500">{errors.description}</p>}
 
+                                            <label className="block text-sm font-medium text-gray-700">Strengths</label>
                                             <Input name="strengths" value={traitsData.strengths} onChange={handleTraitsInputChange} placeholder="Enter Strengths" />
+                                            {errors.strengths && <p className="text-red-500">{errors.strengths}</p>}
 
+                                            <label className="block text-sm font-medium text-gray-700">Weakness</label>
                                             <Input name="weakness" value={traitsData.weakness} onChange={handleTraitsInputChange} placeholder="Enter Weakness" />
+                                            {errors.weakness && <p className="text-red-500">{errors.weakness}</p>}
 
+                                            <label className="block text-sm font-medium text-gray-700">Opportunities</label>
                                             <Input name="opportunities" value={traitsData.opportunities} onChange={handleTraitsInputChange} placeholder="Enter Opportunities" />
+                                            {errors.opportunities && <p className="text-red-500">{errors.opportunities}</p>}
 
+                                            <label className="block text-sm font-medium text-gray-700">Threats</label>
                                             <Input name="threats" value={traitsData.threats} onChange={handleTraitsInputChange} placeholder="Enter Threats" />
+                                            {errors.threats && <p className="text-red-500">{errors.threats}</p>}
 
+                                            <label className="block text-sm font-medium text-gray-700">Display (1 or 0)</label>
                                             <Input name="display" value={traitsData.display} onChange={handleTraitsInputChange} placeholder="Display (1 or 0)" />
+                                            {errors.display && <p className="text-red-500">{errors.display}</p>}
                                         </>
                                     )}
+
                                     {activeModule === "Sub Questions" && (
                                         <>
-                                            {/* Dropdown for Questions */}
+                                            <label className="block text-sm font-medium text-gray-700">Select Question</label>
                                             <Select
                                                 value={subQuestionData.question_id ? subQuestionData.question_id.toString() : questionsList.length > 0 ? questionsList[0].id.toString() : ""}
-                                                onValueChange={(value) =>
-                                                    setSubQuestionData((prev) => ({ ...prev, question_id: value }))
-                                                }
+                                                onValueChange={(value) => setSubQuestionData((prev) => ({ ...prev, question_id: value }))}
                                             >
                                                 <SelectTrigger>
                                                     <SelectValue>
@@ -257,22 +304,16 @@ const TestGroupAction = () => {
                                                     )}
                                                 </SelectContent>
                                             </Select>
+                                            {errors.question_id && <p className="text-red-500">{errors.question_id}</p>}
 
+                                            <label className="block text-sm font-medium text-gray-700">Question Name</label>
+                                            <Input name="question_name" value={subQuestionData.question_name} onChange={handleSubQuestionInputChange} placeholder="Enter Question Name" />
+                                            {errors.question_name && <p className="text-red-500">{errors.question_name}</p>}
 
-
-                                            <Input
-                                                name="question_name"
-                                                value={subQuestionData.question_name}
-                                                onChange={handleSubQuestionInputChange}
-                                                placeholder="Enter Question Name"
-                                            />
-
-                                            {/* Dropdown for Traits */}
+                                            <label className="block text-sm font-medium text-gray-700">Select Traits Category</label>
                                             <Select
                                                 value={subQuestionData.traits_category ? subQuestionData.traits_category.toString() : traitsList.length > 0 ? traitsList[0].id.toString() : ""}
-                                                onValueChange={(value) =>
-                                                    setSubQuestionData((prev) => ({ ...prev, traits_category: value }))
-                                                }
+                                                onValueChange={(value) => setSubQuestionData((prev) => ({ ...prev, traits_category: value }))}
                                             >
                                                 <SelectTrigger>
                                                     <SelectValue>
@@ -291,40 +332,34 @@ const TestGroupAction = () => {
                                                     )}
                                                 </SelectContent>
                                             </Select>
+                                            {errors.traits_category && <p className="text-red-500">{errors.traits_category}</p>}
 
-
-
-                                            <Input
-                                                name="display"
-                                                value={subQuestionData.display}
-                                                onChange={handleSubQuestionInputChange}
-                                                placeholder="Display (1 or 0)"
-                                            />
+                                            <label className="block text-sm font-medium text-gray-700">Display (1 or 0)</label>
+                                            <Input name="display" value={subQuestionData.display} onChange={handleSubQuestionInputChange} placeholder="Display (1 or 0)" />
+                                            {errors.display && <p className="text-red-500">{errors.display}</p>}
                                         </>
                                     )}
+
                                     {activeModule === "Questions" && (
                                         <>
-                                            <Input
-                                                name="question"
-                                                value={questionData.question} onChange={handleInputChange}
-                                                placeholder="Enter Question"
-                                            />
-                                            <Input
-                                                name="status"
-                                                value={questionData.status}
-                                                onChange={handleInputChange}
-                                                placeholder="Enter Status (1 or 0)"
-                                            />
-                                            <Input
-                                                name="order_id"
-                                                value={questionData.order_id}
-                                                onChange={handleInputChange}
-                                                placeholder="Enter Order ID"
-                                            />
+                                            <label className="block text-sm font-medium text-gray-700">Question</label>
+                                            <Input name="question" value={questionData.question} onChange={handleInputChange} placeholder="Enter Question" />
+
+                                            {errors.question && <p className="text-red-500">{errors.question}</p>}
+
+                                            <label className="block text-sm font-medium text-gray-700">Status (1 or 0)</label>
+                                            <Input name="status" value={questionData.status} onChange={handleInputChange} placeholder="Enter Status (1 or 0)" />
+                                            {errors.status && <p className="text-red-500">{errors.status}</p>}
+
+                                            <label className="block text-sm font-medium text-gray-700">Order ID</label>
+                                            <Input name="order_id" value={questionData.order_id} onChange={handleInputChange} placeholder="Enter Order ID" />
+                                            {errors.order_id && <p className="text-red-500">{errors.order_id}</p>}
                                         </>
                                     )}
+
                                     <Button type="submit" className="bg-Primary text-white w-full">Submit</Button>
                                 </form>
+
                             </DialogContent>
                         </Dialog>
                     </div>
