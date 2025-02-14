@@ -5,6 +5,7 @@ import { PencilIcon, TrashIcon } from "lucide-react";
 import { useGetAssessmentById } from "@/hooks/apis/test-group/useGetAssessmentById";
 import { useState } from "react";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { useAddQuestion } from "@/hooks/apis/test-group/team-inventory/useAddQuestion";
 import { useAddSubQuestion } from "@/hooks/apis/test-group/team-inventory/useAddSubQuestion";
@@ -66,6 +67,7 @@ const Table = ({ moduleType, moduleData }) => {
 };
 
 const TestGroupAction = () => {
+
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     const assessmentId = 1;
@@ -89,15 +91,15 @@ const TestGroupAction = () => {
     };
 
 
-        //hit when in module_type Question's and Add Question
-        const {isPending, addQuestionTeamInventoryMutation} = useAddQuestion();
+    //hit when in module_type Question's and Add Question
+    const { isPending, addQuestionTeamInventoryMutation } = useAddQuestion();
 
-        //hit when in module_type Sub Question's and Add Sub Question
-        const {isPending:addSubQuestionTeamInventoryisPending, addSubQuestionTeamInventoryMutation} = useAddSubQuestion();
+    //hit when in module_type Sub Question's and Add Sub Question
+    const { isPending: addSubQuestionTeamInventoryisPending, addSubQuestionTeamInventoryMutation } = useAddSubQuestion();
 
-    
-        //hit when in module_type Traits and Add Traits
-        const {isPending:addTraitsTeamInventoryisPending,addTraitsMutation} = useAddTraits()
+
+    //hit when in module_type Traits and Add Traits
+    const { isPending: addTraitsTeamInventoryisPending, addTraitsMutation } = useAddTraits()
 
     const [questionData, setQuestionData] = useState({
         question: "",
@@ -114,16 +116,16 @@ const TestGroupAction = () => {
     });
 
     const [traitsData, setTraitsData] = useState({
-            "trait_name": "",
-            "trait_code": "",
-            "key_traits": "",
-            "description": "",
-            "strengths": "",
-            "weakness": "",
-            "opportunities": "",
-            "threats": "",
-            "display": "1"            
-        });
+        "trait_name": "",
+        "trait_code": "",
+        "key_traits": "",
+        "description": "",
+        "strengths": "",
+        "weakness": "",
+        "opportunities": "",
+        "threats": "",
+        "display": "1"
+    });
 
     const handleInputChange = (e) => {
         console.log("click 1")
@@ -152,27 +154,32 @@ const TestGroupAction = () => {
                 console.error("Submission failed:", error);
             }
 
-        } else if(activeModule === "Sub Questions"){
+        } else if (activeModule === "Sub Questions") {
             try {
                 await addSubQuestionTeamInventoryMutation(subQuestionData);
                 setIsDialogOpen(false); // Close the dialog after successful submission
-                setSubQuestionData({"question_id": "","question_name": "","traits_category": "","display": "1" }); // Reset form fields
+                setSubQuestionData({ "question_id": "", "question_name": "", "traits_category": "", "display": "1" }); // Reset form fields
             } catch (error) {
                 console.error("Sub question Submission failed:", error);
             }
-        } else if(activeModule === "Traits"){
+        } else if (activeModule === "Traits") {
             try {
                 await addTraitsMutation(traitsData);
                 setIsDialogOpen(false); // Close the dialog after successful submission
-                setTraitsData({"trait_name": "","trait_code": "","key_traits": "","description": "","strengths": "","weakness": "","opportunities": "","threats": "","display": "1"}); // Reset form fields
+                setTraitsData({ "trait_name": "", "trait_code": "", "key_traits": "", "description": "", "strengths": "", "weakness": "", "opportunities": "", "threats": "", "display": "1" }); // Reset form fields
             } catch (error) {
                 console.error("Traits Submission failed:", error);
             }
 
         }
     };
+    // console.log("This is list of Question where id and question_name are there",assessmentByIdData?.data?.modules_data[2].module_data.data);
+    // console.log("This is list of Traits where id and trait_name are there",assessmentByIdData?.data?.modules_data[0].module_data.data);
 
-    
+    const questionsList = assessmentByIdData?.data?.modules_data[2]?.module_data?.data || [];
+    const traitsList = assessmentByIdData?.data?.modules_data[0]?.module_data?.data || [];
+    console.log(questionsList, traitsList);
+
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error loading data</div>;
@@ -226,15 +233,73 @@ const TestGroupAction = () => {
                                     )}
                                     {activeModule === "Sub Questions" && (
                                         <>
-                                            //here instead of input show dropdown of question list and pass select question id
-                                            <Input name="question_id" value={subQuestionData.question_id} onChange={handleSubQuestionInputChange} placeholder="Select Question" />
+                                            {/* Dropdown for Questions */}
+                                            <Select
+                                                value={subQuestionData.question_id ? subQuestionData.question_id.toString() : questionsList.length > 0 ? questionsList[0].id.toString() : ""}
+                                                onValueChange={(value) =>
+                                                    setSubQuestionData((prev) => ({ ...prev, question_id: value }))
+                                                }
+                                            >
+                                                <SelectTrigger>
+                                                    <SelectValue>
+                                                        {questionsList.find((q) => q.id.toString() === subQuestionData.question_id)?.question_name || (questionsList.length > 0 ? questionsList[0].question_name : "Select Question")}
+                                                    </SelectValue>
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {questionsList.length === 0 ? (
+                                                        <SelectItem disabled>No Questions Found</SelectItem>
+                                                    ) : (
+                                                        questionsList.map((question) => (
+                                                            <SelectItem key={question.id} value={question.id.toString()}>
+                                                                {question.question_name}
+                                                            </SelectItem>
+                                                        ))
+                                                    )}
+                                                </SelectContent>
+                                            </Select>
 
-                                            <Input name="question_name" value={subQuestionData.question_name} onChange={handleSubQuestionInputChange} placeholder="Enter Question Name" />
 
-                                            /here instead of input show dropdown of Traits list and pass select Traits id
-                                            <Input name="traits_category" value={subQuestionData.traits_category} onChange={handleSubQuestionInputChange} placeholder="Select Traits Category" />
 
-                                            <Input name="display" value={subQuestionData.display} onChange={handleSubQuestionInputChange} placeholder="Display (1 or 0)" />
+                                            <Input
+                                                name="question_name"
+                                                value={subQuestionData.question_name}
+                                                onChange={handleSubQuestionInputChange}
+                                                placeholder="Enter Question Name"
+                                            />
+
+                                            {/* Dropdown for Traits */}
+                                            <Select
+                                                value={subQuestionData.traits_category ? subQuestionData.traits_category.toString() : traitsList.length > 0 ? traitsList[0].id.toString() : ""}
+                                                onValueChange={(value) =>
+                                                    setSubQuestionData((prev) => ({ ...prev, traits_category: value }))
+                                                }
+                                            >
+                                                <SelectTrigger>
+                                                    <SelectValue>
+                                                        {traitsList.find((t) => t.id.toString() === subQuestionData.traits_category)?.trait_name || (traitsList.length > 0 ? traitsList[0].trait_name : "Select Traits Category")}
+                                                    </SelectValue>
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {traitsList.length === 0 ? (
+                                                        <SelectItem disabled>No Traits Found</SelectItem>
+                                                    ) : (
+                                                        traitsList.map((trait) => (
+                                                            <SelectItem key={trait.id} value={trait.id.toString()}>
+                                                                {trait.trait_name}
+                                                            </SelectItem>
+                                                        ))
+                                                    )}
+                                                </SelectContent>
+                                            </Select>
+
+
+
+                                            <Input
+                                                name="display"
+                                                value={subQuestionData.display}
+                                                onChange={handleSubQuestionInputChange}
+                                                placeholder="Display (1 or 0)"
+                                            />
                                         </>
                                     )}
                                     {activeModule === "Questions" && (
