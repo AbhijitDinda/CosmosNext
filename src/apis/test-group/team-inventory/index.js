@@ -21,3 +21,46 @@ export const addQuestionInTeamInventory = async ({ token , logout, post_data}) =
         }
     }
 }
+
+export const addSubQuestionInTeamInventory = async ({ token , logout, post_data}) => {
+    try {
+        console.log("inside post_data",post_data,logout)
+        const response = await axios.post(`/admin/team-inventory/sub-questions/add`,post_data , {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
+            }
+        });
+        return response;
+    } catch (error) {
+        if (error.response?.status === 401) {
+            unauthorizedErrorResponse(logout);
+            return;
+        } else {
+            console.error("Error in Fatch Assessment details", error);
+            throw error;
+        }
+    }
+}
+
+
+export const addTraitsInTeamInventory = async ({ token , logout, post_data}) => {
+    try {
+        console.log("inside post_data",post_data,logout)
+        const response = await axios.post(`/admin/team-inventory/traits/add`,post_data , {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
+            }
+        });
+        return response;
+    } catch (error) {
+        if (error.response?.status === 401) {
+            unauthorizedErrorResponse(logout);
+            return;
+        } else {
+            console.error("Error in Fatch Assessment details", error);
+            throw error;
+        }
+    }
+}

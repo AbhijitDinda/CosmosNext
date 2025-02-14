@@ -7,6 +7,8 @@ import { useState } from "react";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useAddQuestion } from "@/hooks/apis/test-group/team-inventory/useAddQuestion";
+import { useAddSubQuestion } from "@/hooks/apis/test-group/team-inventory/useAddSubQuestion";
+import { useAddTraits } from "@/hooks/apis/test-group/team-inventory/useAddTraits";
 
 const Table = ({ moduleType, moduleData }) => {
     let columns = [];
@@ -91,8 +93,11 @@ const TestGroupAction = () => {
         const {isPending, addQuestionTeamInventoryMutation} = useAddQuestion();
 
         //hit when in module_type Sub Question's and Add Sub Question
+        const {isPending:addSubQuestionTeamInventoryisPending, addSubQuestionTeamInventoryMutation} = useAddSubQuestion();
+
     
         //hit when in module_type Traits and Add Traits
+        const {isPending:addTraitsTeamInventoryisPending,addTraitsMutation} = useAddTraits()
 
     const [questionData, setQuestionData] = useState({
         question: "",
@@ -100,8 +105,40 @@ const TestGroupAction = () => {
         order_id: "",
     });
 
+    const [subQuestionData, setSubQuestionData] = useState({
+        "question_id": "",
+        "question_name": "",
+        "traits_category": "",
+        "display": "1",
+        // "order_id": "" 
+    });
+
+    const [traitsData, setTraitsData] = useState({
+            "trait_name": "",
+            "trait_code": "",
+            "key_traits": "",
+            "description": "",
+            "strengths": "",
+            "weakness": "",
+            "opportunities": "",
+            "threats": "",
+            "display": "1"            
+        });
+
     const handleInputChange = (e) => {
+        console.log("click 1")
+
         setQuestionData({ ...questionData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubQuestionInputChange = (e) => {
+        console.log("click 2")
+        setSubQuestionData({ ...subQuestionData, [e.target.name]: e.target.value });
+    };
+
+    const handleTraitsInputChange = (e) => {
+        console.log("click 3")
+        setTraitsData({ ...traitsData, [e.target.name]: e.target.value });
     };
 
     const handleSubmit = async (e) => {
@@ -114,6 +151,24 @@ const TestGroupAction = () => {
             } catch (error) {
                 console.error("Submission failed:", error);
             }
+
+        } else if(activeModule === "Sub Questions"){
+            try {
+                await addSubQuestionTeamInventoryMutation(subQuestionData);
+                setIsDialogOpen(false); // Close the dialog after successful submission
+                setSubQuestionData({"question_id": "","question_name": "","traits_category": "","display": "1" }); // Reset form fields
+            } catch (error) {
+                console.error("Sub question Submission failed:", error);
+            }
+        } else if(activeModule === "Traits"){
+            try {
+                await addTraitsMutation(traitsData);
+                setIsDialogOpen(false); // Close the dialog after successful submission
+                setTraitsData({"trait_name": "","trait_code": "","key_traits": "","description": "","strengths": "","weakness": "","opportunities": "","threats": "","display": "1"}); // Reset form fields
+            } catch (error) {
+                console.error("Traits Submission failed:", error);
+            }
+
         }
     };
 
@@ -150,31 +205,41 @@ const TestGroupAction = () => {
                                 <form className="space-y-4" onSubmit={handleSubmit}>
                                     {activeModule === "Traits" && (
                                         <>
-                                            <Input placeholder="Enter Trait Name" />
-                                            <Input placeholder="Enter Trait Code" />
-                                            <Input placeholder="Enter Key Traits" />
-                                            <Input placeholder="Enter Description" />
-                                            <Input placeholder="Enter Strengths" />
-                                            <Input placeholder="Enter Weakness" />
-                                            <Input placeholder="Enter Opportunities" />
-                                            <Input placeholder="Enter Threats" />
-                                            <Input placeholder="Display (1 or 0)" />
+                                            <Input name="trait_name" value={traitsData.trait_name} onChange={handleTraitsInputChange} placeholder="Enter Trait Name" />
+
+                                            <Input name="trait_code" value={traitsData.trait_code} onChange={handleTraitsInputChange} placeholder="Enter Trait Code" />
+
+                                            <Input name="key_traits" value={traitsData.key_traits} onChange={handleTraitsInputChange} placeholder="Enter Key Traits" />
+
+                                            <Input name="description" value={traitsData.description} onChange={handleTraitsInputChange} placeholder="Enter Description" />
+
+                                            <Input name="strengths" value={traitsData.strengths} onChange={handleTraitsInputChange} placeholder="Enter Strengths" />
+
+                                            <Input name="weakness" value={traitsData.weakness} onChange={handleTraitsInputChange} placeholder="Enter Weakness" />
+
+                                            <Input name="opportunities" value={traitsData.opportunities} onChange={handleTraitsInputChange} placeholder="Enter Opportunities" />
+
+                                            <Input name="threats" value={traitsData.threats} onChange={handleTraitsInputChange} placeholder="Enter Threats" />
+
+                                            <Input name="display" value={traitsData.display} onChange={handleTraitsInputChange} placeholder="Display (1 or 0)" />
                                         </>
                                     )}
                                     {activeModule === "Sub Questions" && (
                                         <>
-                                            <Input placeholder="Enter Question ID" />
-                                            <Input placeholder="Enter Question Name" />
-                                            <Input placeholder="Enter Traits Category" />
-                                            <Input placeholder="Display (1 or 0)" />
+                                            <Input name="question_id" value={subQuestionData.question_id} onChange={handleSubQuestionInputChange} placeholder="Enter Question ID" />
+
+                                            <Input name="question_name" value={subQuestionData.question_name} onChange={handleSubQuestionInputChange} placeholder="Enter Question Name" />
+
+                                            <Input name="traits_category" value={subQuestionData.traits_category} onChange={handleSubQuestionInputChange} placeholder="Enter Traits Category" />
+
+                                            <Input name="display" value={subQuestionData.display} onChange={handleSubQuestionInputChange} placeholder="Display (1 or 0)" />
                                         </>
                                     )}
                                     {activeModule === "Questions" && (
                                         <>
                                             <Input
                                                 name="question"
-                                                value={questionData.question}
-                                                onChange={handleInputChange}
+                                                value={questionData.question} onChange={handleInputChange}
                                                 placeholder="Enter Question"
                                             />
                                             <Input
