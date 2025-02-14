@@ -226,11 +226,13 @@ const TestGroupAction = () => {
                                     )}
                                     {activeModule === "Sub Questions" && (
                                         <>
-                                            <Input name="question_id" value={subQuestionData.question_id} onChange={handleSubQuestionInputChange} placeholder="Enter Question ID" />
+                                            //here instead of input show dropdown of question list and pass select question id
+                                            <Input name="question_id" value={subQuestionData.question_id} onChange={handleSubQuestionInputChange} placeholder="Select Question" />
 
                                             <Input name="question_name" value={subQuestionData.question_name} onChange={handleSubQuestionInputChange} placeholder="Enter Question Name" />
 
-                                            <Input name="traits_category" value={subQuestionData.traits_category} onChange={handleSubQuestionInputChange} placeholder="Enter Traits Category" />
+                                            /here instead of input show dropdown of Traits list and pass select Traits id
+                                            <Input name="traits_category" value={subQuestionData.traits_category} onChange={handleSubQuestionInputChange} placeholder="Select Traits Category" />
 
                                             <Input name="display" value={subQuestionData.display} onChange={handleSubQuestionInputChange} placeholder="Display (1 or 0)" />
                                         </>
