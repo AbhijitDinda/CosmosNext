@@ -131,7 +131,6 @@ const TestGroupAction = () => {
 
     const handleInputChange = (e) => {
         console.log("click 1")
-
         setQuestionData({ ...questionData, [e.target.name]: e.target.value });
     };
 
@@ -235,11 +234,11 @@ const TestGroupAction = () => {
                             <DialogTrigger asChild>
                                 <Button className="bg-Primary text-white  rounded-md">{getAddButtonText(activeModule)}</Button>
                             </DialogTrigger>
-                            <DialogContent>
+                            <DialogContent className="max-h-[80vh] overflow-y-auto w-[500px]">
                                 <DialogHeader>
                                     <DialogTitle>{getAddButtonText(activeModule)}</DialogTitle>
                                 </DialogHeader>
-                                <form className="space-y-4" onSubmit={handleSubmit}>
+                                <form className="space-y-2" onSubmit={handleSubmit}>
                                     {activeModule === "Traits" && (
                                         <>
                                             <label className="block text-sm font-medium text-gray-700">Trait Name</label>
