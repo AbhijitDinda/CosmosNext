@@ -72,13 +72,19 @@ const AssessmentsTable = ({
                   onClick={() => {
                     if (
                       item?.test_name ===
-                        "Situational Judgement Assessment For Executive Leadership roles" ||
-                      item?.test_name ===
-                        "Situational Judgement Assessment For Junior-Mid Level Roles" ||
-                      item?.test_name ===
-                        "Situational Judgement Assessment For Sales oriented roles"
+                      "Situational Judgement Assessment For Executive Leadership roles"
                     ) {
-                      router.push(`/test-groups/action/situational-judgement`);
+                      router.push(`/test-groups/action/executive-leadership`);
+                    } else if (
+                      item?.test_name ===
+                      "Situational Judgement Assessment For Junior-Mid Level Roles"
+                    ) {
+                      router.push(`/test-groups/action/junior-mid-level`);
+                    } else if (
+                      item?.test_name ===
+                      "Situational Judgement Assessment For Sales oriented roles"
+                    ) {
+                      router.push(`/test-groups/action/sales-oriented`);
                     } else {
                       router.push(
                         `/test-groups/action/${item?.test_name

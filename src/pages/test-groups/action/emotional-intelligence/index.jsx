@@ -15,10 +15,10 @@ import {
 
 const Table = ({ moduleType, moduleData }) => {
   let columns = [];
-  if (moduleType === "Styles") {
+  if (moduleType === "Approach Styles") {
     columns = ["ID", "Name", "Action"];
   } else if (moduleType === "Questions") {
-    columns = ["ID", "Question", "Style Name", "Action"];
+    columns = ["ID", "Question", "Group Name", "Action"];
   }
 
   console.log("moduleData", moduleData);
@@ -43,7 +43,7 @@ const Table = ({ moduleType, moduleData }) => {
               <td className="border border-gray-300 px-4 py-2 text-nowrap">
                 {item.id}
               </td>
-              {moduleType === "Styles" && (
+              {moduleType === "Approach Styles" && (
                 <td className="border border-gray-300 px-4 py-2 text-nowrap">
                   {item.name}
                 </td>
@@ -54,7 +54,7 @@ const Table = ({ moduleType, moduleData }) => {
                     {item.question_name}
                   </td>
                   <td className="border border-gray-300 px-4 py-2 text-nowrap truncate max-w-[200px] overflow-hidden whitespace-nowrap">
-                    {item.style_name}
+                    {item.group_name}
                   </td>
                 </>
               )}
@@ -73,12 +73,13 @@ const Table = ({ moduleType, moduleData }) => {
     </div>
   );
 };
-const ApproachAssesment = () => {
+
+const EmotionalIntelligence = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   // Error states
   const [errors, setErrors] = useState({});
 
-  const assessmentId = 3;
+  const assessmentId = 4;
   const shouldFetch = Boolean(assessmentId);
 
   const { isLoading, error, assessmentByIdData } = useGetAssessmentById(
@@ -94,13 +95,17 @@ const ApproachAssesment = () => {
 
   const getAddButtonText = (moduleType) => {
     switch (moduleType) {
-      case "Styles":
-        return "Add Style";
+      case "Approach Styles":
+        return "Add Approach Style";
       case "Questions":
         return "Add Question";
       default:
         return "Add";
     }
+  };
+
+  const handleButtonClick = () => {
+    setIsDialogOpen(true);
   };
 
   if (isLoading) {
@@ -161,4 +166,4 @@ const ApproachAssesment = () => {
   );
 };
 
-export default ApproachAssesment;
+export default EmotionalIntelligence;

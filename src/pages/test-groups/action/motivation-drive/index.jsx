@@ -118,7 +118,9 @@ const MotivationDriveAction = () => {
       <Heading title="Test Options" />
       <div className="p-4 bg-White rounded-sm">
         <Tabs
-          defaultValue={activeModule}
+          defaultValue={
+            assessmentByIdData?.data?.modules_data?.[0]?.module_type
+          }
           className="w-full"
           onValueChange={setActiveModule}
         >
