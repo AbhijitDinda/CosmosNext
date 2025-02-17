@@ -11,6 +11,9 @@ import { useAddQuestion } from "@/hooks/apis/test-group/team-inventory/useAddQue
 import { useAddSubQuestion } from "@/hooks/apis/test-group/team-inventory/useAddSubQuestion";
 import { useAddTraits } from "@/hooks/apis/test-group/team-inventory/useAddTraits";
 
+import ReactQuill from "react-quill";
+import 'react-quill/dist/quill.snow.css';
+
 const Table = ({ moduleType, moduleData }) => {
     let columns = [];
     if (moduleType === "Traits") {
@@ -234,7 +237,7 @@ const TestGroupAction = () => {
                             <DialogTrigger asChild>
                                 <Button className="bg-Primary text-white  rounded-md">{getAddButtonText(activeModule)}</Button>
                             </DialogTrigger>
-                            <DialogContent className="max-h-[80vh] overflow-y-auto w-[500px]">
+                            <DialogContent className="max-h-[80vh] overflow-y-auto max-w-[600px]">
                                 <DialogHeader>
                                     <DialogTitle>{getAddButtonText(activeModule)}</DialogTitle>
                                 </DialogHeader>
@@ -253,8 +256,12 @@ const TestGroupAction = () => {
                                             <Input name="key_traits" value={traitsData.key_traits} onChange={handleTraitsInputChange} placeholder="Enter Key Traits" />
                                             {errors.key_traits && <p className="text-red-500">{errors.key_traits}</p>}
 
-                                            <label className="block text-sm font-medium text-gray-700">Description</label>
+                                            {/* <label className="block text-sm font-medium text-gray-700">Description</label>
                                             <Input name="description" value={traitsData.description} onChange={handleTraitsInputChange} placeholder="Enter Description" />
+                                            {errors.description && <p className="text-red-500">{errors.description}</p>} */}
+
+                                            <label className="block text-sm font-medium text-gray-700">Description</label>
+                                            <ReactQuill value={traitsData.description} onChange={(value) => handleTraitsInputChange({ target: { name: "description", value } })} />
                                             {errors.description && <p className="text-red-500">{errors.description}</p>}
 
                                             <label className="block text-sm font-medium text-gray-700">Strengths</label>
