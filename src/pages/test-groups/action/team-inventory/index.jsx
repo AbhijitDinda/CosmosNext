@@ -1,4 +1,5 @@
 import Heading from "@/components/Heading";
+import dynamic from 'next/dynamic'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { PencilIcon, TrashIcon } from "lucide-react";
@@ -11,7 +12,7 @@ import { useAddQuestion } from "@/hooks/apis/test-group/team-inventory/useAddQue
 import { useAddSubQuestion } from "@/hooks/apis/test-group/team-inventory/useAddSubQuestion";
 import { useAddTraits } from "@/hooks/apis/test-group/team-inventory/useAddTraits";
 
-import ReactQuill from "react-quill";
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import 'react-quill/dist/quill.snow.css';
 
 const Table = ({ moduleType, moduleData }) => {
@@ -72,8 +73,8 @@ const Table = ({ moduleType, moduleData }) => {
 const TestGroupAction = () => {
 
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-     // Error states
-     const [errors, setErrors] = useState({});
+    // Error states
+    const [errors, setErrors] = useState({});
 
     const assessmentId = 1;
     const shouldFetch = Boolean(assessmentId);
@@ -132,20 +133,40 @@ const TestGroupAction = () => {
         "display": "1"
     });
 
+
     const handleInputChange = (e) => {
-        console.log("click 1")
-        setQuestionData({ ...questionData, [e.target.name]: e.target.value });
+        console.log("click 1");
+        const { name, value } = e.target;
+
+        setQuestionData((prev) => ({ ...prev, [name]: value }));
+
+        // Clear the error for the field
+        setErrors((prev) => ({ ...prev, [name]: "" }));
     };
 
     const handleSubQuestionInputChange = (e) => {
-        console.log("click 2")
-        setSubQuestionData({ ...subQuestionData, [e.target.name]: e.target.value });
+        console.log("click 2");
+        const { name, value } = e.target;
+
+        setSubQuestionData((prev) => ({ ...prev, [name]: value }));
+
+        // Clear the error for the field
+        setErrors((prev) => ({ ...prev, [name]: "" }));
     };
 
-    const handleTraitsInputChange = (e) => {
-        console.log("click 3")
-        setTraitsData({ ...traitsData, [e.target.name]: e.target.value });
+    const handleTraitsInputChange = (e, name) => {
+        if (typeof e === "string") {
+            // ReactQuill input
+            setTraitsData((prev) => ({ ...prev, [name]: e }));
+            setErrors((prev) => ({ ...prev, [name]: "" })); // Clear the error
+        } else {
+            // Normal input fields
+            const { name, value } = e.target;
+            setTraitsData((prev) => ({ ...prev, [name]: value }));
+            setErrors((prev) => ({ ...prev, [name]: "" })); // Clear the error
+        }
     };
+
 
     // Validation Function
     const validateForm = () => {
@@ -256,28 +277,26 @@ const TestGroupAction = () => {
                                             <Input name="key_traits" value={traitsData.key_traits} onChange={handleTraitsInputChange} placeholder="Enter Key Traits" />
                                             {errors.key_traits && <p className="text-red-500">{errors.key_traits}</p>}
 
-                                            {/* <label className="block text-sm font-medium text-gray-700">Description</label>
-                                            <Input name="description" value={traitsData.description} onChange={handleTraitsInputChange} placeholder="Enter Description" />
-                                            {errors.description && <p className="text-red-500">{errors.description}</p>} */}
 
                                             <label className="block text-sm font-medium text-gray-700">Description</label>
                                             <ReactQuill value={traitsData.description} onChange={(value) => handleTraitsInputChange({ target: { name: "description", value } })} />
                                             {errors.description && <p className="text-red-500">{errors.description}</p>}
 
+
                                             <label className="block text-sm font-medium text-gray-700">Strengths</label>
-                                            <Input name="strengths" value={traitsData.strengths} onChange={handleTraitsInputChange} placeholder="Enter Strengths" />
+                                            <ReactQuill value={traitsData.strengths} onChange={(value) => handleTraitsInputChange({ target: { name: "strengths", value } })} />
                                             {errors.strengths && <p className="text-red-500">{errors.strengths}</p>}
 
                                             <label className="block text-sm font-medium text-gray-700">Weakness</label>
-                                            <Input name="weakness" value={traitsData.weakness} onChange={handleTraitsInputChange} placeholder="Enter Weakness" />
+                                            <ReactQuill value={traitsData.weakness} onChange={(value) => handleTraitsInputChange({ target: { name: "weakness", value } })} />
                                             {errors.weakness && <p className="text-red-500">{errors.weakness}</p>}
 
                                             <label className="block text-sm font-medium text-gray-700">Opportunities</label>
-                                            <Input name="opportunities" value={traitsData.opportunities} onChange={handleTraitsInputChange} placeholder="Enter Opportunities" />
+                                            <ReactQuill value={traitsData.opportunities} onChange={(value) => handleTraitsInputChange({ target: { name: "opportunities", value } })} />
                                             {errors.opportunities && <p className="text-red-500">{errors.opportunities}</p>}
 
                                             <label className="block text-sm font-medium text-gray-700">Threats</label>
-                                            <Input name="threats" value={traitsData.threats} onChange={handleTraitsInputChange} placeholder="Enter Threats" />
+                                            <ReactQuill value={traitsData.threats} onChange={(value) => handleTraitsInputChange({ target: { name: "threats", value } })} />
                                             {errors.threats && <p className="text-red-500">{errors.threats}</p>}
 
                                             <label className="block text-sm font-medium text-gray-700">Display (1 or 0)</label>
