@@ -1,4 +1,3 @@
-import React from "react";
 import Heading from "@/components/Heading";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -15,10 +14,8 @@ import {
 
 const Table = ({ moduleType, moduleData }) => {
   let columns = [];
-  if (moduleType === "Styles") {
-    columns = ["ID", "Name", "Action"];
-  } else if (moduleType === "Questions") {
-    columns = ["ID", "Question", "Style Name", "Action"];
+  if (moduleType === "Questions") {
+    columns = ["ID", "Question", "Options", "Right Option", "Action"];
   }
 
   console.log("moduleData", moduleData);
@@ -43,18 +40,22 @@ const Table = ({ moduleType, moduleData }) => {
               <td className="border border-gray-300 px-4 py-2 text-nowrap">
                 {item.id}
               </td>
-              {moduleType === "Styles" && (
-                <td className="border border-gray-300 px-4 py-2 text-nowrap">
-                  {item.name}
-                </td>
-              )}
               {moduleType === "Questions" && (
                 <>
-                  <td className="border border-gray-300 px-4 py-2 text-nowrap truncate max-w-[300px] overflow-hidden whitespace-nowrap">
+                  <td className="border border-gray-300 px-4 py-2  max-w-[300px]">
                     {item.question_name}
                   </td>
-                  <td className="border border-gray-300 px-4 py-2 text-nowrap truncate max-w-[200px] overflow-hidden whitespace-nowrap">
-                    {item.style_name}
+                  <td className="border border-gray-300 px-4 py-2 max-w-[300px]">
+                    <ol>
+                      {[1, 2, 3, 4].map((option) => (
+                        <li key={option} className="list-decimal">
+                          {item[`option${option}`]}
+                        </li>
+                      ))}
+                    </ol>
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2  max-w-[300px]">
+                    {item.right_option}
                   </td>
                 </>
               )}
@@ -73,12 +74,13 @@ const Table = ({ moduleType, moduleData }) => {
     </div>
   );
 };
-const ApproachAssesment = () => {
+
+const JuniorMidlevel = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   // Error states
   const [errors, setErrors] = useState({});
 
-  const assessmentId = 3;
+  const assessmentId = 8;
   const shouldFetch = Boolean(assessmentId);
 
   const { isLoading, error, assessmentByIdData } = useGetAssessmentById(
@@ -94,13 +96,15 @@ const ApproachAssesment = () => {
 
   const getAddButtonText = (moduleType) => {
     switch (moduleType) {
-      case "Styles":
-        return "Add Style";
       case "Questions":
         return "Add Question";
       default:
         return "Add";
     }
+  };
+
+  const handleButtonClick = () => {
+    setIsDialogOpen(true);
   };
 
   if (isLoading) {
@@ -161,4 +165,4 @@ const ApproachAssesment = () => {
   );
 };
 
-export default ApproachAssesment;
+export default JuniorMidlevel;
