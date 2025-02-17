@@ -73,8 +73,8 @@ const Table = ({ moduleType, moduleData }) => {
 const TestGroupAction = () => {
 
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-     // Error states
-     const [errors, setErrors] = useState({});
+    // Error states
+    const [errors, setErrors] = useState({});
 
     const assessmentId = 1;
     const shouldFetch = Boolean(assessmentId);
@@ -133,42 +133,27 @@ const TestGroupAction = () => {
         "display": "1"
     });
 
-    // const handleInputChange = (e) => {
-    //     console.log("click 1")
-    //     setQuestionData({ ...questionData, [e.target.name]: e.target.value });
-        
-    // };
-
-    // const handleSubQuestionInputChange = (e) => {
-    //     console.log("click 2")
-    //     setSubQuestionData({ ...subQuestionData, [e.target.name]: e.target.value });
-    // };
-
-    // const handleTraitsInputChange = (e) => {
-    //     console.log("click 3")
-    //     setTraitsData({ ...traitsData, [e.target.name]: e.target.value });
-    // };
 
     const handleInputChange = (e) => {
         console.log("click 1");
         const { name, value } = e.target;
-        
+
         setQuestionData((prev) => ({ ...prev, [name]: value }));
-        
+
         // Clear the error for the field
         setErrors((prev) => ({ ...prev, [name]: "" }));
     };
-    
+
     const handleSubQuestionInputChange = (e) => {
         console.log("click 2");
         const { name, value } = e.target;
-        
+
         setSubQuestionData((prev) => ({ ...prev, [name]: value }));
-        
+
         // Clear the error for the field
         setErrors((prev) => ({ ...prev, [name]: "" }));
     };
-    
+
     const handleTraitsInputChange = (e, name) => {
         if (typeof e === "string") {
             // ReactQuill input
@@ -181,7 +166,7 @@ const TestGroupAction = () => {
             setErrors((prev) => ({ ...prev, [name]: "" })); // Clear the error
         }
     };
-    
+
 
     // Validation Function
     const validateForm = () => {
@@ -292,25 +277,6 @@ const TestGroupAction = () => {
                                             <Input name="key_traits" value={traitsData.key_traits} onChange={handleTraitsInputChange} placeholder="Enter Key Traits" />
                                             {errors.key_traits && <p className="text-red-500">{errors.key_traits}</p>}
 
-                                            {/* <label className="block text-sm font-medium text-gray-700">Description</label>
-                                            <Input name="description" value={traitsData.description} onChange={handleTraitsInputChange} placeholder="Enter Description" />
-                                            {errors.description && <p className="text-red-500">{errors.description}</p>}
-
-                                            <label className="block text-sm font-medium text-gray-700">Strengths</label>
-                                            <Input name="strengths" value={traitsData.strengths} onChange={handleTraitsInputChange} placeholder="Enter Strengths" />
-                                            {errors.strengths && <p className="text-red-500">{errors.strengths}</p>}
-
-                                            <label className="block text-sm font-medium text-gray-700">Weakness</label>
-                                            <Input name="weakness" value={traitsData.weakness} onChange={handleTraitsInputChange} placeholder="Enter Weakness" />
-                                            {errors.weakness && <p className="text-red-500">{errors.weakness}</p>}
-
-                                            <label className="block text-sm font-medium text-gray-700">Opportunities</label>
-                                            <Input name="opportunities" value={traitsData.opportunities} onChange={handleTraitsInputChange} placeholder="Enter Opportunities" />
-                                            {errors.opportunities && <p className="text-red-500">{errors.opportunities}</p>}
-
-                                            <label className="block text-sm font-medium text-gray-700">Threats</label>
-                                            <Input name="threats" value={traitsData.threats} onChange={handleTraitsInputChange} placeholder="Enter Threats" />
-                                            {errors.threats && <p className="text-red-500">{errors.threats}</p>} */}
 
                                             <label className="block text-sm font-medium text-gray-700">Description</label>
                                             <ReactQuill value={traitsData.description} onChange={(value) => handleTraitsInputChange({ target: { name: "description", value } })} />
