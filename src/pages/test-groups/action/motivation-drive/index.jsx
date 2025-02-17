@@ -13,20 +13,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { useAddQuestion } from "@/hooks/apis/test-group/team-inventory/useAddQuestion";
-import { useAddSubQuestion } from "@/hooks/apis/test-group/team-inventory/useAddSubQuestion";
-import { useAddTraits } from "@/hooks/apis/test-group/team-inventory/useAddTraits";
-
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 
 const Table = ({ moduleType, moduleData }) => {
   let columns = [];
