@@ -15,6 +15,160 @@ import { useAddTraits } from "@/hooks/apis/test-group/team-inventory/useAddTrait
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import 'react-quill/dist/quill.snow.css';
 
+const TableRow = ({ item, moduleType }) => {
+    
+    const [isEditDialogOpen, setEditIsDialogOpen] = useState(false);
+    const [errorsEdit, setErrorsEdit] = useState({});
+    const [traitsEditData, setTraitsEditData] = useState({
+        "trait_name": "",
+        "trait_code": "",
+        "key_traits": "",
+        "description": "",
+        "strengths": "",
+        "weakness": "",
+        "opportunities": "",
+        "threats": "",
+        "display": "1"
+    });
+
+    // Validation Function
+    const validateEditForm = () => {
+        let tempErrors = {};
+
+        if (moduleType === "Questions") {
+            if (!questionData.question) tempErrors.question = "Question is required";
+            if (!questionData.status) tempErrors.status = "Status is required";
+            if (!questionData.order_id) tempErrors.order_id = "Order ID is required";
+        }
+
+        if (moduleType === "Sub Questions") {
+            if (!subQuestionData.question_id) tempErrors.question_id = "Question ID is required";
+            if (!subQuestionData.question_name) tempErrors.question_name = "Question Name is required";
+            if (!subQuestionData.traits_category) tempErrors.traits_category = "Traits Category is required";
+            if (!subQuestionData.display) tempErrors.display = "Display is required";
+        }
+
+        if (moduleType === "Traits") {
+            Object.keys(traitsEditData).forEach((key) => {
+                if (!traitsEditData[key]) tempErrors[key] = `${key.replace("_", " ")} is required`;
+            });
+        }
+
+        errorsEdit(tempErrors);
+        return Object.keys(tempErrors).length === 0; // Returns true if no errors
+    };
+
+
+    
+
+    const handleTraitsInputChange = (e, name) => {
+        if (typeof e === "string") {
+            // ReactQuill input
+            setTraitsEditData((prev) => ({ ...prev, [name]: e }));
+            setErrorsEdit((prev) => ({ ...prev, [name]: "" })); // Clear the error
+        } else {
+            // Normal input fields
+            const { name, value } = e.target;
+            setTraitsEditData((prev) => ({ ...prev, [name]: value }));
+            setErrorsEdit((prev) => ({ ...prev, [name]: "" })); // Clear the error
+        }
+    };
+
+    const handleEditSubmit = async (e) => {
+        e.preventDefault();
+        if (!validateEditForm()) return;
+
+        
+    };
+
+    return (
+        <tr key={item.id}>
+            <td className="border border-gray-300 px-4 py-2 text-nowrap">{item.id}</td>
+            {moduleType === "Traits" && (
+                <td className="border border-gray-300 px-4 py-2 text-nowrap">{item.trait_name}</td>
+            )}
+            {moduleType === "Sub Questions" && (
+                <>
+                    <td className="border border-gray-300 px-4 py-2 text-nowrap truncate max-w-[300px] overflow-hidden whitespace-nowrap">
+                        {item.question_name}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2 text-nowrap truncate max-w-[200px] overflow-hidden whitespace-nowrap">
+                        {item.main_question}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2 text-nowrap">{item.traits_category}</td>
+                </>
+            )}
+            {moduleType === "Questions" && (
+                <td className="border border-gray-300 px-4 py-2 text-nowrap">{item.question_name}</td>
+            )}
+            <td className="border border-gray-300 px-4 py-2 text-nowrap">
+                <Dialog open={isEditDialogOpen} onOpenChange={setEditIsDialogOpen}>
+                    <DialogTrigger asChild>
+                        <Button size="sm" variant="outline" className="rounded-sm mr-2">
+                            <PencilIcon className="stroke-Third" />
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-h-[80vh] overflow-y-auto max-w-[600px]">
+                        <DialogHeader>
+                            <DialogTitle>Edit {moduleType.slice(0, -1)}</DialogTitle>
+                        </DialogHeader>
+                        {/* Add your edit form here using item data */}
+                        <form className="space-y-2" onSubmit={handleEditSubmit}>
+                            {moduleType === "Traits" && (
+                                <>
+                                    <label className="block text-sm font-medium text-gray-700">Trait Name</label>
+                                    <Input className="" name="trait_name" value={traitsEditData?.trait_name} onChange={handleTraitsInputChange} placeholder="Enter Trait Name" />
+                                    {errorsEdit.trait_name && <p className="text-red-500">{errorsEdit.trait_name}</p>}
+
+                                    <label className="block text-sm font-medium text-gray-700">Trait Code</label>
+                                    <Input name="trait_code" value={traitsEditData.trait_code} onChange={handleTraitsInputChange} placeholder="Enter Trait Code" />
+                                    {errorsEdit.trait_code && <p className="text-red-500">{errorsEdit.trait_code}</p>}
+
+                                    <label className="block text-sm font-medium text-gray-700">Key Traits</label>
+                                    <Input name="key_traits" value={traitsEditData.key_traits} onChange={handleTraitsInputChange} placeholder="Enter Key Traits" />
+                                    {errorsEdit.key_traits && <p className="text-red-500">{errorsEdit.key_traits}</p>}
+
+
+                                    <label className="block text-sm font-medium text-gray-700">Description</label>
+                                    <ReactQuill value={traitsEditData.description} onChange={(value) => handleTraitsInputChange({ target: { name: "description", value } })} />
+                                    {errorsEdit.description && <p className="text-red-500">{errorsEdit.description}</p>}
+
+
+                                    <label className="block text-sm font-medium text-gray-700">Strengths</label>
+                                    <ReactQuill value={traitsEditData.strengths} onChange={(value) => handleTraitsInputChange({ target: { name: "strengths", value } })} />
+                                    {errorsEdit.strengths && <p className="text-red-500">{errorsEdit.strengths}</p>}
+
+                                    <label className="block text-sm font-medium text-gray-700">Weakness</label>
+                                    <ReactQuill value={traitsEditData.weakness} onChange={(value) => handleTraitsInputChange({ target: { name: "weakness", value } })} />
+                                    {errorsEdit.weakness && <p className="text-red-500">{errorsEdit.weakness}</p>}
+
+                                    <label className="block text-sm font-medium text-gray-700">Opportunities</label>
+                                    <ReactQuill value={traitsEditData.opportunities} onChange={(value) => handleTraitsInputChange({ target: { name: "opportunities", value } })} />
+                                    {errorsEdit.opportunities && <p className="text-red-500">{errorsEdit.opportunities}</p>}
+
+                                    <label className="block text-sm font-medium text-gray-700">Threats</label>
+                                    <ReactQuill value={traitsEditData.threats} onChange={(value) => handleTraitsInputChange({ target: { name: "threats", value } })} />
+                                    {errorsEdit.threats && <p className="text-red-500">{errorsEdit.threats}</p>}
+
+                                    <label className="block text-sm font-medium text-gray-700">Display (1 or 0)</label>
+                                    <Input name="display" value={traitsEditData.display} onChange={handleTraitsInputChange} placeholder="Display (1 or 0)" />
+                                    {errorsEdit.display && <p className="text-red-500">{errorsEdit.display}</p>}
+                                </>
+                            )}
+
+
+                            <Button type="submit" className="bg-Primary text-white w-full">Update</Button>
+                        </form>
+                    </DialogContent>
+                </Dialog>
+                <Button size="sm" variant="outline" className="rounded-sm">
+                    <TrashIcon className="stroke-Error" />
+                </Button>
+            </td>
+        </tr>
+    );
+};
+
 const Table = ({ moduleType, moduleData }) => {
     let columns = [];
     if (moduleType === "Traits") {
@@ -24,6 +178,8 @@ const Table = ({ moduleType, moduleData }) => {
     } else if (moduleType === "Questions") {
         columns = ["ID", "Question", "Action"];
     }
+
+    
 
     return (
         <div className="overflow-x-auto">
@@ -39,30 +195,11 @@ const Table = ({ moduleType, moduleData }) => {
                 </thead>
                 <tbody>
                     {moduleData?.data?.map((item) => (
-                        <tr key={item.id}>
-                            <td className="border border-gray-300 px-4 py-2 text-nowrap">{item.id}</td>
-                            {moduleType === "Traits" && (
-                                <td className="border border-gray-300 px-4 py-2 text-nowrap">{item.trait_name}</td>
-                            )}
-                            {moduleType === "Sub Questions" && (
-                                <>
-                                    <td className="border border-gray-300 px-4 py-2 text-nowrap truncate max-w-[300px] overflow-hidden whitespace-nowrap">{item.question_name}</td>
-                                    <td className="border border-gray-300 px-4 py-2 text-nowrap truncate max-w-[200px] overflow-hidden whitespace-nowrap">{item.main_question}</td>
-                                    <td className="border border-gray-300 px-4 py-2 text-nowrap">{item.traits_category}</td>
-                                </>
-                            )}
-                            {moduleType === "Questions" && (
-                                <td className="border border-gray-300 px-4 py-2 text-nowrap">{item.question_name}</td>
-                            )}
-                            <td className="border border-gray-300 px-4 py-2 text-nowrap">
-                                <Button size="sm" variant="outline" className="rounded-sm mr-2">
-                                    <PencilIcon className="stroke-Third" />
-                                </Button>
-                                <Button size="sm" variant="outline" className="rounded-sm">
-                                    <TrashIcon className="stroke-Error" />
-                                </Button>
-                            </td>
-                        </tr>
+                        <TableRow 
+                            key={item.id}
+                            item={item}
+                            moduleType={moduleType}
+                        />
                     ))}
                 </tbody>
             </table>
