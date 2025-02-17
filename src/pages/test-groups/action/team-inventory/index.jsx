@@ -7,79 +7,284 @@ import { useGetAssessmentById } from "@/hooks/apis/test-group/useGetAssessmentBy
 import { useState } from "react";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
 import { useAddQuestion } from "@/hooks/apis/test-group/team-inventory/useAddQuestion";
 import { useAddSubQuestion } from "@/hooks/apis/test-group/team-inventory/useAddSubQuestion";
 import { useAddTraits } from "@/hooks/apis/test-group/team-inventory/useAddTraits";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import 'react-quill/dist/quill.snow.css';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+
+const questionSchema = z.object({
+    question: z.string().min(1, { message: "Question is required" }),
+    status: z.string().min(1, { message: "Status is required" }),
+    order_id: z.number().min(1, { message: "Order ID is required" }),
+});
+
+const subQuestionSchema = z.object({
+    question_id: z.string().min(1, { message: "Question ID is required" }),
+    question_name: z.string().min(1, { message: "Question Name is required" }),
+    traits_category: z.string().min(1, { message: "Traits Category is required" }),
+    display: z.string().min(1, { message: "Display is required" }),
+});
+
+const traitsSchema = z.object({
+    trait_name: z.string().min(1, { message: "Trait Name is required" }),
+    trait_code: z.string().min(1, { message: "Trait Code is required" }),
+    key_traits: z.string().min(1, { message: "Key Traits are required" }),
+    description: z.string().min(1, { message: "Description is required" }),
+    strengths: z.string().min(1, { message: "Strengths are required" }),
+    weakness: z.string().min(1, { message: "Weakness is required" }),
+    opportunities: z.string().min(1, { message: "Opportunities are required" }),
+    threats: z.string().min(1, { message: "Threats are required" }),
+    display: z.enum(["0", "1"], { message: "Display must be 0 or 1" }), // Ensures only "0" or "1" is allowed
+});
 
 const TableRow = ({ item, moduleType }) => {
-    
     const [isEditDialogOpen, setEditIsDialogOpen] = useState(false);
-    const [errorsEdit, setErrorsEdit] = useState({});
-    const [traitsEditData, setTraitsEditData] = useState({
-        "trait_name": "",
-        "trait_code": "",
-        "key_traits": "",
-        "description": "",
-        "strengths": "",
-        "weakness": "",
-        "opportunities": "",
-        "threats": "",
-        "display": "1"
+
+    const assessmentId = 1;
+    const shouldFetch = Boolean(assessmentId);
+    const { isLoading, error, assessmentByIdData } = useGetAssessmentById(assessmentId, shouldFetch);
+
+    const questionsList = assessmentByIdData?.data?.modules_data[2]?.module_data?.data || [];
+    const traitsList = assessmentByIdData?.data?.modules_data[0]?.module_data?.data || [];
+    // console.log("purba",questionsList, traitsList);
+
+    const questionForm = useForm({
+        resolver: zodResolver(questionSchema),
+        defaultValues: {
+            question: "",
+            status: "",
+            order_id: "",
+        },
     });
 
-    // Validation Function
-    const validateEditForm = () => {
-        let tempErrors = {};
+    const subQuestionForm = useForm({
+        resolver: zodResolver(subQuestionSchema),
+        defaultValues: {
+            question_name: "",
+            traits_category: "",
+            display: "1",
+        },
+    });
 
-        if (moduleType === "Questions") {
-            if (!questionData.question) tempErrors.question = "Question is required";
-            if (!questionData.status) tempErrors.status = "Status is required";
-            if (!questionData.order_id) tempErrors.order_id = "Order ID is required";
-        }
+    const traitsForm = useForm({
+        resolver: zodResolver(traitsSchema),
+        defaultValues: {
+            trait_name: "",
+            trait_code: "",
+            key_traits: "",
+            description: "",
+            strengths: "",
+            weakness: "",
+            opportunities: "",
+            threats: "",
+            display: "1",
+        },
+    });
 
-        if (moduleType === "Sub Questions") {
-            if (!subQuestionData.question_id) tempErrors.question_id = "Question ID is required";
-            if (!subQuestionData.question_name) tempErrors.question_name = "Question Name is required";
-            if (!subQuestionData.traits_category) tempErrors.traits_category = "Traits Category is required";
-            if (!subQuestionData.display) tempErrors.display = "Display is required";
-        }
+    function onSubmit(values) {
+        console.log(values);
+    }
 
-        if (moduleType === "Traits") {
-            Object.keys(traitsEditData).forEach((key) => {
-                if (!traitsEditData[key]) tempErrors[key] = `${key.replace("_", " ")} is required`;
-            });
-        }
-
-        errorsEdit(tempErrors);
-        return Object.keys(tempErrors).length === 0; // Returns true if no errors
+    const formMap = {
+        Questions: questionForm,
+        "Sub Questions": subQuestionForm,
+        Traits: traitsForm,
     };
 
+    const renderFormFields = (form) => {
+        const fields = {
+            Questions: (
+            <>
+                <FormField control={form.control} name="question" render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Question</FormLabel>
+                    <FormControl>
+                    <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )} />
+                <FormField control={form.control} name="status" render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Status</FormLabel>
+                    <FormControl>
+                    <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )} />
+                <FormField control={form.control} name="order_id" render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Order ID</FormLabel>
+                    <FormControl>
+                    <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )} />
+            </>
+            ),
+            "Sub Questions": (
+            <>
+                <FormField control={form.control} name="question_name" render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Question Name</FormLabel>
+                    <FormControl>
+                    <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )} />
+                
+                <FormField control={form.control} name="question_id" render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Select Question</FormLabel>
+                    <FormControl>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                        <SelectTrigger>
+                        <SelectValue placeholder="Select a question" />
+                        </SelectTrigger>
+                        <SelectContent>
+                        {questionsList.map((question) => (
+                            <SelectItem key={question.id} value={question.id.toString()}>
+                            {question.question_name}
+                            </SelectItem>
+                        ))}
+                        </SelectContent>
+                    </Select>
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )} />
 
+                <FormField control={form.control} name="traits_category" render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Select Traits Category</FormLabel>
+                    <FormControl>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                        <SelectTrigger>
+                        <SelectValue placeholder="Select Traits" />
+                        </SelectTrigger>
+                        <SelectContent>
+                        {traitsList.map((trait) => (
+                            <SelectItem key={trait.id} value={trait.id.toString()}>
+                            {trait.trait_name}
+                            </SelectItem>
+                        ))}
+                        </SelectContent>
+                    </Select>
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )} />
+
+                <FormField control={form.control} name="display" render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Display</FormLabel>
+                    <FormControl>
+                    <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )} />
+            </>
+            ),
+            Traits: (
+            <>
+                <FormField control={form.control} name="trait_name" render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Trait Name</FormLabel>
+                    <FormControl>
+                    <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )} />
+                <FormField control={form.control} name="trait_code" render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Trait Code</FormLabel>
+                    <FormControl>
+                    <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )} />
+                <FormField control={form.control} name="key_traits" render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Key Traits</FormLabel>
+                    <FormControl>
+                    <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )} />
+                {/* Add ReactQuill for Description, Strengths, Weakness, Opportunities, and Threats */}
+                <FormField control={form.control} name="description" render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                    <ReactQuill {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )} />
+                <FormField control={form.control} name="strengths" render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Strengths</FormLabel>
+                    <FormControl>
+                    <ReactQuill {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )} />
+                <FormField control={form.control} name="weakness" render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Weakness</FormLabel>
+                    <FormControl>
+                    <ReactQuill {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )} />
+                <FormField control={form.control} name="opportunities" render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Opportunities</FormLabel>
+                    <FormControl>
+                    <ReactQuill {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )} />
+                <FormField control={form.control} name="threats" render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Threats</FormLabel>
+                    <FormControl>
+                    <ReactQuill {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )} />
+            </>
+            ),
+        };
     
-
-    const handleTraitsInputChange = (e, name) => {
-        if (typeof e === "string") {
-            // ReactQuill input
-            setTraitsEditData((prev) => ({ ...prev, [name]: e }));
-            setErrorsEdit((prev) => ({ ...prev, [name]: "" })); // Clear the error
-        } else {
-            // Normal input fields
-            const { name, value } = e.target;
-            setTraitsEditData((prev) => ({ ...prev, [name]: value }));
-            setErrorsEdit((prev) => ({ ...prev, [name]: "" })); // Clear the error
-        }
+        return fields[moduleType] || null;
     };
-
-    const handleEditSubmit = async (e) => {
-        e.preventDefault();
-        if (!validateEditForm()) return;
-
-        
-    };
+    
 
     return (
         <tr key={item.id}>
@@ -108,57 +313,19 @@ const TableRow = ({ item, moduleType }) => {
                             <PencilIcon className="stroke-Third" />
                         </Button>
                     </DialogTrigger>
+                    
                     <DialogContent className="max-h-[80vh] overflow-y-auto max-w-[600px]">
                         <DialogHeader>
                             <DialogTitle>Edit {moduleType.slice(0, -1)}</DialogTitle>
                         </DialogHeader>
-                        {/* Add your edit form here using item data */}
-                        <form className="space-y-2" onSubmit={handleEditSubmit}>
-                            {moduleType === "Traits" && (
-                                <>
-                                    <label className="block text-sm font-medium text-gray-700">Trait Name</label>
-                                    <Input className="" name="trait_name" value={traitsEditData?.trait_name} onChange={handleTraitsInputChange} placeholder="Enter Trait Name" />
-                                    {errorsEdit.trait_name && <p className="text-red-500">{errorsEdit.trait_name}</p>}
-
-                                    <label className="block text-sm font-medium text-gray-700">Trait Code</label>
-                                    <Input name="trait_code" value={traitsEditData.trait_code} onChange={handleTraitsInputChange} placeholder="Enter Trait Code" />
-                                    {errorsEdit.trait_code && <p className="text-red-500">{errorsEdit.trait_code}</p>}
-
-                                    <label className="block text-sm font-medium text-gray-700">Key Traits</label>
-                                    <Input name="key_traits" value={traitsEditData.key_traits} onChange={handleTraitsInputChange} placeholder="Enter Key Traits" />
-                                    {errorsEdit.key_traits && <p className="text-red-500">{errorsEdit.key_traits}</p>}
-
-
-                                    <label className="block text-sm font-medium text-gray-700">Description</label>
-                                    <ReactQuill value={traitsEditData.description} onChange={(value) => handleTraitsInputChange({ target: { name: "description", value } })} />
-                                    {errorsEdit.description && <p className="text-red-500">{errorsEdit.description}</p>}
-
-
-                                    <label className="block text-sm font-medium text-gray-700">Strengths</label>
-                                    <ReactQuill value={traitsEditData.strengths} onChange={(value) => handleTraitsInputChange({ target: { name: "strengths", value } })} />
-                                    {errorsEdit.strengths && <p className="text-red-500">{errorsEdit.strengths}</p>}
-
-                                    <label className="block text-sm font-medium text-gray-700">Weakness</label>
-                                    <ReactQuill value={traitsEditData.weakness} onChange={(value) => handleTraitsInputChange({ target: { name: "weakness", value } })} />
-                                    {errorsEdit.weakness && <p className="text-red-500">{errorsEdit.weakness}</p>}
-
-                                    <label className="block text-sm font-medium text-gray-700">Opportunities</label>
-                                    <ReactQuill value={traitsEditData.opportunities} onChange={(value) => handleTraitsInputChange({ target: { name: "opportunities", value } })} />
-                                    {errorsEdit.opportunities && <p className="text-red-500">{errorsEdit.opportunities}</p>}
-
-                                    <label className="block text-sm font-medium text-gray-700">Threats</label>
-                                    <ReactQuill value={traitsEditData.threats} onChange={(value) => handleTraitsInputChange({ target: { name: "threats", value } })} />
-                                    {errorsEdit.threats && <p className="text-red-500">{errorsEdit.threats}</p>}
-
-                                    <label className="block text-sm font-medium text-gray-700">Display (1 or 0)</label>
-                                    <Input name="display" value={traitsEditData.display} onChange={handleTraitsInputChange} placeholder="Display (1 or 0)" />
-                                    {errorsEdit.display && <p className="text-red-500">{errorsEdit.display}</p>}
-                                </>
-                            )}
-
-
-                            <Button type="submit" className="bg-Primary text-white w-full">Update</Button>
-                        </form>
+                        <Form {...formMap[moduleType]}>
+                            <form onSubmit={formMap[moduleType].handleSubmit(onSubmit)} className="w-full">
+                                {renderFormFields(formMap[moduleType])}
+                                <Button variant="outline" className="rounded-sm hover:border hover:border-Primary hover:text-Primary text-white bg-Primary mt-2">
+                                    Save
+                                </Button>
+                            </form>
+                        </Form>
                     </DialogContent>
                 </Dialog>
                 <Button size="sm" variant="outline" className="rounded-sm">
@@ -179,7 +346,7 @@ const Table = ({ moduleType, moduleData }) => {
         columns = ["ID", "Question", "Action"];
     }
 
-    
+
 
     return (
         <div className="overflow-x-auto">
@@ -195,7 +362,7 @@ const Table = ({ moduleType, moduleData }) => {
                 </thead>
                 <tbody>
                     {moduleData?.data?.map((item) => (
-                        <TableRow 
+                        <TableRow
                             key={item.id}
                             item={item}
                             moduleType={moduleType}
