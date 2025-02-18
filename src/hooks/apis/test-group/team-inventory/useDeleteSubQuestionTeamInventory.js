@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/context/uesAuth";
 export const useDeleteSubQuestionTeamInventory = () => {
     const { auth, logout } = useAuth();
 
-    const { isPending, mutateAsync: deleteQuestionTeamInventory } = useMutation({
+    const { isPending, mutateAsync: deleteSubQuestionTeamInventory } = useMutation({
         mutationFn: (SubQ_id) => deleteSubQuestionInTeamInventory({ token: auth?.token, logout, SubQ_id }),
         onSuccess: (response) => {
 
@@ -19,6 +19,6 @@ export const useDeleteSubQuestionTeamInventory = () => {
 
     return {
         isPending,
-        deleteQuestionTeamInventory
+        deleteSubQuestionTeamInventory
     };
 };
