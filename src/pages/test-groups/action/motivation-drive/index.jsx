@@ -47,6 +47,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import dynamic from "next/dynamic";
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+import "react-quill/dist/quill.snow.css";
 
 // Define separate schemas for each module type
 const motivationGroupsSchema = z.object({
@@ -253,7 +256,7 @@ const EditForm = ({ moduleType, selectedItem }) => {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <ReactQuill {...field} theme="snow" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -266,7 +269,7 @@ const EditForm = ({ moduleType, selectedItem }) => {
                 <FormItem>
                   <FormLabel>Behaviors</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <ReactQuill {...field} theme="snow" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -279,7 +282,7 @@ const EditForm = ({ moduleType, selectedItem }) => {
                 <FormItem>
                   <FormLabel>Challenges</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <ReactQuill {...field} theme="snow" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -292,7 +295,7 @@ const EditForm = ({ moduleType, selectedItem }) => {
                 <FormItem>
                   <FormLabel>Motivation Techniques</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <ReactQuill {...field} theme="snow" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -436,7 +439,7 @@ const AddForm = ({ moduleType }) => {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <ReactQuill {...field} theme="snow" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -449,7 +452,7 @@ const AddForm = ({ moduleType }) => {
                 <FormItem>
                   <FormLabel>Behaviors</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <ReactQuill {...field} theme="snow" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -462,7 +465,7 @@ const AddForm = ({ moduleType }) => {
                 <FormItem>
                   <FormLabel>Challenges</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <ReactQuill {...field} theme="snow" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -475,7 +478,7 @@ const AddForm = ({ moduleType }) => {
                 <FormItem>
                   <FormLabel>Motivation Techniques</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <ReactQuill {...field} theme="snow" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
