@@ -54,6 +54,12 @@ import { useAddMotivationGroup } from "@/hooks/apis/test-group/motivation-drive/
 import { useAddQuestion } from "@/hooks/apis/test-group/motivation-drive/useAddQuestion";
 import { useGetAllMotivationGroup } from "@/hooks/apis/test-group/motivation-drive/useGetAllMotivationGroup";
 import { list } from "postcss";
+import { useMotivationGroupById } from "@/hooks/apis/test-group/motivation-drive/useMotivationGroupById";
+import { se } from "date-fns/locale";
+import { useQuestionById } from "@/hooks/apis/test-group/motivation-drive/useQuestionById";
+import { useEditMotivationGroup } from "@/hooks/apis/test-group/motivation-drive/useEditMotivationGroup";
+import { useEditQuestion } from "@/hooks/apis/test-group/motivation-drive/useEditQuestion";
+import { editQuestionInMotivationDrive } from "@/apis/test-group/motivation-drive";
 // Define separate schemas for each module type
 const motivationGroupsSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -208,26 +214,93 @@ const DataTable = ({ moduleType, moduleData }) => {
 
 // Main Form Component
 const EditForm = ({ moduleType, selectedItem, setIsDialogOpen }) => {
-  // Select schema based on module type
+  const [groupList, setGroupList] = useState([]);
+
+  // Fetch motivation groups
+  const {
+    allMotivationGroupData,
+    isSuccess,
+    isFetching: isGroupListFetching,
+  } = useGetAllMotivationGroup();
+
+  useEffect(() => {
+    if (isSuccess) {
+      const list = allMotivationGroupData.data.motivation_groups.map(
+        (item) => item.name
+      );
+      setGroupList(list);
+    }
+  }, [isSuccess, allMotivationGroupData]);
+
+  // Fetch individual data based on module type
+  const { motivationGroupDataById, isFetching: isMotivationFetching } =
+    moduleType === "Motivation Groups"
+      ? useMotivationGroupById(selectedItem.id)
+      : { motivationGroupDataById: null, isFetching: false };
+
+  const { motivationQuestionDataById, isFetching: isQuestionFetching } =
+    moduleType === "Questions"
+      ? useQuestionById(selectedItem.id)
+      : { motivationQuestionDataById: null, isFetching: false };
+
+  // Define Schema Based on Module Type
   const schema =
     moduleType === "Motivation Groups"
       ? motivationGroupsSchema
       : questionsSchema;
 
+  // Initialize Form
   const form = useForm({
     resolver: zodResolver(schema),
-    defaultValues: selectedItem,
+    defaultValues: selectedItem || {}, // Initially empty, will be set later
   });
 
-  const onSubmit = (data) => {
-    console.log("Updated Data:", data);
-    // Handle form submission (API call, etc.)
+  // **Reset form when `selectedItem` changes**
+  useEffect(() => {
+    if (selectedItem) {
+      // console.log("selectedItem", selectedItem);
+      if (moduleType === "Motivation Groups" && !isMotivationFetching) {
+        form.reset(motivationGroupDataById?.data.data);
+      } else if (moduleType !== "Questions" && !isQuestionFetching) {
+        form.reset(motivationQuestionDataById?.data.data);
+      }
+    }
+  }, [selectedItem, form, isMotivationFetching, isQuestionFetching]);
+
+  const { editMotivationGroup, isPending: isMotivationGroupPending } =
+    useEditMotivationGroup();
+  const { editQuestionMutation, isPending: isQuestionPending } =
+    useEditQuestion();
+
+  // Submit Handler
+  const onSubmit = async (data) => {
+    let response;
+    if (moduleType === "Motivation Groups") {
+      response = await editMotivationGroup({
+        post_data: data,
+        groupId: selectedItem.id,
+      });
+    } else {
+      response = await editQuestionMutation({
+        post_data: data,
+        questionId: selectedItem.id,
+      });
+    }
+
+    if (response.data.status === "success") {
+      console.log(`${moduleType} updated successfully`);
+      form.reset();
+      setIsDialogOpen(false);
+    } else {
+      console.log(response.status);
+    }
   };
 
-  console.log("form", selectedItem);
-
+  if (isMotivationFetching || isQuestionFetching) {
+    return <div>Loading...</div>;
+  }
   return (
-    <Form {...form}>
+    <Form {...form} key={selectedItem.id}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         {moduleType === "Motivation Groups" ? (
           <>
@@ -309,6 +382,30 @@ const EditForm = ({ moduleType, selectedItem, setIsDialogOpen }) => {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="display"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Display Status</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger className="">
+                        <SelectValue placeholder="Select Status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1">Show</SelectItem>
+                        <SelectItem value="0">Hide</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </>
         ) : (
           <>
@@ -332,7 +429,24 @@ const EditForm = ({ moduleType, selectedItem, setIsDialogOpen }) => {
                 <FormItem>
                   <FormLabel>Motivation Group</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger
+                        disabled={isGroupListFetching}
+                        className=""
+                      >
+                        <SelectValue placeholder="Select Motivation Group" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {groupList.map((item, index) => {
+                          const myValue = index + 2;
+                          return (
+                            <SelectItem key={index} value={myValue.toString()}>
+                              {item}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -345,7 +459,11 @@ const EditForm = ({ moduleType, selectedItem, setIsDialogOpen }) => {
                 <FormItem>
                   <FormLabel>Order ID</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input
+                      type="number"
+                      value={field.value}
+                      onChange={(e) => field.onChange(parseInt(e.target.value))}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -358,7 +476,10 @@ const EditForm = ({ moduleType, selectedItem, setIsDialogOpen }) => {
                 <FormItem>
                   <FormLabel>Display Status</FormLabel>
                   <FormControl>
-                    <Select {...field} name="status">
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <SelectTrigger className="">
                         <SelectValue placeholder="Select Status" />
                       </SelectTrigger>
@@ -374,13 +495,18 @@ const EditForm = ({ moduleType, selectedItem, setIsDialogOpen }) => {
             />
           </>
         )}
-        <Button type="submit" className="w-full mt-2">
+        <Button
+          type="submit"
+          className="w-full mt-2"
+          disabled={isMotivationGroupPending || isQuestionPending}
+        >
           Save Changes
         </Button>
       </form>
     </Form>
   );
 };
+
 const AddForm = ({ moduleType, setIsDialogOpen }) => {
   const [groupList, setGroupList] = useState([]);
   // Select schema based on module type
@@ -398,10 +524,10 @@ const AddForm = ({ moduleType, setIsDialogOpen }) => {
 
   useEffect(() => {
     if (isSuccess) {
-      const list = allMotivationGroupData.data.data.data.map(
+      const list = allMotivationGroupData.data.motivation_groups.map(
         (item) => item.name
       );
-      console.log(allMotivationGroupData.data.data);
+      console.log("allMotivationGroupData", allMotivationGroupData);
       setGroupList(list);
     }
   }, [isSuccess, allMotivationGroupData]);
@@ -577,10 +703,7 @@ const AddForm = ({ moduleType, setIsDialogOpen }) => {
                 <FormItem>
                   <FormLabel>Motivation Group</FormLabel>
                   <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger
                         disabled={isGroupListFetching}
                         className=""
@@ -588,9 +711,14 @@ const AddForm = ({ moduleType, setIsDialogOpen }) => {
                         <SelectValue placeholder="Select Motivation Group" />
                       </SelectTrigger>
                       <SelectContent>
-                        {groupList.map((item, index) => (
-                          <SelectItem value={index}>{item}</SelectItem>
-                        ))}
+                        {groupList.map((item, index) => {
+                          const myValue = index + 2;
+                          return (
+                            <SelectItem key={index} value={myValue.toString()}>
+                              {item}
+                            </SelectItem>
+                          );
+                        })}
                       </SelectContent>
                     </Select>
                   </FormControl>
