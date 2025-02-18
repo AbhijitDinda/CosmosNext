@@ -1,10 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import Heading from "@/components/Heading";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { PencilIcon, TrashIcon } from "lucide-react";
 import { useGetAssessmentById } from "@/hooks/apis/test-group/useGetAssessmentById";
-import { useState } from "react";
 import {
   Dialog,
   DialogTrigger,
@@ -12,71 +10,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import DataTable from "@/pages/test-groups/action/approach-assessment/(components)/data-table";
+import AddForm from "@/pages/test-groups/action/approach-assessment/(components)/add-form"; // Add Entry Form
 
-const Table = ({ moduleType, moduleData }) => {
-  let columns = [];
-  if (moduleType === "Styles") {
-    columns = ["ID", "Name", "Action"];
-  } else if (moduleType === "Questions") {
-    columns = ["ID", "Question", "Style Name", "Action"];
-  }
-
-  console.log("moduleData", moduleData);
-  return (
-    <div className="overflow-x-auto">
-      <table className="table-auto w-full border">
-        <thead>
-          <tr className="bg-gray-100 text-nowrap">
-            {columns.map((col, idx) => (
-              <th
-                key={idx}
-                className="border border-gray-300 px-4 py-2 text-left"
-              >
-                {col}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {moduleData?.data?.map((item) => (
-            <tr key={item.id}>
-              <td className="border border-gray-300 px-4 py-2 text-nowrap">
-                {item.id}
-              </td>
-              {moduleType === "Styles" && (
-                <td className="border border-gray-300 px-4 py-2 text-nowrap">
-                  {item.name}
-                </td>
-              )}
-              {moduleType === "Questions" && (
-                <>
-                  <td className="border border-gray-300 px-4 py-2 text-nowrap truncate max-w-[300px] overflow-hidden whitespace-nowrap">
-                    {item.question_name}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2 text-nowrap truncate max-w-[200px] overflow-hidden whitespace-nowrap">
-                    {item.style_name}
-                  </td>
-                </>
-              )}
-              <td className="border border-gray-300 px-4 py-2 text-nowrap">
-                <Button size="sm" variant="outline" className="rounded-sm mr-2">
-                  <PencilIcon className="stroke-Third" />
-                </Button>
-                <Button size="sm" variant="outline" className="rounded-sm">
-                  <TrashIcon className="stroke-Error" />
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-};
-const ApproachAssesment = () => {
+const ApproachAssessment = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  // Error states
-  const [errors, setErrors] = useState({});
 
   const assessmentId = 3;
   const shouldFetch = Boolean(assessmentId);
@@ -89,8 +27,6 @@ const ApproachAssesment = () => {
   const [activeModule, setActiveModule] = useState(
     assessmentByIdData?.data?.modules_data[0]?.module_type || "Questions"
   );
-
-  console.log("assessmentByIdData", assessmentByIdData);
 
   const getAddButtonText = (moduleType) => {
     switch (moduleType) {
@@ -113,12 +49,10 @@ const ApproachAssesment = () => {
 
   return (
     <div className="rounded-sm mx-auto w-full max-w-[1300px]">
-      <Heading title="Test Options" />
+      <Heading title="Approach Assessment" />
       <div className="p-4 bg-White rounded-sm">
         <Tabs
-          defaultValue={
-            assessmentByIdData?.data?.modules_data?.[0]?.module_type
-          }
+          defaultValue={activeModule}
           className="w-full"
           onValueChange={setActiveModule}
         >
@@ -136,7 +70,7 @@ const ApproachAssesment = () => {
             </TabsList>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-Primary text-white  rounded-md">
+                <Button className="bg-Primary text-white rounded-md">
                   {getAddButtonText(activeModule)}
                 </Button>
               </DialogTrigger>
@@ -144,12 +78,13 @@ const ApproachAssesment = () => {
                 <DialogHeader>
                   <DialogTitle>{getAddButtonText(activeModule)}</DialogTitle>
                 </DialogHeader>
+                <AddForm moduleType={activeModule} />
               </DialogContent>
             </Dialog>
           </div>
           {assessmentByIdData?.data?.modules_data.map((module, index) => (
             <TabsContent key={index} value={module.module_type}>
-              <Table
+              <DataTable
                 moduleType={module.module_type}
                 moduleData={module.module_data}
               />
@@ -161,4 +96,4 @@ const ApproachAssesment = () => {
   );
 };
 
-export default ApproachAssesment;
+export default ApproachAssessment;
