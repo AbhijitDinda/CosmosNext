@@ -66,8 +66,8 @@ const motivationGroupsSchema = z.object({
 const questionsSchema = z.object({
   question_name: z.string().min(5, "Question must be at least 5 characters"),
   group: z.string().min(1, "Group is required"),
-  order_id: z.number().int().positive("Order ID must be a positive number"),
-  status: z.string().min(1, "Status is required"),
+  order_id: z.number().int(),
+  display: z.string().min(1, "Status is required"),
 });
 
 const DataTable = ({ moduleType, moduleData }) => {
@@ -345,7 +345,7 @@ const EditForm = ({ moduleType, selectedItem }) => {
             />
             <FormField
               control={form.control}
-              name="status"
+              name="display"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Display Status</FormLabel>
@@ -392,7 +392,7 @@ const AddForm = ({ moduleType }) => {
       question_name: "",
       group: "",
       order_id: "",
-      status: "",
+      display: "",
     },
   });
 
@@ -533,7 +533,7 @@ const AddForm = ({ moduleType }) => {
                 <FormItem>
                   <FormLabel>Display Status</FormLabel>
                   <FormControl>
-                    <Select {...field} name="status">
+                    <Select {...field} name="display">
                       <SelectTrigger className="">
                         <SelectValue placeholder="Select Status" />
                       </SelectTrigger>
