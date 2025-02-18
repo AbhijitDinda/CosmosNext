@@ -8,11 +8,9 @@ export const useDeleteQuestion = () => {
     const { isPending, mutateAsync: deleteQuestionMutation } = useMutation({
         mutationFn: (questionId) => deleteQuestionInMotivationDrive({ token: auth?.token, logout, questionId }),
         onSuccess: (response) => {
-
             console.log('Successfully Trait Deleted', response);
         },
         onError: (error) => {
-
             console.log('Failed to Delete Trait', error);
         }
     });
