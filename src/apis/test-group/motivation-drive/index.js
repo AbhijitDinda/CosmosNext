@@ -125,3 +125,68 @@ export const deleteQuestionInMotivationDrive = async ({ token, logout, questionI
         }
     }
 }
+
+//get Motivation Group by id 
+export const getMotivationGroupById = async ({ token, logout, groupId }) => {
+    try {
+        const response = await axios.get(`/admin/motivation-drive/motivation-groups/${groupId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
+            }
+        });
+        return response;
+    } catch (error) {
+        if (error.response?.status === 401) {
+            unauthorizedErrorResponse(logout);
+            return;
+        } else {
+            console.error("Error in get Motivation Group By Id", error);
+            throw error;
+        }
+    }
+}
+
+//get Question by id 
+
+export const getQuestionById = async ({ token, logout, questionId }) => {
+    try {
+        const response = await axios.get(`/admin/motivation-drive/questions/${questionId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
+            }
+        });
+        return response;
+    } catch (error) {
+        if (error.response?.status === 401) {
+            unauthorizedErrorResponse(logout);
+            return;
+        } else {
+            console.error("Error in get Question By Id", error);
+            throw error;
+        }
+    }
+}
+
+//get all motivation Group data
+
+export const getAllMotivationGroups = async ({ token, logout }) => {
+    try {
+        const response = await axios.get(`/admin/motivation-drive/motivation-groups`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
+            }
+        });
+        return response;
+    } catch (error) {
+        if (error.response?.status === 401) {
+            unauthorizedErrorResponse(logout);
+            return;
+        } else {
+            console.error("Error in get All Motivation Groups", error);
+            throw error;
+        }
+    }
+}
