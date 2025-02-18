@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Heading from "@/components/Heading";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -50,7 +50,10 @@ import { Textarea } from "@/components/ui/textarea";
 import dynamic from "next/dynamic";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
-
+import { useAddMotivationGroup } from "@/hooks/apis/test-group/motivation-drive/useAddMotivationGroup";
+import { useAddQuestion } from "@/hooks/apis/test-group/motivation-drive/useAddQuestion";
+import { useGetAllMotivationGroup } from "@/hooks/apis/test-group/motivation-drive/useGetAllMotivationGroup";
+import { list } from "postcss";
 // Define separate schemas for each module type
 const motivationGroupsSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -61,6 +64,7 @@ const motivationGroupsSchema = z.object({
   motivation_techniques: z
     .string()
     .min(2, "Motivation techniques are required"),
+  display: z.string().min(1, "Status is required"),
 });
 
 const questionsSchema = z.object({
@@ -190,7 +194,11 @@ const DataTable = ({ moduleType, moduleData }) => {
           </DialogHeader>
           {console.log("selectedItem", selectedItem)}
           {selectedItem && (
-            <EditForm moduleType={moduleType} selectedItem={selectedItem} />
+            <EditForm
+              moduleType={moduleType}
+              selectedItem={selectedItem}
+              setIsDialogOpen={setIsDialogOpen}
+            />
           )}
         </DialogContent>
       </Dialog>
@@ -199,7 +207,7 @@ const DataTable = ({ moduleType, moduleData }) => {
 };
 
 // Main Form Component
-const EditForm = ({ moduleType, selectedItem }) => {
+const EditForm = ({ moduleType, selectedItem, setIsDialogOpen }) => {
   // Select schema based on module type
   const schema =
     moduleType === "Motivation Groups"
@@ -373,12 +381,30 @@ const EditForm = ({ moduleType, selectedItem }) => {
     </Form>
   );
 };
-const AddForm = ({ moduleType }) => {
+const AddForm = ({ moduleType, setIsDialogOpen }) => {
+  const [groupList, setGroupList] = useState([]);
   // Select schema based on module type
   const schema =
     moduleType === "Motivation Groups"
       ? motivationGroupsSchema
       : questionsSchema;
+
+  const {
+    allMotivationGroupData,
+    isSuccess,
+    isFetching: isGroupListFetching,
+    isError,
+  } = useGetAllMotivationGroup();
+
+  useEffect(() => {
+    if (isSuccess) {
+      const list = allMotivationGroupData.data.data.data.map(
+        (item) => item.name
+      );
+      console.log(allMotivationGroupData.data.data);
+      setGroupList(list);
+    }
+  }, [isSuccess, allMotivationGroupData]);
 
   const form = useForm({
     resolver: zodResolver(schema),
@@ -395,10 +421,30 @@ const AddForm = ({ moduleType }) => {
       display: "",
     },
   });
-
-  const onSubmit = (data) => {
-    console.log("New Data:", data);
-    // Handle form submission (API call, etc.)
+  const { isPending: isGroupPending, addMotivationGroupMutation } =
+    useAddMotivationGroup();
+  const { isPending: isQuestionPending, addQuestionMutation } =
+    useAddQuestion();
+  const onSubmit = async (data) => {
+    if (moduleType === "Motivation Groups") {
+      const response = await addMotivationGroupMutation(data);
+      if (response.data.status === "success") {
+        console.log("Success");
+        form.reset();
+        setIsDialogOpen(false); // fixed the missing closing parenthesis here
+      } else {
+        console.log(response.data.status);
+      }
+    } else if (moduleType === "Questions") {
+      const response = await addQuestionMutation(data);
+      if (response.data.status === "success") {
+        console.log("Question added successfully");
+        form.reset();
+        setIsDialogOpen(false);
+      } else {
+        console.log(response.data.status);
+      }
+    }
   };
 
   return (
@@ -484,6 +530,30 @@ const AddForm = ({ moduleType }) => {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="display"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Display Status</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger className="">
+                        <SelectValue placeholder="Select Status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1">Show</SelectItem>
+                        <SelectItem value="0">Hide</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </>
         ) : (
           <>
@@ -507,7 +577,22 @@ const AddForm = ({ moduleType }) => {
                 <FormItem>
                   <FormLabel>Motivation Group</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger
+                        disabled={isGroupListFetching}
+                        className=""
+                      >
+                        <SelectValue placeholder="Select Motivation Group" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {groupList.map((item, index) => (
+                          <SelectItem value={index}>{item}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -520,7 +605,11 @@ const AddForm = ({ moduleType }) => {
                 <FormItem>
                   <FormLabel>Order ID</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input
+                      type="number"
+                      value={field.value}
+                      onChange={(e) => field.onChange(parseInt(e.target.value))}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -528,12 +617,15 @@ const AddForm = ({ moduleType }) => {
             />
             <FormField
               control={form.control}
-              name="status"
+              name="display"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Display Status</FormLabel>
                   <FormControl>
-                    <Select {...field} name="display">
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <SelectTrigger className="">
                         <SelectValue placeholder="Select Status" />
                       </SelectTrigger>
@@ -549,7 +641,11 @@ const AddForm = ({ moduleType }) => {
             />
           </>
         )}
-        <Button type="submit" className="w-full mt-2">
+        <Button
+          type="submit"
+          className="w-full mt-2"
+          disabled={isGroupPending || isQuestionPending}
+        >
           Add
         </Button>
       </form>
@@ -573,6 +669,10 @@ const MotivationDriveAction = () => {
   const [activeModule, setActiveModule] = useState(
     assessmentByIdData?.data?.modules_data[0]?.module_type || "Questions"
   );
+
+  useEffect(() => {
+    setActiveModule(assessmentByIdData?.data?.modules_data[0]?.module_type);
+  }, [assessmentByIdData]);
 
   console.log("assessmentByIdData", assessmentByIdData);
 
@@ -628,7 +728,10 @@ const MotivationDriveAction = () => {
                 <DialogHeader>
                   <DialogTitle>{getAddButtonText(activeModule)}</DialogTitle>
                 </DialogHeader>
-                <AddForm moduleType={activeModule} />
+                <AddForm
+                  moduleType={activeModule}
+                  setIsDialogOpen={setIsDialogOpen}
+                />
               </DialogContent>
             </Dialog>
           </div>
