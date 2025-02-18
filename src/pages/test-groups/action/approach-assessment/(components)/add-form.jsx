@@ -62,7 +62,9 @@ const AddForm = ({ moduleType }) => {
   });
 
   const onSubmit = (data) => {
-    console.log("New Entry:", data);
+    if (moduleType === "Styles") {
+    } else if (moduleType === "Questions") {
+    }
   };
 
   return (
