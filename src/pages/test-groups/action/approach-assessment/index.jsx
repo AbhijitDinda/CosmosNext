@@ -19,16 +19,17 @@ const ApproachAssessment = () => {
   const assessmentId = 3;
   const shouldFetch = Boolean(assessmentId);
 
-  const { isLoading, error, assessmentByIdData, refetch } =
+  const { isLoading, error, assessmentByIdData, refetch, isFetching } =
     useGetAssessmentById(assessmentId, shouldFetch);
 
   const [activeModule, setActiveModule] = useState(
-    assessmentByIdData?.data?.modules_data[0]?.module_type
+    assessmentByIdData?.data?.modules_data[0]?.module_type || "Styles"
   );
 
   // useEffect(() => {
+  //   if (isFetching || isLoading) return;
   //   setActiveModule(assessmentByIdData?.data?.modules_data[0]?.module_type);
-  // }, [assessmentByIdData]);
+  // }, [assessmentByIdData, isFetching, isLoading]);
 
   const getAddButtonText = (moduleType) => {
     switch (moduleType) {
@@ -41,7 +42,7 @@ const ApproachAssessment = () => {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return <div>Loading...</div>;
   }
 
@@ -60,7 +61,7 @@ const ApproachAssessment = () => {
         >
           <div className="flex justify-between">
             <TabsList className="!h-auto bg-white justify-start gap-1 flex flex-wrap">
-              {assessmentByIdData?.data?.modules_data.map((module, index) => (
+              {assessmentByIdData?.data?.modules_data?.map((module, index) => (
                 <TabsTrigger
                   key={index}
                   value={module.module_type}

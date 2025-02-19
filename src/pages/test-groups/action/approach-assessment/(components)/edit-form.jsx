@@ -24,6 +24,10 @@ import dynamic from "next/dynamic";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
+import { useEditStyle } from "@/hooks/apis/test-group/approac-assessment/useEditStyle";
+import { useGetQuestionById } from "@/hooks/apis/test-group/approac-assessment/useGetQuestionById";
+import { useGetStyleById } from "@/hooks/apis/test-group/approac-assessment/useGetStyleById";
+import { use, useEffect } from "react";
 const styleSchema = z.object({
   name: z.string().min(2, "Name is required"),
   description: z.string().min(10, "Description must be at least 10 characters"),
@@ -35,12 +39,39 @@ const styleSchema = z.object({
 });
 
 const questionSchema = z.object({
-  question: z.string().min(5, "Question must be at least 5 characters"),
-  approach_style: z.string().min(1, "Approach style is required"),
+  question_name: z.string().min(5, "Question must be at least 5 characters"),
+  style: z.string().min(1, "Approach style is required"),
   status: z.string().min(1, "Display is required"),
 });
 const EditForm = ({ moduleType, selectedItem, refetch }) => {
   const schema = moduleType === "Styles" ? styleSchema : questionSchema;
+  const { approachQuestionDataById, isFetching, isLoading, isError } =
+    moduleType === "Questions"
+      ? useGetQuestionById(selectedItem.id)
+      : {
+          approachQuestionDataById: null,
+          isFetching: false,
+          isLoading: false,
+          isError: false,
+        };
+
+  const {
+    approachStyleDataById,
+    isFetching: isStyleFetching,
+    isLoading: isStyleLoading,
+  } = moduleType === "Styles"
+    ? useGetStyleById(selectedItem.id)
+    : { approachStyleDataById: null, isFetching: false, isLoading: false };
+
+  useEffect(() => {
+    if (selectedItem) {
+      if (moduleType === "Styles" && !isStyleFetching && !isStyleLoading) {
+        form.reset(approachStyleDataById?.data.data);
+      } else if (moduleType === "Questions" && !isFetching && !isLoading) {
+        form.reset(approachQuestionDataById?.data.data);
+      }
+    }
+  }, [selectedItem, isStyleFetching, isStyleLoading, isFetching, isLoading]);
 
   const form = useForm({
     resolver: zodResolver(schema),
@@ -48,10 +79,21 @@ const EditForm = ({ moduleType, selectedItem, refetch }) => {
   });
 
   console.log(selectedItem);
+  const { editStyle } = useEditStyle();
 
-  const onSubmit = (data) => {
-    console.log("Updated Data:", data);
+  const onSubmit = async (data) => {
+    let response;
+    if (moduleType === "Styles") {
+    } else {
+    }
+    if (response) {
+      refetch();
+    }
   };
+
+  if (isStyleFetching || isStyleLoading || isFetching || isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Form {...form}>
@@ -140,7 +182,7 @@ const EditForm = ({ moduleType, selectedItem, refetch }) => {
         ) : (
           <>
             <FormField
-              name="question"
+              name="question_name"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
@@ -153,7 +195,7 @@ const EditForm = ({ moduleType, selectedItem, refetch }) => {
               )}
             />
             <FormField
-              name="approach_style"
+              name="style"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
@@ -179,7 +221,7 @@ const EditForm = ({ moduleType, selectedItem, refetch }) => {
               )}
             />
             <FormField
-              name="display"
+              name="status"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
