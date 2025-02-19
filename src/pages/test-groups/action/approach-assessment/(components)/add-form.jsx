@@ -64,7 +64,6 @@ const AddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
         name: item.name,
       }));
       setStyleList(List); // Updating to set the style list
-      console.log("List", List);
     }
   }, [allStyleData]);
   const form = useForm({

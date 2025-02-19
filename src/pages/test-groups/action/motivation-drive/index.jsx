@@ -293,7 +293,10 @@ const EditForm = ({ moduleType, selectedItem, setIsDialogOpen, refetch }) => {
   useEffect(() => {
     if (isSuccess) {
       const list = allMotivationGroupData.data.motivation_groups.map(
-        (item) => item.name
+        (item) => ({
+          id: item.id,
+          name: item.name,
+        })
       );
       setGroupList(list);
     }
@@ -504,7 +507,10 @@ const EditForm = ({ moduleType, selectedItem, setIsDialogOpen, refetch }) => {
                 <FormItem>
                   <FormLabel>Motivation Group</FormLabel>
                   <FormControl>
-                    <Select value={field.value} onValueChange={field.onChange}>
+                    <Select
+                      value={field.value ? field.value.toString() : ""} // Ensure it's a string
+                      onValueChange={(value) => field.onChange(value)}
+                    >
                       <SelectTrigger
                         disabled={isGroupListFetching}
                         className=""
@@ -512,14 +518,11 @@ const EditForm = ({ moduleType, selectedItem, setIsDialogOpen, refetch }) => {
                         <SelectValue placeholder="Select Motivation Group" />
                       </SelectTrigger>
                       <SelectContent>
-                        {groupList.map((item, index) => {
-                          const myValue = index + 2;
-                          return (
-                            <SelectItem key={index} value={myValue.toString()}>
-                              {item}
-                            </SelectItem>
-                          );
-                        })}
+                        {groupList.map((item, index) => (
+                          <SelectItem key={item.id} value={item.id.toString()}>
+                            {item.name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </FormControl>
@@ -600,9 +603,11 @@ const AddForm = ({ moduleType, setIsDialogOpen, refetch }) => {
   useEffect(() => {
     if (isSuccess) {
       const list = allMotivationGroupData.data.motivation_groups.map(
-        (item) => item.name
+        (item) => ({
+          id: item.id,
+          name: item.name,
+        })
       );
-      console.log("allMotivationGroupData", allMotivationGroupData);
       setGroupList(list);
     }
   }, [isSuccess, allMotivationGroupData]);
@@ -780,7 +785,10 @@ const AddForm = ({ moduleType, setIsDialogOpen, refetch }) => {
                 <FormItem>
                   <FormLabel>Motivation Group</FormLabel>
                   <FormControl>
-                    <Select value={field.value} onValueChange={field.onChange}>
+                    <Select
+                      value={field.value ? field.value.toString() : ""} // Ensure it's a string
+                      onValueChange={(value) => field.onChange(value)}
+                    >
                       <SelectTrigger
                         disabled={isGroupListFetching}
                         className=""
@@ -788,14 +796,11 @@ const AddForm = ({ moduleType, setIsDialogOpen, refetch }) => {
                         <SelectValue placeholder="Select Motivation Group" />
                       </SelectTrigger>
                       <SelectContent>
-                        {groupList.map((item, index) => {
-                          const myValue = index + 2;
-                          return (
-                            <SelectItem key={index} value={myValue.toString()}>
-                              {item}
-                            </SelectItem>
-                          );
-                        })}
+                        {groupList.map((item, index) => (
+                          <SelectItem key={item.id} value={item.id.toString()}>
+                            {item.name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </FormControl>
@@ -870,12 +875,13 @@ const MotivationDriveAction = () => {
     useGetAssessmentById(assessmentId, shouldFetch);
 
   const [activeModule, setActiveModule] = useState(
-    assessmentByIdData?.data?.modules_data[0]?.module_type || "Questions"
+    assessmentByIdData?.data?.modules_data[0]?.module_type ||
+      "Motivation Groups"
   );
 
-  useEffect(() => {
-    setActiveModule(assessmentByIdData?.data?.modules_data[0]?.module_type);
-  }, [assessmentByIdData]);
+  // useEffect(() => {
+  //   setActiveModule(assessmentByIdData?.data?.modules_data[0]?.module_type);
+  // }, [assessmentByIdData]);
 
   console.log("assessmentByIdData", assessmentByIdData);
 

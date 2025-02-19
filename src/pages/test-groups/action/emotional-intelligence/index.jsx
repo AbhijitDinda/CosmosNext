@@ -151,7 +151,7 @@ const EmotionalIntelligence = () => {
                 <DialogHeader>
                   <DialogTitle>{getAddButtonText(activeModule)}</DialogTitle>
                 </DialogHeader>
-                <EmotionalIntelligenceAddForm moduleType={activeModule}/>
+                <EmotionalIntelligenceAddForm moduleType={activeModule} setIsDialogOpen={setIsDialogOpen}/>
               </DialogContent>
             </Dialog>
           </div>
