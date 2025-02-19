@@ -76,29 +76,29 @@ export const editQuestionInLeadershipReadiness = async ({ token, logout, post_da
     }
 };
 
-// export const editStyleInLeadershipReadiness = async ({ token, logout, post_data, styleId }) => {
-//     try {
-//         const response = await axios.patch(
-//             `/admin/leadership-style/styles/update/${styleId}`,
-//             post_data,
-//             {
-//                 headers: {
-//                     Authorization: `Bearer ${token}`,
-//                     Accept: "application/json",
-//                 },
-//             }
-//         );
-//         return response;
-//     } catch (error) {
-//         if (error.response?.status === 401) {
-//             unauthorizedErrorResponse(logout);
-//             return;
-//         } else {
-//             console.error("Error in edit Style In Leadership Readiness", error);
-//             throw error;
-//         }
-//     }
-// };
+export const editStyleInLeadershipReadiness = async ({ token, logout, post_data, styleId }) => {
+    try {
+        const response = await axios.patch(
+            `/admin/leadership-style/leadership-styles/update/${styleId}`,
+            post_data,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: "application/json",
+                },
+            }
+        );
+        return response;
+    } catch (error) {
+        if (error.response?.status === 401) {
+            unauthorizedErrorResponse(logout);
+            return;
+        } else {
+            console.error("Error in edit Style In Leadership Readiness", error);
+            throw error;
+        }
+    }
+};
 
 //delete
 
@@ -125,28 +125,28 @@ export const deleteQuestionInLeadershipReadiness = async ({ token, logout, quest
     }
 };
 
-// export const deleteStyleInLeadershipReadiness = async ({ token, logout, styleId }) => {
-//     try {
-//         const response = await axios.delete(
-//             `/admin/leadership-style/styles/delete/${styleId}`,
-//             {
-//                 headers: {
-//                     Authorization: `Bearer ${token}`,
-//                     Accept: "application/json",
-//                 },
-//             }
-//         );
-//         return response;
-//     } catch (error) {
-//         if (error.response?.status === 401) {
-//             unauthorizedErrorResponse(logout);
-//             return;
-//         } else {
-//             console.error("Error in delete Style In Leadership Readiness", error);
-//             throw error;
-//         }
-//     }
-// };
+export const deleteStyleInLeadershipReadiness = async ({ token, logout, styleId }) => {
+    try {
+        const response = await axios.delete(
+            `/admin/leadership-readiness/leadership-styles/delete/${styleId}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: "application/json",
+                },
+            }
+        );
+        return response;
+    } catch (error) {
+        if (error.response?.status === 401) {
+            unauthorizedErrorResponse(logout);
+            return;
+        } else {
+            console.error("Error in delete Style In Leadership Readiness", error);
+            throw error;
+        }
+    }
+};
 
 //get question by id 
 export const getQuestionByIdInLeadershipReadiness = async ({ token, logout, questionId }) => {
@@ -173,7 +173,30 @@ export const getQuestionByIdInLeadershipReadiness = async ({ token, logout, ques
 };
 
 //get style by id 
+export const getStyleByIdInLeadershipReadiness = async ({ token, logout, styleId }) => {
+    try {
+        const response = await axios.get(
+            `/admin/leadership-readiness/leadership-styles/${styleId}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: "application/json",
+                },
+            }
+        );
+        return response;
+    } catch (error) {
+        if (error.response?.status === 401) {
+            unauthorizedErrorResponse(logout);
+            return;
+        } else {
+            console.error("Error in get Style By Id In Leadership Readiness", error);
+            throw error;
+        }
+    }
+};
 
+//get all 
 export const getAllStylesInLeadershipReadiness = async ({ token, logout }) => {
     try {
         const response = await axios.get(
@@ -196,4 +219,6 @@ export const getAllStylesInLeadershipReadiness = async ({ token, logout }) => {
         }
     }
 };
+
+
 

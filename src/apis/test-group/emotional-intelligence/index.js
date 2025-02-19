@@ -203,7 +203,7 @@ export const getAllApproachStylesInEmotionalIntelligence = async ({ token, logou
         console.log("Token :",token)
 
         const response = await axios.get(
-            `/admin/emotional-intelligence/groups/`,
+            `/admin/emotional-intelligence/groups`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
