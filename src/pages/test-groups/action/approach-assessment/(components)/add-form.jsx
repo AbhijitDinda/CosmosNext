@@ -26,6 +26,8 @@ const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 import { useAddStyle } from "@/hooks/apis/test-group/approac-assessment/useAddStyle";
 import { useAddQuestion } from "@/hooks/apis/test-group/approac-assessment/useAddQuestion";
+import { useEffect, useState } from "react";
+import { useListOfStyle } from "@/hooks/apis/test-group/approac-assessment/useListOfStyle";
 
 // Define schemas
 const styleSchema = z.object({
@@ -46,8 +48,25 @@ const questionSchema = z.object({
 });
 
 const AddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
+  const [styleList, setStyleList] = useState([]);
   const schema = moduleType === "Styles" ? styleSchema : questionSchema;
 
+  const {
+    allStyleData,
+    isFetching: isStyleListFetching,
+    isLoading: isStyleListLoading,
+  } = useListOfStyle();
+
+  useEffect(() => {
+    if (allStyleData) {
+      const List = allStyleData?.data?.data?.map((item) => ({
+        id: item.id,
+        name: item.name,
+      }));
+      setStyleList(List); // Updating to set the style list
+      console.log("List", List);
+    }
+  }, [allStyleData]);
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -214,12 +233,27 @@ const AddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                 <FormItem>
                   <FormLabel>Approach Style</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Select
+                      value={field.value ? field.value.toString() : ""} // Ensure it's a string
+                      onValueChange={(value) => field.onChange(value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Style" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {styleList?.map((item) => (
+                          <SelectItem key={item.id} value={item.id.toString()}>
+                            {item.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               name="order_id"
               control={form.control}
@@ -227,14 +261,18 @@ const AddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                 <FormItem>
                   <FormLabel>Order Id</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input
+                      type="number"
+                      value={field.value}
+                      onChange={(e) => field.onChange(parseInt(e.target.value))}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <FormField
-              name="display"
+              name="status"
               control={form.control}
               render={({ field }) => (
                 <FormItem>

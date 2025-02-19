@@ -56,9 +56,12 @@ const EditForm = ({ moduleType, selectedItem, refetch, setIsDialogOpen }) => {
 
   useEffect(() => {
     if (allStyleData) {
-      const List = allStyleData.data.data.map((item) => item.name);
+      const List = allStyleData?.data?.data?.map((item) => ({
+        id: item.id,
+        name: item.name,
+      }));
       setStyleList(List); // Updating to set the style list
-      console.log(allStyleData.data.data);
+      console.log("List", List);
     }
   }, [allStyleData]);
 
@@ -128,9 +131,6 @@ const EditForm = ({ moduleType, selectedItem, refetch, setIsDialogOpen }) => {
   if (isStyleFetching || isStyleLoading || isFetching || isLoading) {
     return <div>Loading...</div>;
   }
-
-  console.log("form values", form.getValues());
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -259,19 +259,16 @@ const EditForm = ({ moduleType, selectedItem, refetch, setIsDialogOpen }) => {
                   <FormLabel>Approach Style</FormLabel>
                   <FormControl>
                     <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      value={field.value ? field.value.toString() : ""} // Ensure it's a string
+                      onValueChange={(value) => field.onChange(value)}
                     >
-                      <SelectTrigger className="">
+                      <SelectTrigger>
                         <SelectValue placeholder="Select Style" />
                       </SelectTrigger>
                       <SelectContent>
-                        {styleList.map((item, index) => (
-                          <SelectItem
-                            key={index}
-                            value={(index + 2).toString()}
-                          >
-                            {item}
+                        {styleList?.map((item) => (
+                          <SelectItem key={item.id} value={item.id.toString()}>
+                            {item.name}
                           </SelectItem>
                         ))}
                       </SelectContent>
