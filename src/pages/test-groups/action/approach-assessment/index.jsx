@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Heading from "@/components/Heading";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -19,14 +19,16 @@ const ApproachAssessment = () => {
   const assessmentId = 3;
   const shouldFetch = Boolean(assessmentId);
 
-  const { isLoading, error, assessmentByIdData } = useGetAssessmentById(
-    assessmentId,
-    shouldFetch
-  );
+  const { isLoading, error, assessmentByIdData, refetch } =
+    useGetAssessmentById(assessmentId, shouldFetch);
 
   const [activeModule, setActiveModule] = useState(
-    assessmentByIdData?.data?.modules_data[0]?.module_type || "Questions"
+    assessmentByIdData?.data?.modules_data[0]?.module_type
   );
+
+  // useEffect(() => {
+  //   setActiveModule(assessmentByIdData?.data?.modules_data[0]?.module_type);
+  // }, [assessmentByIdData]);
 
   const getAddButtonText = (moduleType) => {
     switch (moduleType) {
@@ -83,10 +85,15 @@ const ApproachAssessment = () => {
             </Dialog>
           </div>
           {assessmentByIdData?.data?.modules_data.map((module, index) => (
-            <TabsContent key={index} value={module.module_type}>
+            <TabsContent
+              key={index}
+              value={module.module_type}
+              refetch={refetch}
+            >
               <DataTable
                 moduleType={module.module_type}
                 moduleData={module.module_data}
+                refetch={refetch}
               />
             </TabsContent>
           ))}

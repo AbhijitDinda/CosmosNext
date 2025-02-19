@@ -72,17 +72,17 @@ const motivationGroupsSchema = z.object({
   motivation_techniques: z
     .string()
     .min(2, "Motivation techniques are required"),
-  display: z.string().min(1, "Status is required"),
+  status: z.string().min(1, "Status is required"),
 });
 
 const questionsSchema = z.object({
   question_name: z.string().min(5, "Question must be at least 5 characters"),
   group: z.string().min(1, "Group is required"),
   order_id: z.number().int(),
-  display: z.string().min(1, "Status is required"),
+  status: z.string().min(1, "Status is required"),
 });
 
-const DataTable = ({ moduleType, moduleData,refetch }) => {
+const DataTable = ({ moduleType, moduleData, refetch }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -280,7 +280,7 @@ const DataTable = ({ moduleType, moduleData,refetch }) => {
 };
 
 // Main Form Component
-const EditForm = ({ moduleType, selectedItem, setIsDialogOpen,refetch }) => {
+const EditForm = ({ moduleType, selectedItem, setIsDialogOpen, refetch }) => {
   const [groupList, setGroupList] = useState([]);
 
   // Fetch motivation groups
@@ -459,7 +459,7 @@ const EditForm = ({ moduleType, selectedItem, setIsDialogOpen,refetch }) => {
             />
             <FormField
               control={form.control}
-              name="display"
+              name="status"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Display Status</FormLabel>
@@ -546,7 +546,7 @@ const EditForm = ({ moduleType, selectedItem, setIsDialogOpen,refetch }) => {
             />
             <FormField
               control={form.control}
-              name="display"
+              name="status"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Display Status</FormLabel>
@@ -582,7 +582,7 @@ const EditForm = ({ moduleType, selectedItem, setIsDialogOpen,refetch }) => {
   );
 };
 
-const AddForm = ({ moduleType, setIsDialogOpen,refetch }) => {
+const AddForm = ({ moduleType, setIsDialogOpen, refetch }) => {
   const [groupList, setGroupList] = useState([]);
   // Select schema based on module type
   const schema =
@@ -619,7 +619,7 @@ const AddForm = ({ moduleType, setIsDialogOpen,refetch }) => {
       question_name: "",
       group: "",
       order_id: "",
-      display: "",
+      status: "",
     },
   });
   const { isPending: isGroupPending, addMotivationGroupMutation } =
@@ -735,7 +735,7 @@ const AddForm = ({ moduleType, setIsDialogOpen,refetch }) => {
             />
             <FormField
               control={form.control}
-              name="display"
+              name="status"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Display Status</FormLabel>
@@ -822,7 +822,7 @@ const AddForm = ({ moduleType, setIsDialogOpen,refetch }) => {
             />
             <FormField
               control={form.control}
-              name="display"
+              name="status"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Display Status</FormLabel>
@@ -866,10 +866,8 @@ const MotivationDriveAction = () => {
   const assessmentId = 2;
   const shouldFetch = Boolean(assessmentId);
 
-  const { isLoading, error,refetch, assessmentByIdData } = useGetAssessmentById(
-    assessmentId,
-    shouldFetch
-  );
+  const { isLoading, error, refetch, assessmentByIdData } =
+    useGetAssessmentById(assessmentId, shouldFetch);
 
   const [activeModule, setActiveModule] = useState(
     assessmentByIdData?.data?.modules_data[0]?.module_type || "Questions"

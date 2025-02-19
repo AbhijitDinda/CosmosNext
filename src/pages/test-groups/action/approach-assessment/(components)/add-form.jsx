@@ -33,17 +33,17 @@ const styleSchema = z.object({
   challenges: z.string().min(2, "Challenges are required"),
   strengths: z.string().min(2, "Strengths are required"),
   best_roles: z.string().min(2, "Best Roles are required"),
-  display: z.string().min(1, "Display is required"),
+  status: z.string().min(1, "Display is required"),
 });
 
 const questionSchema = z.object({
   question: z.string().min(5, "Question must be at least 5 characters"),
   approach_style: z.string().min(1, "Approach style is required"),
   order_id: z.number().int(),
-  display: z.string().min(1, "Display is required"),
+  status: z.string().min(1, "Display is required"),
 });
 
-const AddForm = ({ moduleType }) => {
+const AddForm = ({ moduleType, refetch }) => {
   const schema = moduleType === "Styles" ? styleSchema : questionSchema;
 
   const form = useForm({
@@ -61,9 +61,27 @@ const AddForm = ({ moduleType }) => {
     },
   });
 
-  const onSubmit = (data) => {
-    if (moduleType === "Styles") {
+  const onSubmit = async (data) => {
+    if (moduleType === "Motivation Groups") {
+      // const response = await addMotivationGroupMutation(data);
+      // if (response.data.status === "success") {
+      //   console.log("Success");
+      //   form.reset();
+      //   refetch();
+      //   setIsDialogOpen(false); // fixed the missing closing parenthesis here
+      // } else {
+      //   console.log(response.data.status);
+      // }
     } else if (moduleType === "Questions") {
+      // const response = await addQuestionMutation(data);
+      // if (response.data.status === "success") {
+      //   console.log("Question added successfully");
+      //   form.reset();
+      //   refetch();
+      //   setIsDialogOpen(false);
+      // } else {
+      //   console.log(response.data.status);
+      // }
     }
   };
 
