@@ -1,12 +1,15 @@
+import {addApproachStyleInEmotionalIntelligence} from "@/apis/test-group/emotional-intelligence";
 import {Button} from "@/components/ui/button";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Skeleton} from "@/components/ui/skeleton";
+import {useAddQuestion} from "@/hooks/apis/test-group/emotional-intelligence/useAddQuestion";
+import {useAddStyle} from "@/hooks/apis/test-group/emotional-intelligence/useAddStyle";
+import {useListOfStyle} from "@/hooks/apis/test-group/emotional-intelligence/useListOfStyle";
 import {zodResolver} from "@hookform/resolvers/zod";
-
 import dynamic from "next/dynamic";
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useForm} from "react-hook-form";
 import {z} from "zod";
 import "react-quill/dist/quill.snow.css";
@@ -36,12 +39,13 @@ const groupSchema = z.object({
     .min(5, "Description must be at least 5 characters"),
   competencies: z.string()
     .min(5, "Competencies must be at least 5 characters"),
-  display: z.string()
+  status: z.string()
     .min(1, "Display is required"),
 })
 
 export default function EmotionalIntelligenceAddForm({
   moduleType,
+  setIsDialogOpen,
   refetch
 })
 {
@@ -52,16 +56,52 @@ export default function EmotionalIntelligenceAddForm({
       name: "",
       description: "",
       competencies: "",
-      display: "1",
       question: "",
       group: "",
       status: "1",
     }
   })
 
-  const onSubmit = async () =>
-  {
+  const {
+    isPending,
+    addQuestionMutationInEmotionalIntelligence
+  } = useAddQuestion();
 
+  const {
+    isPending: stylePending,
+    addStyleMutationInEmotionalIntelligence
+  } = useAddStyle();
+
+  const {allApproachStylesData, isSuccess, isFetching} = useListOfStyle();
+
+  // useEffect(() =>
+  // {
+  //   if(isSuccess){
+  //     const list = allApproachStylesData?.data?.m
+  //   }
+  // }, []);
+
+  console.log(allApproachStylesData);
+
+  const onSubmit = async (data) =>
+  {
+    let response;
+    if (moduleType === "Questions")
+    {
+      response = await addQuestionMutationInEmotionalIntelligence(data);
+    }
+    else if (moduleType === "Approach Styles")
+    {
+      response = await addApproachStyleInEmotionalIntelligence(data);
+    }
+    if (response?.data?.status === "success")
+    {
+      form.reset();
+      setIsDialogOpen(false);
+      refetch();
+    }else{
+      console.log("Error in response", response.data);
+    }
   }
 
   return (
@@ -143,7 +183,7 @@ export default function EmotionalIntelligenceAddForm({
         ) : (
            <>
              <FormField
-               name="question"
+               name="name"
                control={form.control}
                render={({ field }) => (
                  <FormItem>
@@ -193,7 +233,7 @@ export default function EmotionalIntelligenceAddForm({
              />
              <FormField
                control={form.control}
-               name="display"
+               name="status"
                render={({ field }) => (
                  <FormItem>
                    <FormLabel>Display Status</FormLabel>

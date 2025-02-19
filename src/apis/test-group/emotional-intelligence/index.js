@@ -199,6 +199,9 @@ export const getApproachStyleByIdInEmotionalIntelligence = async ({ token, logou
 
 export const getAllApproachStylesInEmotionalIntelligence = async ({ token, logout }) => {
     try {
+        console.log("It hit")
+        console.log("Token :",token)
+
         const response = await axios.get(
             `/admin/emotional-intelligence/groups/`,
             {
@@ -208,6 +211,7 @@ export const getAllApproachStylesInEmotionalIntelligence = async ({ token, logou
                 },
             }
         );
+        console.log("Emotional Res :", response);
         return response;
     } catch (error) {
         if (error.response?.status === 401) {
