@@ -81,7 +81,11 @@ const ApproachAssessment = () => {
                 <DialogHeader>
                   <DialogTitle>{getAddButtonText(activeModule)}</DialogTitle>
                 </DialogHeader>
-                <AddForm moduleType={activeModule} />
+                <AddForm
+                  moduleType={activeModule}
+                  refetch={refetch}
+                  setIsDialogOpen={setIsDialogOpen}
+                />
               </DialogContent>
             </Dialog>
           </div>

@@ -137,6 +137,7 @@ const DataTable = ({ moduleType, moduleData, refetch }) => {
               moduleType={moduleType}
               selectedItem={selectedItem}
               refetch={refetch}
+              setIsDialogOpen={setIsDialogOpen}
             />
           )}
         </DialogContent>

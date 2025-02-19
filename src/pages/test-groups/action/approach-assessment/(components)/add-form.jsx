@@ -24,6 +24,8 @@ import dynamic from "next/dynamic";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
+import { useAddStyle } from "@/hooks/apis/test-group/approac-assessment/useAddStyle";
+import { useAddQuestion } from "@/hooks/apis/test-group/approac-assessment/useAddQuestion";
 
 // Define schemas
 const styleSchema = z.object({
@@ -43,7 +45,7 @@ const questionSchema = z.object({
   status: z.string().min(1, "Display is required"),
 });
 
-const AddForm = ({ moduleType, refetch }) => {
+const AddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
   const schema = moduleType === "Styles" ? styleSchema : questionSchema;
 
   const form = useForm({
@@ -61,27 +63,24 @@ const AddForm = ({ moduleType, refetch }) => {
     },
   });
 
+  const { addStyleMutation, isPending: isStylePending } = useAddStyle();
+  const { addQuestionMutation, isPending: isQuestionPending } =
+    useAddQuestion();
+
   const onSubmit = async (data) => {
-    if (moduleType === "Motivation Groups") {
-      // const response = await addMotivationGroupMutation(data);
-      // if (response.data.status === "success") {
-      //   console.log("Success");
-      //   form.reset();
-      //   refetch();
-      //   setIsDialogOpen(false); // fixed the missing closing parenthesis here
-      // } else {
-      //   console.log(response.data.status);
-      // }
+    let response;
+    console.log("moduleType", moduleType);
+    if (moduleType === "Styles") {
+      response = await addStyleMutation(data);
     } else if (moduleType === "Questions") {
-      // const response = await addQuestionMutation(data);
-      // if (response.data.status === "success") {
-      //   console.log("Question added successfully");
-      //   form.reset();
-      //   refetch();
-      //   setIsDialogOpen(false);
-      // } else {
-      //   console.log(response.data.status);
-      // }
+      response = await addQuestionMutation(data);
+    }
+    if (response.data.status === "success") {
+      form.reset();
+      setIsDialogOpen(false);
+      refetch();
+    } else {
+      console.log("Error in response", response.data);
     }
   };
 
@@ -168,6 +167,30 @@ const AddForm = ({ moduleType, refetch }) => {
                 </FormItem>
               )}
             />
+            <FormField
+              name="status"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Display Status</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger className="">
+                        <SelectValue placeholder="Select Status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1">Show</SelectItem>
+                        <SelectItem value="0">Hide</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </>
         ) : (
           <>
@@ -217,7 +240,10 @@ const AddForm = ({ moduleType, refetch }) => {
                 <FormItem>
                   <FormLabel>Display Status</FormLabel>
                   <FormControl>
-                    <Select {...field}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <SelectTrigger className="">
                         <SelectValue placeholder="Select Status" />
                       </SelectTrigger>
