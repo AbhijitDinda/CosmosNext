@@ -1,3 +1,5 @@
+import EmotionalIntelligenceAddForm
+  from "@/pages/test-groups/action/emotional-intelligence/(components)/EmotionalIntelligenceAddForm";
 import React from "react";
 import Heading from "@/components/Heading";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -149,6 +151,7 @@ const EmotionalIntelligence = () => {
                 <DialogHeader>
                   <DialogTitle>{getAddButtonText(activeModule)}</DialogTitle>
                 </DialogHeader>
+                <EmotionalIntelligenceAddForm moduleType={activeModule}/>
               </DialogContent>
             </Dialog>
           </div>
