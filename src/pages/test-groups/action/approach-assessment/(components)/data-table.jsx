@@ -23,14 +23,22 @@ import {
 } from "@/components/ui/dialog";
 import EditForm from "@/pages/test-groups/action/approach-assessment/(components)/edit-form";
 import { PencilIcon, TrashIcon } from "lucide-react";
+import { useDeleteStyle } from "@/hooks/apis/test-group/approac-assessment/useDeleteStyle";
+import { useDeleteQuestion } from "@/hooks/apis/test-group/approac-assessment/useDeleteQuestion";
 
 const DataTable = ({ moduleType, moduleData, refetch }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const openDialog = (item) => {
     setSelectedItem(item);
     setIsDialogOpen(true);
+  };
+
+  const openDeleteDialog = (item) => {
+    setSelectedItem(item);
+    setIsDeleteDialogOpen(true);
   };
 
   const columns = [
@@ -54,7 +62,12 @@ const DataTable = ({ moduleType, moduleData, refetch }) => {
           >
             <PencilIcon className="w-4 h-4 text-orange-500" />
           </Button>
-          <Button size="sm" variant="outline" className="rounded-sm">
+          <Button
+            size="sm"
+            variant="outline"
+            className="rounded-sm"
+            onClick={() => openDeleteDialog(row.original)}
+          >
             <TrashIcon className="w-4 h-4 text-red-500" />
           </Button>
         </div>
@@ -68,6 +81,25 @@ const DataTable = ({ moduleType, moduleData, refetch }) => {
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+  const { deleteStyleMutation, isPending: isDeleteStylePending } =
+    useDeleteStyle();
+  const { deleteQuestionMutation, isPending: isDeleteQuestionPending } =
+    useDeleteQuestion();
+
+  const handleDelete = async (id) => {
+    let response;
+    if (moduleType === "Styles") {
+      response = await deleteStyleMutation(id);
+    } else {
+      response = await deleteQuestionMutation(id);
+    }
+    if (response.data.status === "success") {
+      setIsDeleteDialogOpen(false);
+      refetch();
+    } else {
+      console.log("Error in delete response", response.data);
+    }
+  };
 
   return (
     <div className="overflow-x-auto border rounded-lg shadow-sm">
@@ -127,6 +159,30 @@ const DataTable = ({ moduleType, moduleData, refetch }) => {
           Next
         </Button>
       </div>
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent className="max-h-[80vh] overflow-y-auto max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Delete {moduleType}</DialogTitle>
+          </DialogHeader>
+          <div className="p-4">
+            Are you sure you want to delete this {moduleType}?
+          </div>
+          <div className="flex justify-end p-4 space-x-2">
+            <Button
+              variant="outline"
+              onClick={() => setIsDeleteDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="bg-red-500"
+              onClick={() => handleDelete(selectedItem.id)}
+            >
+              Delete
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-h-[80vh] overflow-y-auto max-w-[600px]">
           <DialogHeader>
@@ -137,6 +193,7 @@ const DataTable = ({ moduleType, moduleData, refetch }) => {
               moduleType={moduleType}
               selectedItem={selectedItem}
               refetch={refetch}
+              setIsDialogOpen={setIsDialogOpen}
             />
           )}
         </DialogContent>
