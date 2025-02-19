@@ -24,7 +24,7 @@ import {
 import EditForm from "@/pages/test-groups/action/approach-assessment/(components)/edit-form";
 import { PencilIcon, TrashIcon } from "lucide-react";
 
-const DataTable = ({ moduleType, moduleData }) => {
+const DataTable = ({ moduleType, moduleData, refetch }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -133,7 +133,11 @@ const DataTable = ({ moduleType, moduleData }) => {
             <DialogTitle>Edit {moduleType}</DialogTitle>
           </DialogHeader>
           {selectedItem && (
-            <EditForm moduleType={moduleType} selectedItem={selectedItem} />
+            <EditForm
+              moduleType={moduleType}
+              selectedItem={selectedItem}
+              refetch={refetch}
+            />
           )}
         </DialogContent>
       </Dialog>
