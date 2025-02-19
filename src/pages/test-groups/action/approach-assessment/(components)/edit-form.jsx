@@ -31,15 +31,15 @@ const styleSchema = z.object({
   challenges: z.string().min(2, "Challenges are required"),
   strengths: z.string().min(2, "Strengths are required"),
   best_roles: z.string().min(2, "Best Roles are required"),
-  display: z.string().min(1, "Display is required"),
+  status: z.string().min(1, "Display is required"),
 });
 
 const questionSchema = z.object({
   question: z.string().min(5, "Question must be at least 5 characters"),
   approach_style: z.string().min(1, "Approach style is required"),
-  display: z.string().min(1, "Display is required"),
+  status: z.string().min(1, "Display is required"),
 });
-const EditForm = ({ moduleType, selectedItem }) => {
+const EditForm = ({ moduleType, selectedItem, refetch }) => {
   const schema = moduleType === "Styles" ? styleSchema : questionSchema;
 
   const form = useForm({
