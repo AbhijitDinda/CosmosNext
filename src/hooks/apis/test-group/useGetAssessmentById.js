@@ -6,7 +6,7 @@ export const useGetAssessmentById = (assessment_id, enabled) => {
     // console.log("assessment_id",assessment_id)
     const { auth, logout } = useAuth();
 
-    const { isFetching, isLoading, isError, isSuccess, error, data: assessmentByIdData } = useQuery({
+    const { isFetching, isLoading, isError, isSuccess, error,refetch, data: assessmentByIdData } = useQuery({
         queryFn: () => fatchAssessmentById({ token: auth?.token }, logout, assessment_id),
         queryKey: ['getAssessmentById', assessment_id],
         enabled: Boolean(enabled),
@@ -18,6 +18,7 @@ export const useGetAssessmentById = (assessment_id, enabled) => {
         isSuccess,
         isError,
         error,
+        refetch,
         assessmentByIdData
     }
 };

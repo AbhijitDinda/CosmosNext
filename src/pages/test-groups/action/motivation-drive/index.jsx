@@ -82,7 +82,7 @@ const questionsSchema = z.object({
   display: z.string().min(1, "Status is required"),
 });
 
-const DataTable = ({ moduleType, moduleData }) => {
+const DataTable = ({ moduleType, moduleData,refetch }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -152,6 +152,7 @@ const DataTable = ({ moduleType, moduleData }) => {
       const response = await deleteMotivationGroupMutation(id);
       if (response.data.status === "success") {
         console.log("Motivation Group deleted successfully");
+        refetch();
         setIsDeleteDialogOpen(false);
       } else {
         console.log(response.data.status);
@@ -160,6 +161,7 @@ const DataTable = ({ moduleType, moduleData }) => {
       const response = await deleteQuestionMutation(id);
       if (response.data.status === "success") {
         console.log("Question deleted successfully");
+        refetch();
         setIsDeleteDialogOpen(false);
       } else {
         console.log(response.data.status);
@@ -268,6 +270,7 @@ const DataTable = ({ moduleType, moduleData }) => {
               moduleType={moduleType}
               selectedItem={selectedItem}
               setIsDialogOpen={setIsDialogOpen}
+              refetch={refetch}
             />
           )}
         </DialogContent>
@@ -277,7 +280,7 @@ const DataTable = ({ moduleType, moduleData }) => {
 };
 
 // Main Form Component
-const EditForm = ({ moduleType, selectedItem, setIsDialogOpen }) => {
+const EditForm = ({ moduleType, selectedItem, setIsDialogOpen,refetch }) => {
   const [groupList, setGroupList] = useState([]);
 
   // Fetch motivation groups
@@ -344,19 +347,27 @@ const EditForm = ({ moduleType, selectedItem, setIsDialogOpen }) => {
         post_data: data,
         groupId: selectedItem.id,
       });
+      if (response.data.status === "success") {
+        console.log("Success");
+        form.reset();
+        refetch();
+        setIsDialogOpen(false); // fixed the missing closing parenthesis here
+      } else {
+        console.log(response.data.status);
+      }
     } else {
       response = await editQuestionMutation({
         post_data: data,
         questionId: selectedItem.id,
       });
-    }
-
-    if (response.data.status === "success") {
-      console.log(`${moduleType} updated successfully`);
-      form.reset();
-      setIsDialogOpen(false);
-    } else {
-      console.log(response.status);
+      if (response.data.status === "success") {
+        console.log("Success");
+        form.reset();
+        refetch();
+        setIsDialogOpen(false); // fixed the missing closing parenthesis here
+      } else {
+        console.log(response.data.status);
+      }
     }
   };
 
@@ -571,7 +582,7 @@ const EditForm = ({ moduleType, selectedItem, setIsDialogOpen }) => {
   );
 };
 
-const AddForm = ({ moduleType, setIsDialogOpen }) => {
+const AddForm = ({ moduleType, setIsDialogOpen,refetch }) => {
   const [groupList, setGroupList] = useState([]);
   // Select schema based on module type
   const schema =
@@ -621,6 +632,7 @@ const AddForm = ({ moduleType, setIsDialogOpen }) => {
       if (response.data.status === "success") {
         console.log("Success");
         form.reset();
+        refetch();
         setIsDialogOpen(false); // fixed the missing closing parenthesis here
       } else {
         console.log(response.data.status);
@@ -630,6 +642,7 @@ const AddForm = ({ moduleType, setIsDialogOpen }) => {
       if (response.data.status === "success") {
         console.log("Question added successfully");
         form.reset();
+        refetch();
         setIsDialogOpen(false);
       } else {
         console.log(response.data.status);
@@ -853,7 +866,7 @@ const MotivationDriveAction = () => {
   const assessmentId = 2;
   const shouldFetch = Boolean(assessmentId);
 
-  const { isLoading, error, assessmentByIdData } = useGetAssessmentById(
+  const { isLoading, error,refetch, assessmentByIdData } = useGetAssessmentById(
     assessmentId,
     shouldFetch
   );
@@ -923,6 +936,7 @@ const MotivationDriveAction = () => {
                 <AddForm
                   moduleType={activeModule}
                   setIsDialogOpen={setIsDialogOpen}
+                  refetch={refetch}
                 />
               </DialogContent>
             </Dialog>
@@ -932,6 +946,7 @@ const MotivationDriveAction = () => {
               <DataTable
                 moduleType={module.module_type}
                 moduleData={module.module_data}
+                refetch={refetch}
               />
             </TabsContent>
           ))}
