@@ -2,6 +2,7 @@ import {Button} from "@/components/ui/button";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
+import {Skeleton} from "@/components/ui/skeleton";
 import {zodResolver} from "@hookform/resolvers/zod";
 
 import dynamic from "next/dynamic";
@@ -10,7 +11,12 @@ import {useForm} from "react-hook-form";
 import {z} from "zod";
 import "react-quill/dist/quill.snow.css";
 
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+const ReactQuill = dynamic(() => import("react-quill"), {
+  ssr: false,
+  loading: () => (
+    <Skeleton className={"w-full h-32"}/>
+  )
+});
 
 const questionSchema = z.object({
   question: z.string()
@@ -60,7 +66,10 @@ export default function EmotionalIntelligenceAddForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-4"
+      >
         {moduleType === "Questions" ? (
           <>
             <FormField
@@ -77,15 +86,15 @@ export default function EmotionalIntelligenceAddForm({
               )}
             />
             <FormField
-              name="description"
+              name="group"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>Group</FormLabel>
                   <FormControl>
-                    <ReactQuill {...field} theme="snow" />
+                    <Input {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage/>
                 </FormItem>
               )}
             />
@@ -102,7 +111,7 @@ export default function EmotionalIntelligenceAddForm({
                       onChange={(e) => field.onChange(parseInt(e.target.value))}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage/>
                 </FormItem>
               )}
             />
@@ -118,7 +127,7 @@ export default function EmotionalIntelligenceAddForm({
                       defaultValue={field.value}
                     >
                       <SelectTrigger className="">
-                        <SelectValue placeholder="Select Status" />
+                        <SelectValue placeholder="Select Status"/>
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="1">Show</SelectItem>
@@ -126,15 +135,92 @@ export default function EmotionalIntelligenceAddForm({
                       </SelectContent>
                     </Select>
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage/>
                 </FormItem>
               )}
             />
           </>
         ) : (
-           <></>
+           <>
+             <FormField
+               name="question"
+               control={form.control}
+               render={({ field }) => (
+                 <FormItem>
+                   <FormLabel>Name</FormLabel>
+                   <FormControl>
+                     <Input {...field} />
+                   </FormControl>
+                   <FormMessage/>
+                 </FormItem>
+               )}
+             />
+             <FormField
+               name="description"
+               control={form.control}
+               render={({ field }) => (
+                 <FormItem>
+                   <FormLabel>Description</FormLabel>
+                   <FormControl>
+                     <ReactQuill
+                       key={field.name}
+                       value={field.value}
+                       onChange={field.onChange}
+                       theme="snow"
+                     />
+                   </FormControl>
+                   <FormMessage/>
+                 </FormItem>
+               )}
+             />
+             <FormField
+               name="competencies"
+               control={form.control}
+               render={({ field }) => (
+                 <FormItem>
+                   <FormLabel>Competencies</FormLabel>
+                   <FormControl>
+                     <ReactQuill
+                       key={field.name}
+                       value={field.value}
+                       onChange={field.onChange}
+                       theme="snow"
+                     />
+                   </FormControl>
+                   <FormMessage/>
+                 </FormItem>
+               )}
+             />
+             <FormField
+               control={form.control}
+               name="display"
+               render={({ field }) => (
+                 <FormItem>
+                   <FormLabel>Display Status</FormLabel>
+                   <FormControl>
+                     <Select
+                       onValueChange={field.onChange}
+                       defaultValue={field.value}
+                     >
+                       <SelectTrigger className="">
+                         <SelectValue placeholder="Select Status"/>
+                       </SelectTrigger>
+                       <SelectContent>
+                         <SelectItem value="1">Show</SelectItem>
+                         <SelectItem value="0">Hide</SelectItem>
+                       </SelectContent>
+                     </Select>
+                   </FormControl>
+                   <FormMessage/>
+                 </FormItem>
+               )}
+             />
+           </>
          )}
-        <Button type="submit" className="w-full mt-2">
+        <Button
+          type="submit"
+          className="w-full mt-2"
+        >
           Add
         </Button>
       </form>
