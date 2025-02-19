@@ -60,6 +60,8 @@ import { useQuestionById } from "@/hooks/apis/test-group/motivation-drive/useQue
 import { useEditMotivationGroup } from "@/hooks/apis/test-group/motivation-drive/useEditMotivationGroup";
 import { useEditQuestion } from "@/hooks/apis/test-group/motivation-drive/useEditQuestion";
 import { editQuestionInMotivationDrive } from "@/apis/test-group/motivation-drive";
+import { useDeleteMotivationGroup } from "@/hooks/apis/test-group/motivation-drive/useDeleteMotivationGroup";
+import { useDeleteQuestion } from "@/hooks/apis/test-group/motivation-drive/useDeleteQuestion";
 // Define separate schemas for each module type
 const motivationGroupsSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -83,11 +85,17 @@ const questionsSchema = z.object({
 const DataTable = ({ moduleType, moduleData }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   // Function to handle opening the dialog
   const openDialog = (item) => {
     setSelectedItem(item);
     setIsDialogOpen(true);
+  };
+
+  const openDeleteDialog = (item) => {
+    setSelectedItem(item);
+    setIsDeleteDialogOpen(true);
   };
 
   // Define columns dynamically based on module type
@@ -112,7 +120,12 @@ const DataTable = ({ moduleType, moduleData }) => {
           >
             <PencilIcon className="w-4 h-4 text-orange-500" />
           </Button>
-          <Button size="sm" variant="outline" className="rounded-sm">
+          <Button
+            size="sm"
+            variant="outline"
+            className="rounded-sm"
+            onClick={() => openDeleteDialog(row.original)}
+          >
             <TrashIcon className="w-4 h-4 text-red-500" />
           </Button>
         </div>
@@ -127,6 +140,32 @@ const DataTable = ({ moduleType, moduleData }) => {
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+
+  const { isPending: isDeleteQuestionPending, deleteMotivationGroupMutation } =
+    useDeleteMotivationGroup();
+
+  const { isPending: isDeletePending, deleteQuestionMutation } =
+    useDeleteQuestion();
+
+  const handleDelete = async (id) => {
+    if (moduleType === "Motivation Groups") {
+      const response = await deleteMotivationGroupMutation(id);
+      if (response.data.status === "success") {
+        console.log("Motivation Group deleted successfully");
+        setIsDeleteDialogOpen(false);
+      } else {
+        console.log(response.data.status);
+      }
+    } else {
+      const response = await deleteQuestionMutation(id);
+      if (response.data.status === "success") {
+        console.log("Question deleted successfully");
+        setIsDeleteDialogOpen(false);
+      } else {
+        console.log(response.data.status);
+      }
+    }
+  };
 
   return (
     <div className="overflow-x-auto border rounded-lg shadow-sm">
@@ -186,7 +225,33 @@ const DataTable = ({ moduleType, moduleData }) => {
           Next
         </Button>
       </div>
+
       {/* Moved Dialog Outside the Table to Prevent Re-Renders */}
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent className="max-h-[80vh] overflow-y-auto max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Delete {moduleType}</DialogTitle>
+          </DialogHeader>
+          <div className="p-4">
+            Are you sure you want to delete this {moduleType}?
+          </div>
+          <div className="flex justify-end p-4 space-x-2">
+            <Button
+              variant="outline"
+              onClick={() => setIsDeleteDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="bg-red-500"
+              onClick={() => handleDelete(selectedItem.id)}
+            >
+              Delete
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <Dialog
         open={isDialogOpen}
         onOpenChange={(open) => {
@@ -198,7 +263,6 @@ const DataTable = ({ moduleType, moduleData }) => {
           <DialogHeader>
             <DialogTitle>Edit {moduleType}</DialogTitle>
           </DialogHeader>
-          {console.log("selectedItem", selectedItem)}
           {selectedItem && (
             <EditForm
               moduleType={moduleType}
