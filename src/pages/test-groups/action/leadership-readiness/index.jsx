@@ -78,8 +78,6 @@ const Table = ({ moduleType, moduleData }) => {
 
 const LeadershipReadiness = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  // Error states
-  const [errors, setErrors] = useState({});
 
   const assessmentId = 5;
   const shouldFetch = Boolean(assessmentId);
