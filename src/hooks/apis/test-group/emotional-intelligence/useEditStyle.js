@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query'; // Fix import for useMutati
 import { editApproachStyleInEmotionalIntelligence } from '@/apis/test-group/emotional-intelligence';
 import { useAuth } from "@/hooks/context/uesAuth";
 
-export const useEditQuestion = () => {
+export const useEditStyle = () => {
     const { auth, logout } = useAuth();
 
     const { isPending, mutateAsync: editStyleMutationInEmotionalIntelligence } = useMutation({

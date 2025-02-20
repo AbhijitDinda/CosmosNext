@@ -1,4 +1,3 @@
-import {addApproachStyleInEmotionalIntelligence} from "@/apis/test-group/emotional-intelligence";
 import {Button} from "@/components/ui/button";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
@@ -103,7 +102,7 @@ export default function EmotionalIntelligenceAddForm({
     }
     else if (moduleType === "Approach Styles")
     {
-      response = await addApproachStyleInEmotionalIntelligence(data);
+      response = await addStyleMutationInEmotionalIntelligence(data);
     }
     if (response?.data?.status === "success")
     {

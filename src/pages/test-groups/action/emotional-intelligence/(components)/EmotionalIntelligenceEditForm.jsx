@@ -3,6 +3,8 @@ import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/
 import {Input} from "@/components/ui/input";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Skeleton} from "@/components/ui/skeleton";
+import {useEditQuestion} from "@/hooks/apis/test-group/emotional-intelligence/useEditQuestion";
+import {useEditStyle} from "@/hooks/apis/test-group/emotional-intelligence/useEditStyle";
 import {useGetQuestionById} from "@/hooks/apis/test-group/emotional-intelligence/useGetQuestionById";
 import {useGetStyleById} from "@/hooks/apis/test-group/emotional-intelligence/useGetStyleById";
 import {useListOfStyle} from "@/hooks/apis/test-group/emotional-intelligence/useListOfStyle";
@@ -96,22 +98,49 @@ export default function EmotionalIntelligenceEditForm({
     styleFetching: false,
     styleLoading: false,
   }
-  console.log(emotionalIntelligenceQuestionDataById?.data?.data);
-  console.log(emotionalIntelligenceStyleDataById?.data?.data);
 
   useEffect(() =>
   {
-    if(selectedItem){
-      if(moduleType === "Questions" && !isFetching && !isLoading){
+    if (selectedItem)
+    {
+      if (moduleType === "Questions" && !isFetching && !isLoading)
+      {
         form.reset(emotionalIntelligenceQuestionDataById?.data?.data)
-      }else if(moduleType === "Approach Styles" && !styleFetching && !styleLoading){
+      }
+      else if (moduleType === "Approach Styles" && !styleFetching && !styleLoading)
+      {
         form.reset(emotionalIntelligenceStyleDataById?.data?.data)
       }
     }
   }, [isFetching, isLoading, styleFetching, styleLoading, selectedItem]);
 
-  const onSubmit = () => {
+  const {
+    editQuestionMutationInEmotionalIntelligence,
+    isPending: isQuestionPending
+  } = useEditQuestion()
+  const {
+    editStyleMutationInEmotionalIntelligence,
+    isPending: isStylePending
+  } = useEditStyle();
 
+  const onSubmit = async (data) =>
+  {
+    console.log(data)
+
+    let response;
+    if(moduleType === "Approach Styles"){
+      response = await editStyleMutationInEmotionalIntelligence({
+        post_data: data,
+        id: selectedItem.id,
+      })
+    }else {
+      const post_data = {
+        question: data.question_name,
+        group: data.group,
+        order_id: data.order_id,
+        status: data.status,
+      }
+    }
   }
 
   return (

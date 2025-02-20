@@ -124,8 +124,6 @@ const EmotionalIntelligence = () =>
     assessmentByIdData?.data?.modules_data[0]?.module_type || "Questions"
   );
 
-  console.log("assessmentByIdData", assessmentByIdData);
-
   const getAddButtonText = (moduleType) =>
   {
     switch (moduleType)

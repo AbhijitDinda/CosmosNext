@@ -28,6 +28,9 @@ export const addQuestionInEmotionalIntelligence = async ({ token, logout, post_d
 
 export const addApproachStyleInEmotionalIntelligence = async ({ token, logout, post_data }) => {
     try {
+        console.log("Token :", token);
+        console.log("Post Data :", post_data);
+
         const response = await axios.post(
             `/admin/emotional-intelligence/groups/add`,
             post_data,
@@ -199,9 +202,6 @@ export const getApproachStyleByIdInEmotionalIntelligence = async ({ token, logou
 
 export const getAllApproachStylesInEmotionalIntelligence = async ({ token, logout }) => {
     try {
-        console.log("It hit")
-        console.log("Token :",token)
-
         const response = await axios.get(
             `/admin/emotional-intelligence/groups`,
             {
@@ -211,7 +211,6 @@ export const getAllApproachStylesInEmotionalIntelligence = async ({ token, logou
                 },
             }
         );
-        console.log("Emotional Res :", response);
         return response;
     } catch (error) {
         if (error.response?.status === 401) {

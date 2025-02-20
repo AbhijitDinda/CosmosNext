@@ -103,7 +103,6 @@ export default function EmotionalIntelligenceTableData({
       refetch()
     } else {
       console.log("Error in delete response", response.data);
-
     }
   }
 
