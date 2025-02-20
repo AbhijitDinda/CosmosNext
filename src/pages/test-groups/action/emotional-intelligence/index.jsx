@@ -1,26 +1,41 @@
+import Heading from "@/components/Heading";
+import {Button} from "@/components/ui/button";
+import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,} from "@/components/ui/dialog";
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
+import {useGetAssessmentById} from "@/hooks/apis/test-group/useGetAssessmentById";
 import EmotionalIntelligenceAddForm
   from "@/pages/test-groups/action/emotional-intelligence/(components)/EmotionalIntelligenceAddForm";
-import React from "react";
-import Heading from "@/components/Heading";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { PencilIcon, TrashIcon } from "lucide-react";
-import { useGetAssessmentById } from "@/hooks/apis/test-group/useGetAssessmentById";
-import { useState } from "react";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import {PencilIcon, TrashIcon} from "lucide-react";
+import React, {useState} from "react";
 
-const Table = ({ moduleType, moduleData }) => {
+const Table = ({
+  moduleType,
+  moduleData
+}) =>
+{
   let columns = [];
-  if (moduleType === "Approach Styles") {
+  if (moduleType === "Approach Styles")
+  {
     columns = ["ID", "Name", "Action"];
-  } else if (moduleType === "Questions") {
+  }
+  else if (moduleType === "Questions")
+  {
     columns = ["ID", "Question", "Group Name", "Action"];
+  }
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+  const openDialog = (item) =>
+  {
+    setSelectedItem(item);
+    setIsDialogOpen(true);
+  };
+
+  const openDeleteDialog = (item) =>
+  {
+    setSelectedItem(item);
+    setIsDeleteDialogOpen(true);
   }
 
   console.log("moduleData", moduleData);
@@ -28,55 +43,64 @@ const Table = ({ moduleType, moduleData }) => {
     <div className="overflow-x-auto">
       <table className="table-auto w-full border">
         <thead>
-          <tr className="bg-gray-100 text-nowrap">
-            {columns.map((col, idx) => (
-              <th
-                key={idx}
-                className="border border-gray-300 px-4 py-2 text-left"
-              >
-                {col}
-              </th>
-            ))}
-          </tr>
+        <tr className="bg-gray-100 text-nowrap">
+          {columns.map((col, idx) => (
+            <th
+              key={idx}
+              className="border border-gray-300 px-4 py-2 text-left"
+            >
+              {col}
+            </th>
+          ))}
+        </tr>
         </thead>
         <tbody>
-          {moduleData?.data?.map((item) => (
-            <tr key={item.id}>
+        {moduleData?.data?.map((item) => (
+          <tr key={item.id}>
+            <td className="border border-gray-300 px-4 py-2 text-nowrap">
+              {item.id}
+            </td>
+            {moduleType === "Approach Styles" && (
               <td className="border border-gray-300 px-4 py-2 text-nowrap">
-                {item.id}
+                {item.name}
               </td>
-              {moduleType === "Approach Styles" && (
-                <td className="border border-gray-300 px-4 py-2 text-nowrap">
-                  {item.name}
+            )}
+            {moduleType === "Questions" && (
+              <>
+                <td className="border border-gray-300 px-4 py-2 text-nowrap truncate max-w-[300px] overflow-hidden whitespace-nowrap">
+                  {item.question_name}
                 </td>
-              )}
-              {moduleType === "Questions" && (
-                <>
-                  <td className="border border-gray-300 px-4 py-2 text-nowrap truncate max-w-[300px] overflow-hidden whitespace-nowrap">
-                    {item.question_name}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2 text-nowrap truncate max-w-[200px] overflow-hidden whitespace-nowrap">
-                    {item.group_name}
-                  </td>
-                </>
-              )}
-              <td className="border border-gray-300 px-4 py-2 text-nowrap">
-                <Button size="sm" variant="outline" className="rounded-sm mr-2">
-                  <PencilIcon className="stroke-Third" />
-                </Button>
-                <Button size="sm" variant="outline" className="rounded-sm">
-                  <TrashIcon className="stroke-Error" />
-                </Button>
-              </td>
-            </tr>
-          ))}
+                <td className="border border-gray-300 px-4 py-2 text-nowrap truncate max-w-[200px] overflow-hidden whitespace-nowrap">
+                  {item.group_name}
+                </td>
+              </>
+            )}
+            <td className="border border-gray-300 px-4 py-2 text-nowrap">
+              <Button
+                size="sm"
+                variant="outline"
+                className="rounded-sm mr-2"
+              >
+                <PencilIcon className="stroke-Third"/>
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                className="rounded-sm"
+              >
+                <TrashIcon className="stroke-Error"/>
+              </Button>
+            </td>
+          </tr>
+        ))}
         </tbody>
       </table>
     </div>
   );
 };
 
-const EmotionalIntelligence = () => {
+const EmotionalIntelligence = () =>
+{
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   // Error states
   const [errors, setErrors] = useState({});
@@ -84,7 +108,11 @@ const EmotionalIntelligence = () => {
   const assessmentId = 4;
   const shouldFetch = Boolean(assessmentId);
 
-  const { isLoading, error, assessmentByIdData } = useGetAssessmentById(
+  const {
+    isLoading,
+    error,
+    assessmentByIdData
+  } = useGetAssessmentById(
     assessmentId,
     shouldFetch
   );
@@ -95,8 +123,10 @@ const EmotionalIntelligence = () => {
 
   console.log("assessmentByIdData", assessmentByIdData);
 
-  const getAddButtonText = (moduleType) => {
-    switch (moduleType) {
+  const getAddButtonText = (moduleType) =>
+  {
+    switch (moduleType)
+    {
       case "Approach Styles":
         return "Add Approach Style";
       case "Questions":
@@ -106,21 +136,24 @@ const EmotionalIntelligence = () => {
     }
   };
 
-  const handleButtonClick = () => {
+  const handleButtonClick = () =>
+  {
     setIsDialogOpen(true);
   };
 
-  if (isLoading) {
+  if (isLoading)
+  {
     return <div>Loading...</div>;
   }
 
-  if (error) {
+  if (error)
+  {
     return <div>Error: {error.message}</div>;
   }
 
   return (
     <div className="rounded-sm mx-auto w-full max-w-[1300px]">
-      <Heading title="Test Options" />
+      <Heading title="Test Options"/>
       <div className="p-4 bg-White rounded-sm">
         <Tabs
           defaultValue={
@@ -141,7 +174,10 @@ const EmotionalIntelligence = () => {
                 </TabsTrigger>
               ))}
             </TabsList>
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <Dialog
+              open={isDialogOpen}
+              onOpenChange={setIsDialogOpen}
+            >
               <DialogTrigger asChild>
                 <Button className="bg-Primary text-white  rounded-md">
                   {getAddButtonText(activeModule)}
@@ -151,12 +187,18 @@ const EmotionalIntelligence = () => {
                 <DialogHeader>
                   <DialogTitle>{getAddButtonText(activeModule)}</DialogTitle>
                 </DialogHeader>
-                <EmotionalIntelligenceAddForm moduleType={activeModule} setIsDialogOpen={setIsDialogOpen}/>
+                <EmotionalIntelligenceAddForm
+                  moduleType={activeModule}
+                  setIsDialogOpen={setIsDialogOpen}
+                />
               </DialogContent>
             </Dialog>
           </div>
           {assessmentByIdData?.data?.modules_data.map((module, index) => (
-            <TabsContent key={index} value={module.module_type}>
+            <TabsContent
+              key={index}
+              value={module.module_type}
+            >
               <Table
                 moduleType={module.module_type}
                 moduleData={module.module_data}

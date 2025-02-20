@@ -1,18 +1,15 @@
-import {addApproachStyleInEmotionalIntelligence} from "@/apis/test-group/emotional-intelligence";
 import {Button} from "@/components/ui/button";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Skeleton} from "@/components/ui/skeleton";
-import {useAddQuestion} from "@/hooks/apis/test-group/emotional-intelligence/useAddQuestion";
-import {useAddStyle} from "@/hooks/apis/test-group/emotional-intelligence/useAddStyle";
 import {useListOfStyle} from "@/hooks/apis/test-group/emotional-intelligence/useListOfStyle";
 import {zodResolver} from "@hookform/resolvers/zod";
-import dynamic from "next/dynamic";
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react'
 import {useForm} from "react-hook-form";
 import {z} from "zod";
 import "react-quill/dist/quill.snow.css";
+import dynamic from "next/dynamic";
 
 const ReactQuill = dynamic(() => import("react-quill"), {
   ssr: false,
@@ -20,6 +17,7 @@ const ReactQuill = dynamic(() => import("react-quill"), {
     <Skeleton className={"w-full h-32"}/>
   )
 });
+
 
 const questionSchema = z.object({
   question: z.string()
@@ -43,35 +41,14 @@ const groupSchema = z.object({
     .min(1, "Display is required"),
 })
 
-export default function EmotionalIntelligenceAddForm({
-  moduleType,
-  setIsDialogOpen,
-  refetch
-})
+export default function EmotionalIntelligenceEditForm({moduleType, selectedItem, refetch, setIsDialogOpen})
 {
-  const [list, setList] = useState()
+  const [list, setList] = useState();
   const schema = moduleType === "Questions" ? questionSchema : groupSchema;
   const form = useForm({
     resolver: zodResolver(schema),
-    defaultValues: {
-      name: "",
-      description: "",
-      competencies: "",
-      question: "",
-      group: "",
-      status: "1",
-    }
-  })
-
-  const {
-    isPending,
-    addQuestionMutationInEmotionalIntelligence
-  } = useAddQuestion();
-
-  const {
-    isPending: stylePending,
-    addStyleMutationInEmotionalIntelligence
-  } = useAddStyle();
+    defaultValues: selectedItem || {},
+  });
 
   const {
     allApproachStylesData,
@@ -93,29 +70,6 @@ export default function EmotionalIntelligenceAddForm({
       setList(list);
     }
   }, [allApproachStylesData, isSuccess]);
-
-  const onSubmit = async (data) =>
-  {
-    let response;
-    if (moduleType === "Questions")
-    {
-      response = await addQuestionMutationInEmotionalIntelligence(data);
-    }
-    else if (moduleType === "Approach Styles")
-    {
-      response = await addApproachStyleInEmotionalIntelligence(data);
-    }
-    if (response?.data?.status === "success")
-    {
-      form.reset();
-      setIsDialogOpen(false);
-      refetch();
-    }
-    else
-    {
-      console.log("Error in response", response.data);
-    }
-  }
 
   return (
     <Form {...form}>
