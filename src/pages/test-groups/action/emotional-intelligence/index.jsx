@@ -5,6 +5,8 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {useGetAssessmentById} from "@/hooks/apis/test-group/useGetAssessmentById";
 import EmotionalIntelligenceAddForm
   from "@/pages/test-groups/action/emotional-intelligence/(components)/EmotionalIntelligenceAddForm";
+import EmotionalIntelligenceTableData
+  from "@/pages/test-groups/action/emotional-intelligence/(components)/EmotionalIntelligenceTableData";
 import {PencilIcon, TrashIcon} from "lucide-react";
 import React, {useState} from "react";
 
@@ -110,6 +112,7 @@ const EmotionalIntelligence = () =>
 
   const {
     isLoading,
+    refetch,
     error,
     assessmentByIdData
   } = useGetAssessmentById(
@@ -190,6 +193,7 @@ const EmotionalIntelligence = () =>
                 <EmotionalIntelligenceAddForm
                   moduleType={activeModule}
                   setIsDialogOpen={setIsDialogOpen}
+                  refetch={refetch}
                 />
               </DialogContent>
             </Dialog>
@@ -199,9 +203,10 @@ const EmotionalIntelligence = () =>
               key={index}
               value={module.module_type}
             >
-              <Table
+              <EmotionalIntelligenceTableData
                 moduleType={module.module_type}
                 moduleData={module.module_data}
+                refetch={refetch}
               />
             </TabsContent>
           ))}

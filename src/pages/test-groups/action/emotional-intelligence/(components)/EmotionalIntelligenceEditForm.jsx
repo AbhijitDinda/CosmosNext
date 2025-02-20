@@ -3,13 +3,15 @@ import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/
 import {Input} from "@/components/ui/input";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Skeleton} from "@/components/ui/skeleton";
+import {useGetQuestionById} from "@/hooks/apis/test-group/emotional-intelligence/useGetQuestionById";
+import {useGetStyleById} from "@/hooks/apis/test-group/emotional-intelligence/useGetStyleById";
 import {useListOfStyle} from "@/hooks/apis/test-group/emotional-intelligence/useListOfStyle";
 import {zodResolver} from "@hookform/resolvers/zod";
+import dynamic from "next/dynamic";
 import React, {useEffect, useState} from 'react'
 import {useForm} from "react-hook-form";
 import {z} from "zod";
 import "react-quill/dist/quill.snow.css";
-import dynamic from "next/dynamic";
 
 const ReactQuill = dynamic(() => import("react-quill"), {
   ssr: false,
@@ -18,9 +20,8 @@ const ReactQuill = dynamic(() => import("react-quill"), {
   )
 });
 
-
 const questionSchema = z.object({
-  question: z.string()
+  question_name: z.string()
     .min(5, "Question must be at least 5 characters"),
   group: z.string()
     .min(1, "Group must be at least 1 characters"),
@@ -41,7 +42,12 @@ const groupSchema = z.object({
     .min(1, "Display is required"),
 })
 
-export default function EmotionalIntelligenceEditForm({moduleType, selectedItem, refetch, setIsDialogOpen})
+export default function EmotionalIntelligenceEditForm({
+  moduleType,
+  selectedItem,
+  refetch,
+  setIsDialogOpen
+})
 {
   const [list, setList] = useState();
   const schema = moduleType === "Questions" ? questionSchema : groupSchema;
@@ -53,7 +59,7 @@ export default function EmotionalIntelligenceEditForm({moduleType, selectedItem,
   const {
     allApproachStylesData,
     isSuccess,
-    isFetching
+    isFetching: listFetching,
   } = useListOfStyle();
 
   useEffect(() =>
@@ -71,6 +77,43 @@ export default function EmotionalIntelligenceEditForm({moduleType, selectedItem,
     }
   }, [allApproachStylesData, isSuccess]);
 
+  const {
+    emotionalIntelligenceQuestionDataById,
+    isFetching,
+    isLoading
+  } = moduleType === "Questions" ? useGetQuestionById(selectedItem.id) : {
+    isFetching: false,
+    isLoading: false,
+    emotionalIntelligenceQuestionDataById: null
+  }
+
+  const {
+    isFetching: styleFetching,
+    isLoading: styleLoading,
+    emotionalIntelligenceStyleDataById
+  } = moduleType === "Approach Styles" ? useGetStyleById(selectedItem.id) : {
+    emotionalIntelligenceStyleDataById: null,
+    styleFetching: false,
+    styleLoading: false,
+  }
+  console.log(emotionalIntelligenceQuestionDataById?.data?.data);
+  console.log(emotionalIntelligenceStyleDataById?.data?.data);
+
+  useEffect(() =>
+  {
+    if(selectedItem){
+      if(moduleType === "Questions" && !isFetching && !isLoading){
+        form.reset(emotionalIntelligenceQuestionDataById?.data?.data)
+      }else if(moduleType === "Approach Styles" && !styleFetching && !styleLoading){
+        form.reset(emotionalIntelligenceStyleDataById?.data?.data)
+      }
+    }
+  }, [isFetching, isLoading, styleFetching, styleLoading, selectedItem]);
+
+  const onSubmit = () => {
+
+  }
+
   return (
     <Form {...form}>
       <form
@@ -80,7 +123,7 @@ export default function EmotionalIntelligenceEditForm({moduleType, selectedItem,
         {moduleType === "Questions" ? (
           <>
             <FormField
-              name="question"
+              name="question_name"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
@@ -104,7 +147,7 @@ export default function EmotionalIntelligenceEditForm({moduleType, selectedItem,
                       onValueChange={(value) => field.onChange(value)}
                     >
                       <SelectTrigger
-                        disabled={isFetching}
+                        disabled={listFetching}
                         className=""
                       >
                         <SelectValue placeholder="Select Group"/>
@@ -248,7 +291,7 @@ export default function EmotionalIntelligenceEditForm({moduleType, selectedItem,
           type="submit"
           className="w-full mt-2"
         >
-          Add
+          Save
         </Button>
       </form>
     </Form>
