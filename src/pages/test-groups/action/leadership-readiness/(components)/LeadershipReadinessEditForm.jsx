@@ -24,6 +24,10 @@ import { useEffect, useState } from "react";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
+import { useGetStyleById } from "@/hooks/apis/test-group/leadership-readiness/useGetStyleById";
+import { useGetQuestionById } from "@/hooks/apis/test-group/leadership-readiness/useGetQuestionById";
+import { useEditStyle } from "@/hooks/apis/test-group/leadership-readiness/useEditStyle";
+import { useEditQuestion } from "@/hooks/apis/test-group/leadership-readiness/useEditQuestion";
 
 // Define schemas
 const leadershipStyleSchema = z.object({
@@ -38,7 +42,7 @@ const leadershipStyleSchema = z.object({
 });
 
 const questionSchema = z.object({
-  question: z.string().min(5, "Question must be at least 5 characters"),
+  question_name: z.string().min(5, "Question must be at least 5 characters"),
   order_id: z.number().optional(),
   status: z.string().min(1, "Status is required"),
 });
@@ -52,62 +56,71 @@ const LeadershipReadinessEditForm = ({
   const schema =
     moduleType === "Leadership Styles" ? leadershipStyleSchema : questionSchema;
 
-  // const { leadershipStyleDataById, isFetching: isStyleFetching } =
-  //   moduleType === "Leadership Styles"
-  //     ? useGetLeadershipStyleById(selectedItem.id)
-  //     : { leadershipStyleDataById: null, isFetching: false };
+  const { LeadershipReadinessStyleDataById, isFetching: isStyleFetching } =
+    moduleType === "Leadership Styles"
+      ? useGetStyleById(selectedItem.id)
+      : { LeadershipReadinessStyleDataById: null, isFetching: false };
 
-  // const { questionDataById, isFetching: isQuestionFetching } =
-  //   moduleType === "Questions"
-  //     ? useGetQuestionById(selectedItem.id)
-  //     : { questionDataById: null, isFetching: false };
+  const {
+    LeadershipReadinessQuestionDataById,
+    isFetching: isQuestionFetching,
+  } =
+    moduleType === "Questions"
+      ? useGetQuestionById(selectedItem.id)
+      : { LeadershipReadinessQuestionDataById: null, isFetching: false };
 
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: selectedItem || {},
   });
 
-  // useEffect(() => {
-  //   if (selectedItem) {
-  //     if (moduleType === "Leadership Styles" && !isStyleFetching) {
-  //       form.reset(leadershipStyleDataById?.data.data);
-  //     } else if (moduleType === "Questions" && !isQuestionFetching) {
-  //       form.reset(questionDataById?.data.data);
-  //     }
-  //   }
-  // }, [selectedItem, isStyleFetching, isQuestionFetching]);
+  useEffect(() => {
+    if (selectedItem) {
+      if (moduleType === "Leadership Styles" && !isStyleFetching) {
+        form.reset(LeadershipReadinessStyleDataById?.data.data);
+      } else if (moduleType === "Questions" && !isQuestionFetching) {
+        form.reset(LeadershipReadinessQuestionDataById?.data.data);
+      }
+    }
+  }, [selectedItem, isStyleFetching, isQuestionFetching]);
 
-  // const { editLeadershipStyleMutation } = useEditLeadershipStyle();
-  // const { editQuestionMutation } = useEditQuestion();
+  const {
+    editStyleMutationInLeadershipReadiness,
+    isPending: isEditingStylePending,
+  } = useEditStyle();
+  const {
+    editQuestionMutationInLeadershipReadiness,
+    isPending: isEditingQuestionPending,
+  } = useEditQuestion();
 
   const onSubmit = async (data) => {
     let response;
-    // if (moduleType === "Leadership Styles") {
-    //   response = await editLeadershipStyleMutation({
-    //     post_data: data,
-    //     id: selectedItem.id,
-    //   });
-    // } else {
-    //   response = await editQuestionMutation({
-    //     post_data: {
-    //       question: data.question,
-    //       order_id: data.order_id,
-    //       status: data.status,
-    //     },
-    //     id: selectedItem.id,
-    //   });
-    // }
+    if (moduleType === "Leadership Styles") {
+      response = await editStyleMutationInLeadershipReadiness({
+        post_data: data,
+        styleId: selectedItem.id,
+      });
+    } else {
+      response = await editQuestionMutationInLeadershipReadiness({
+        post_data: {
+          question: data.question_name,
+          order_id: data.order_id,
+          status: data.status,
+        },
+        questionId: selectedItem.id,
+      });
+    }
 
-    // if (response.data.status === "success") {
-    //   form.reset();
-    //   setIsDialogOpen(false);
-    //   refetch();
-    // }
+    if (response.data.status === "success") {
+      form.reset();
+      setIsDialogOpen(false);
+      refetch();
+    }
   };
 
-  // if (isStyleFetching || isQuestionFetching) {
-  //   return <div>Loading...</div>;
-  // }
+  if (isStyleFetching || isQuestionFetching) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Form {...form}>
@@ -170,7 +183,7 @@ const LeadershipReadinessEditForm = ({
         ) : (
           <>
             <FormField
-              name="question"
+              name="question_name"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
@@ -227,7 +240,11 @@ const LeadershipReadinessEditForm = ({
             />
           </>
         )}
-        <Button type="submit" className="w-full mt-2">
+        <Button
+          type="submit"
+          className="w-full mt-2"
+          disabled={isEditingStylePending || isEditingQuestionPending}
+        >
           Save Changes
         </Button>
       </form>

@@ -24,6 +24,8 @@ import {
 } from "@/components/ui/dialog";
 import EditForm from "./LeadershipReadinessEditForm";
 import { PencilIcon, TrashIcon } from "lucide-react";
+import { useDeleteStyle } from "@/hooks/apis/test-group/leadership-readiness/useDeleteStyle";
+import { useDeleteQuestion } from "@/hooks/apis/test-group/leadership-readiness/useDeleteQuestion";
 // import { useDeleteLeadershipStyle } from "@/hooks/apis/test-group/leadership-readiness/useDeleteLeadershipStyle";
 // import { useDeleteQuestion } from "@/hooks/apis/test-group/leadership-readiness/useDeleteQuestion";
 
@@ -80,24 +82,28 @@ const LeadershipReadinessDataTable = ({ moduleType, moduleData, refetch }) => {
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  // const { deleteLeadershipStyleMutation, isPending: isDeleteStylePending } =
-  //   useDeleteLeadershipStyle();
-  // const { deleteQuestionMutation, isPending: isDeleteQuestionPending } =
-  //   useDeleteQuestion();
+  const {
+    deleteStyleMutationInLeadershipReadiness,
+    isPending: isDeleteStylePending,
+  } = useDeleteStyle();
+  const {
+    deleteQuestionMutationInLeadershipReadiness,
+    isPending: isDeleteQuestionPending,
+  } = useDeleteQuestion();
 
   const handleDelete = async (id) => {
     let response;
-    // if (moduleType === "Leadership Styles") {
-    //   response = await deleteLeadershipStyleMutation(id);
-    // } else {
-    //   response = await deleteQuestionMutation(id);
-    // }
-    // if (response.data.status === "success") {
-    //   setIsDeleteDialogOpen(false);
-    //   refetch();
-    // } else {
-    //   console.log("Error in delete response", response.data);
-    // }
+    if (moduleType === "Leadership Styles") {
+      response = await deleteStyleMutationInLeadershipReadiness(id);
+    } else {
+      response = await deleteQuestionMutationInLeadershipReadiness(id);
+    }
+    if (response.data.status === "success") {
+      setIsDeleteDialogOpen(false);
+      refetch();
+    } else {
+      console.log("Error in delete response", response.data);
+    }
   };
 
   return (

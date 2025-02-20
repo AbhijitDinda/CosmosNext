@@ -25,6 +25,8 @@ import { useEffect, useState } from "react";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
+import { useAddStyle } from "@/hooks/apis/test-group/leadership-readiness/useAddStyle";
+import { useAddQuestion } from "@/hooks/apis/test-group/leadership-readiness/useAddQuestion";
 
 // Define schemas
 const leadershipStyleSchema = z.object({
@@ -66,24 +68,30 @@ const LeadershipReadinessAddForm = ({
     },
   });
 
-  // const { addLeadershipStyleMutation } = useAddLeadershipStyle();
-  // const { addQuestionMutation } = useAddQuestion();
+  const {
+    addStyleMutationInLeadershipReadiness,
+    isPending: isAddingStylePending,
+  } = useAddStyle();
+  const {
+    addQuestionMutationInLeadershipReadiness,
+    isPending: isAddingQuestionPending,
+  } = useAddQuestion();
 
   const onSubmit = async (data) => {
     let response;
     if (moduleType === "Leadership Styles") {
-      // response = await addLeadershipStyleMutation(data);
+      response = await addStyleMutationInLeadershipReadiness(data);
     } else if (moduleType === "Questions") {
-      // response = await addQuestionMutation(data);
+      response = await addQuestionMutationInLeadershipReadiness(data);
     }
 
-    // if (response.data.status === "success") {
-    //   form.reset();
-    //   setIsDialogOpen(false);
-    //   refetch();
-    // } else {
-    //   console.log("Error in response", response.data);
-    // }
+    if (response.data.status === "success") {
+      form.reset();
+      setIsDialogOpen(false);
+      refetch();
+    } else {
+      console.log("Error in response", response.data);
+    }
   };
 
   return (
@@ -231,7 +239,11 @@ const LeadershipReadinessAddForm = ({
             />
           </>
         )}
-        <Button type="submit" className="w-full mt-2">
+        <Button
+          type="submit"
+          className="w-full mt-2"
+          disabled={isAddingStylePending || isAddingQuestionPending}
+        >
           Add {moduleType}
         </Button>
       </form>
