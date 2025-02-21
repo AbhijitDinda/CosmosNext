@@ -125,21 +125,28 @@ export default function EmotionalIntelligenceEditForm({
 
   const onSubmit = async (data) =>
   {
-    console.log(data)
-
     let response;
     if(moduleType === "Approach Styles"){
       response = await editStyleMutationInEmotionalIntelligence({
         post_data: data,
-        id: selectedItem.id,
+        groupId: selectedItem.id,
       })
     }else {
       const post_data = {
-        question: data.question_name,
-        group: data.group,
-        order_id: data.order_id,
-        status: data.status,
+        question: data?.question_name,
+        group: data?.group,
+        order_id: data?.order_id,
+        status: data?.status,
       }
+      response = await editQuestionMutationInEmotionalIntelligence({
+        post_data: post_data,
+        questionId: selectedItem.id,
+      })
+    }
+    if(response?.data?.status === "success"){
+      form.reset();
+      setIsDialogOpen(false);
+      refetch();
     }
   }
 
