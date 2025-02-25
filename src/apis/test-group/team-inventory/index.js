@@ -234,6 +234,28 @@ export const getTraitById = async ({ token, logout, traits_id }) => {
     }
 }
 
+//get Sub Question by ID
+export const getSubQuestionById = async ({ token, logout, SubQ_id }) => {
+    try {
+        const response = await axios.get(`/admin/team-inventory/sub-questions/${SubQ_id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
+            }
+        });
+        return response;
+    } catch (error) {
+        if (error.response?.status === 401) {
+            unauthorizedErrorResponse(logout);
+            return;
+        } else {
+            console.error("Error in Get Sub Question by ID", error);
+            throw error;
+        }
+    }
+}
+
+
 //get all Question
 export const getAllQuestions = async ({ token, logout }) => {
     try {
