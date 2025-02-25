@@ -28,6 +28,10 @@ import { useEffect, useState } from "react";
 import { useEditQuestion } from "@/hooks/apis/test-group/team-inventory/useEditQuestion";
 import { useEditSubQuestion } from "@/hooks/apis/test-group/team-inventory/useEditSubQuestion";
 import { useEditTraits } from "@/hooks/apis/test-group/team-inventory/useEditTraits";
+import { useListOfAllQuestion } from "@/hooks/apis/test-group/team-inventory/useListOfAllQuestion";
+import { useListOfAllTraits } from "@/hooks/apis/test-group/team-inventory/useListOfAllTraits";
+import { useQuestionById } from "@/hooks/apis/test-group/team-inventory/useQuestionById";
+import { useTraitsById } from "@/hooks/apis/test-group/team-inventory/useTraitsById";
 
 const TeamInventoryEditForm = ({
   moduleType,
@@ -36,7 +40,7 @@ const TeamInventoryEditForm = ({
   setIsDialogOpen,
 }) => {
   const [questionList, setQuestionList] = useState([]);
-
+  const [traitList, setTraitList] = useState([]);
   const schema =
     moduleType === "Questions"
       ? questionSchema
@@ -45,20 +49,67 @@ const TeamInventoryEditForm = ({
       : traitsSchema;
 
   const {
-    allQuestionData,
+    allQuestionInTeamInventoryData,
     isFetching: isQuestionListFetching,
     isLoading: isQuestionListLoading,
-  } = useListOfQuestions();
+  } = useListOfAllQuestion();
+
+  const {
+    allTraitsInTeamInventoryData,
+    isFetching: isTraitsListFetching,
+    isLoading: isTraitsListLoading,
+  } = useListOfAllTraits();
+
+  console.log(allQuestionInTeamInventoryData?.data?.data?.data);
 
   useEffect(() => {
-    if (allQuestionData) {
-      const list = allQuestionData?.data?.map((item) => ({
-        id: item.id,
-        name: item.question,
-      }));
+    if (allQuestionInTeamInventoryData) {
+      const list = allQuestionInTeamInventoryData?.data?.data?.data?.map(
+        (item) => ({
+          id: item.id,
+          name: item.question_name,
+        })
+      );
       setQuestionList(list);
     }
-  }, [allQuestionData]);
+
+    if (allTraitsInTeamInventoryData) {
+      const list = allTraitsInTeamInventoryData?.data?.data?.data?.map(
+        (item) => ({
+          id: item.id,
+          name: item.trait_name,
+        })
+      );
+      setTraitList(list);
+    }
+  }, [allQuestionInTeamInventoryData, allTraitsInTeamInventoryData]);
+
+  const {
+    TeamInventoryQuestionByIdData,
+    isFetching: isQuestionFetching,
+    isLoading: isQuestionLoading,
+  } = moduleType === "Questions"
+    ? useQuestionById(selectedItem.id)
+    : {
+        TeamInventoryQuestionByIdData: null,
+        isFetching: false,
+        isLoading: false,
+      };
+
+  // const { TeamInventorySubQuestionByIdData,isFetching: isSubQuestionFetching,isLoading: isSubQuestionLoading } =
+  // moduleType === "Sub Questions" ? useSubQuestionById(selectedItem.id) : null;
+
+  const {
+    TeamInventoryTraitsByIdData,
+    isFetching: isTraitFetching,
+    isLoading: isTraitLoading,
+  } = moduleType === "Traits"
+    ? useTraitsById(selectedItem.id)
+    : {
+        TeamInventoryTraitsByIdData: null,
+        isFetching: false,
+        isLoading: false,
+      };
 
   const form = useForm({
     resolver: zodResolver(schema),
@@ -67,10 +118,27 @@ const TeamInventoryEditForm = ({
 
   useEffect(() => {
     if (selectedItem) {
-      if (moduleType === "Questions") {
+      if (
+        moduleType === "Questions" &&
+        !isQuestionFetching &&
+        !isQuestionLoading
+      ) {
+        form.reset(TeamInventoryQuestionByIdData?.data?.data);
+      } else if (
+        moduleType === "Traits" &&
+        !isTraitFetching &&
+        !isTraitLoading
+      ) {
+        form.reset(TeamInventoryTraitsByIdData?.data?.data);
       }
     }
-  }, [selectedItem]);
+  }, [
+    selectedItem,
+    isQuestionFetching,
+    isQuestionLoading,
+    isTraitFetching,
+    isTraitLoading,
+  ]);
 
   //* API Calls
 
@@ -109,6 +177,16 @@ const TeamInventoryEditForm = ({
       refetch();
     }
   };
+
+  if (
+    isQuestionListFetching ||
+    isTraitsListFetching ||
+    isQuestionPending ||
+    isSubQuestionPending ||
+    isTraitPending
+  ) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Form {...form}>
@@ -170,7 +248,7 @@ const TeamInventoryEditForm = ({
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Question</FormLabel>
+                  <FormLabel>Select Question</FormLabel>
                   <FormControl>
                     <Select
                       value={field.value ? field.value.toString() : ""}
