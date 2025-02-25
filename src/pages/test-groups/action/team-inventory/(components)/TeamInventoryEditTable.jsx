@@ -32,6 +32,7 @@ import { useListOfAllQuestion } from "@/hooks/apis/test-group/team-inventory/use
 import { useListOfAllTraits } from "@/hooks/apis/test-group/team-inventory/useListOfAllTraits";
 import { useQuestionById } from "@/hooks/apis/test-group/team-inventory/useQuestionById";
 import { useTraitsById } from "@/hooks/apis/test-group/team-inventory/useTraitsById";
+import { useSubQuestionById } from "@/hooks/apis/test-group/team-inventory/useSubQuestionById";
 
 const TeamInventoryEditForm = ({
   moduleType,
@@ -60,8 +61,6 @@ const TeamInventoryEditForm = ({
     isLoading: isTraitsListLoading,
   } = useListOfAllTraits();
 
-  console.log(allQuestionInTeamInventoryData?.data?.data?.data);
-
   useEffect(() => {
     if (allQuestionInTeamInventoryData) {
       const list = allQuestionInTeamInventoryData?.data?.data?.data?.map(
@@ -76,7 +75,7 @@ const TeamInventoryEditForm = ({
     if (allTraitsInTeamInventoryData) {
       const list = allTraitsInTeamInventoryData?.data?.data?.data?.map(
         (item) => ({
-          id: item.id,
+          id: item.trait_code,
           name: item.trait_name,
         })
       );
@@ -96,8 +95,17 @@ const TeamInventoryEditForm = ({
         isLoading: false,
       };
 
-  // const { TeamInventorySubQuestionByIdData,isFetching: isSubQuestionFetching,isLoading: isSubQuestionLoading } =
-  // moduleType === "Sub Questions" ? useSubQuestionById(selectedItem.id) : null;
+  const {
+    TeamInventorySubQuestionByIdData,
+    isFetching: isSubQuestionFetching,
+    isLoading: isSubQuestionLoading,
+  } = moduleType === "Sub Questions"
+    ? useSubQuestionById(selectedItem.id)
+    : {
+        TeamInventorySubQuestionByIdData: null,
+        isFetching: false,
+        isLoading: false,
+      };
 
   const {
     TeamInventoryTraitsByIdData,
@@ -116,6 +124,11 @@ const TeamInventoryEditForm = ({
     defaultValues: selectedItem || {},
   });
 
+  console.log(
+    "TeamInventoryQuestionByIdData",
+    allTraitsInTeamInventoryData?.data?.data?.data
+  );
+
   useEffect(() => {
     if (selectedItem) {
       if (
@@ -130,6 +143,12 @@ const TeamInventoryEditForm = ({
         !isTraitLoading
       ) {
         form.reset(TeamInventoryTraitsByIdData?.data?.data);
+      } else if (
+        moduleType === "Sub Questions" &&
+        !isSubQuestionFetching &&
+        !isSubQuestionLoading
+      ) {
+        form.reset(TeamInventorySubQuestionByIdData?.data?.data);
       }
     }
   }, [
@@ -194,7 +213,7 @@ const TeamInventoryEditForm = ({
         {moduleType === "Questions" ? (
           <>
             <FormField
-              name="question"
+              name="question_name"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
@@ -290,7 +309,24 @@ const TeamInventoryEditForm = ({
                 <FormItem>
                   <FormLabel>Traits Category</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Select
+                      value={field.value ? field.value.toString() : ""}
+                      onValueChange={(value) => field.onChange(value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Traits Category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {traitList?.map((item) => (
+                          <SelectItem
+                            key={item.id}
+                            value={item.id ? item.id.toString() : ""}
+                          >
+                            {item.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

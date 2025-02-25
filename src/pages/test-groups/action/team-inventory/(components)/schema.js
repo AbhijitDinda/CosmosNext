@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const questionSchema = z.object({
-  question: z.string().min(1, { message: "Question is required" }),
+  question_name: z.string().min(1, { message: "Question is required" }),
   status: z.string().min(1, { message: "Status is required" }),
   order_id: z.string().min(1, { message: "Order ID is required" }),
 });
