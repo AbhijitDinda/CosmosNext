@@ -30,10 +30,36 @@ import { useAddQuestion } from "@/hooks/apis/test-group/team-inventory/useAddQue
 import { useAddSubQuestion } from "@/hooks/apis/test-group/team-inventory/useAddSubQuestion";
 import { useAddTraits } from "@/hooks/apis/test-group/team-inventory/useAddTraits";
 import { useListOfAllQuestion } from "@/hooks/apis/test-group/team-inventory/useListOfAllQuestion";
+import { useListOfAllTraits } from "@/hooks/apis/test-group/team-inventory/useListOfAllTraits";
 
 const TeamInventoryAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
   const [questionList, setQuestionList] = useState([]);
+  const [traitList, setTraitList] = useState([]);
+  const {
+    allQuestionInTeamInventoryData,
+    isFetching: isQuestionListFetching,
+    isLoading: isQuestionListLoading,
+  } = useListOfAllQuestion();
 
+  // console.log("allQuestionInTeamInventoryData", allQuestionInTeamInventoryData);
+  useEffect(() => {
+    if (allQuestionInTeamInventoryData) {
+      const list = allQuestionInTeamInventoryData?.data?.questions.map(
+        (item) => ({
+          id: item.id,
+          name: item.question_name,
+        })
+      );
+      setQuestionList(list);
+      const traitList = allQuestionInTeamInventoryData?.data?.traits.map(
+        (item) => ({
+          id: item.trait_code,
+          name: item.trait_name,
+        })
+      );
+      setTraitList(traitList);
+    }
+  }, [allQuestionInTeamInventoryData]);
   const schema =
     moduleType === "Questions"
       ? questionSchema
@@ -73,7 +99,11 @@ const TeamInventoryAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
     let response;
 
     if (moduleType === "Questions") {
-      response = await addQuestionTeamInventoryMutation(data);
+      const updatedData = {
+        ...data,
+        question: data.question_name,
+      };
+      response = await addQuestionTeamInventoryMutation(updatedData);
     } else if (moduleType === "Sub Questions") {
       response = await addSubQuestionTeamInventoryMutation(data);
     } else {
@@ -93,7 +123,7 @@ const TeamInventoryAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
         {moduleType === "Questions" ? (
           <>
             <FormField
-              name="question"
+              name="question_name"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
@@ -112,7 +142,11 @@ const TeamInventoryAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                 <FormItem>
                   <FormLabel>Order ID</FormLabel>
                   <FormControl>
-                    <Input type="number" {...field} />
+                    <Input
+                      type="number"
+                      value={field.value}
+                      onChange={(e) => field.onChange(parseInt(e.target.value))}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -189,7 +223,64 @@ const TeamInventoryAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                 <FormItem>
                   <FormLabel>Traits Category</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Select
+                      value={field.value ? field.value.toString() : ""}
+                      onValueChange={(value) => field.onChange(value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Traits Category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {traitList?.map((item, index) => (
+                          <SelectItem
+                            key={index}
+                            value={item.id ? item.id.toString() : ""}
+                          >
+                            {item.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="order_id"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Order ID</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      value={field.value}
+                      onChange={(e) => field.onChange(parseInt(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="status"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Display</FormLabel>
+                  <FormControl>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Display" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1">Show</SelectItem>
+                        <SelectItem value="0">Hide</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

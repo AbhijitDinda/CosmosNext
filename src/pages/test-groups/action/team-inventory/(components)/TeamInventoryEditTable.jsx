@@ -55,33 +55,25 @@ const TeamInventoryEditForm = ({
     isLoading: isQuestionListLoading,
   } = useListOfAllQuestion();
 
-  const {
-    allTraitsInTeamInventoryData,
-    isFetching: isTraitsListFetching,
-    isLoading: isTraitsListLoading,
-  } = useListOfAllTraits();
-
+  // console.log("allQuestionInTeamInventoryData", allQuestionInTeamInventoryData);
   useEffect(() => {
     if (allQuestionInTeamInventoryData) {
-      const list = allQuestionInTeamInventoryData?.data?.data?.data?.map(
+      const list = allQuestionInTeamInventoryData?.data?.questions.map(
         (item) => ({
           id: item.id,
           name: item.question_name,
         })
       );
       setQuestionList(list);
-    }
-
-    if (allTraitsInTeamInventoryData) {
-      const list = allTraitsInTeamInventoryData?.data?.data?.data?.map(
+      const traitList = allQuestionInTeamInventoryData?.data?.traits.map(
         (item) => ({
           id: item.trait_code,
           name: item.trait_name,
         })
       );
-      setTraitList(list);
+      setTraitList(traitList);
     }
-  }, [allQuestionInTeamInventoryData, allTraitsInTeamInventoryData]);
+  }, [allQuestionInTeamInventoryData]);
 
   const {
     TeamInventoryQuestionByIdData,
@@ -174,8 +166,12 @@ const TeamInventoryEditForm = ({
     let response;
 
     if (moduleType === "Questions") {
+      const updatedData = {
+        ...data,
+        question: data.question_name,
+      };
       response = await editQuestionTeamInventoryMutation({
-        post_data: data,
+        post_data: updatedData,
         q_id: selectedItem.id,
       });
     } else if (moduleType === "Sub Questions") {
@@ -199,10 +195,12 @@ const TeamInventoryEditForm = ({
 
   if (
     isQuestionListFetching ||
-    isTraitsListFetching ||
-    isQuestionPending ||
-    isSubQuestionPending ||
-    isTraitPending
+    isQuestionLoading ||
+    isSubQuestionLoading ||
+    isTraitLoading ||
+    isQuestionFetching ||
+    isTraitFetching ||
+    isSubQuestionFetching
   ) {
     return <div>Loading...</div>;
   }
@@ -232,7 +230,11 @@ const TeamInventoryEditForm = ({
                 <FormItem>
                   <FormLabel>Order ID</FormLabel>
                   <FormControl>
-                    <Input type="number" {...field} />
+                    <Input
+                      type="number"
+                      value={field.value}
+                      onChange={(e) => field.onChange(parseInt(e.target.value))}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -340,7 +342,11 @@ const TeamInventoryEditForm = ({
                 <FormItem>
                   <FormLabel>Order ID</FormLabel>
                   <FormControl>
-                    <Input type="number" {...field} />
+                    <Input
+                      type="number"
+                      value={field.value}
+                      onChange={(e) => field.onChange(parseInt(e.target.value))}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -3,7 +3,7 @@ import { z } from "zod";
 export const questionSchema = z.object({
   question_name: z.string().min(1, { message: "Question is required" }),
   status: z.string().min(1, { message: "Status is required" }),
-  order_id: z.string().min(1, { message: "Order ID is required" }),
+  order_id: z.number().optional(),
 });
 
 export const subQuestionSchema = z.object({
@@ -13,6 +13,7 @@ export const subQuestionSchema = z.object({
     .string()
     .min(1, { message: "Traits Category is required" }),
   status: z.string().min(1, { message: "Display is required" }),
+  order_id: z.number().optional(),
 });
 
 export const traitsSchema = z.object({
