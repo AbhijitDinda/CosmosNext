@@ -44,13 +44,7 @@ const TeamInventoryDataTable = ({ moduleType, moduleData, refetch }) => {
   const columns = [
     { accessorKey: "id", header: "ID" },
     ...(moduleType === "Traits"
-      ? [
-          { accessorKey: "trait_name", header: "Trait Name" },
-          {
-            accessorKey: "trait_code",
-            header: "Trait Code",
-          },
-        ]
+      ? [{ accessorKey: "trait_name", header: "Trait Name" }]
       : moduleType === "Sub Questions"
       ? [
           { accessorKey: "main_question", header: "Question" },

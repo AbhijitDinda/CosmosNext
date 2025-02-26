@@ -29,6 +29,7 @@ import { questionSchema, subQuestionSchema, traitsSchema } from "./schema";
 import { useAddQuestion } from "@/hooks/apis/test-group/team-inventory/useAddQuestion";
 import { useAddSubQuestion } from "@/hooks/apis/test-group/team-inventory/useAddSubQuestion";
 import { useAddTraits } from "@/hooks/apis/test-group/team-inventory/useAddTraits";
+import { useListOfAllQuestion } from "@/hooks/apis/test-group/team-inventory/useListOfAllQuestion";
 
 const TeamInventoryAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
   const [questionList, setQuestionList] = useState([]);
@@ -39,22 +40,6 @@ const TeamInventoryAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
       : moduleType === "Sub Questions"
       ? subQuestionSchema
       : traitsSchema;
-
-  const {
-    allQuestionData,
-    isFetching: isQuestionListFetching,
-    isLoading: isQuestionListLoading,
-  } = useListOfQuestions();
-
-  useEffect(() => {
-    if (allQuestionData) {
-      const list = allQuestionData?.data?.map((item) => ({
-        id: item.id,
-        name: item.question,
-      }));
-      setQuestionList(list);
-    }
-  }, [allQuestionData]);
 
   const form = useForm({
     resolver: zodResolver(schema),
@@ -240,6 +225,19 @@ const TeamInventoryAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
               )}
             />
             <FormField
+              name="key_traits"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Key Highlights</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
               name="description"
               control={form.control}
               render={({ field }) => (
@@ -265,10 +263,75 @@ const TeamInventoryAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                 </FormItem>
               )}
             />
+            <FormField
+              name="weakness"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Weakness</FormLabel>
+                  <FormControl>
+                    <ReactQuill {...field} theme="snow" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="opportunities"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Opportunities</FormLabel>
+                  <FormControl>
+                    <ReactQuill {...field} theme="snow" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="threats"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Threats</FormLabel>
+                  <FormControl>
+                    <ReactQuill {...field} theme="snow" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="status"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Status</FormLabel>
+                  <FormControl>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1">Show</SelectItem>
+                        <SelectItem value="0">Hide</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </>
         )}
 
-        <Button type="submit" className="w-full mt-2">
+        <Button
+          type="submit"
+          className="w-full mt-2"
+          disabled={isQuestionPending || isSubQuestionPending || isTraitPending}
+        >
           Add
         </Button>
       </form>

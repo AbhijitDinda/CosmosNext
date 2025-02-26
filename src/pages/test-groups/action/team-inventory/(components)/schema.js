@@ -24,5 +24,5 @@ export const traitsSchema = z.object({
   weakness: z.string().min(1, { message: "Weakness is required" }),
   opportunities: z.string().min(1, { message: "Opportunities are required" }),
   threats: z.string().min(1, { message: "Threats are required" }),
-  status: z.enum(["0", "1"], { message: "Display must be 0 or 1" }), // Ensures only "0" or "1" is allowed
+  status: z.string().optional(),
 });

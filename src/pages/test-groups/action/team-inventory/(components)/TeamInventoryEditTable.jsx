@@ -124,10 +124,10 @@ const TeamInventoryEditForm = ({
     defaultValues: selectedItem || {},
   });
 
-  console.log(
-    "TeamInventoryQuestionByIdData",
-    allTraitsInTeamInventoryData?.data?.data?.data
-  );
+  // console.log(
+  //   "TeamInventoryQuestionByIdData",
+  //   allTraitsInTeamInventoryData?.data?.data?.data
+  // );
 
   useEffect(() => {
     if (selectedItem) {
@@ -158,7 +158,7 @@ const TeamInventoryEditForm = ({
     isTraitFetching,
     isTraitLoading,
   ]);
-
+  console.log("SubQ Info", TeamInventorySubQuestionByIdData?.data?.data);
   //* API Calls
 
   const { editQuestionTeamInventoryMutation, isPending: isQuestionPending } =
@@ -176,17 +176,17 @@ const TeamInventoryEditForm = ({
     if (moduleType === "Questions") {
       response = await editQuestionTeamInventoryMutation({
         post_data: data,
-        id: selectedItem.id,
+        q_id: selectedItem.id,
       });
     } else if (moduleType === "Sub Questions") {
       response = await editSubQuestionTeamInventoryMutation({
         post_data: data,
-        id: selectedItem.id,
+        SubQ_id: selectedItem.id,
       });
     } else {
       response = await editTraitTeamInventoryMutation({
         post_data: data,
-        id: selectedItem.id,
+        traits_id: selectedItem.id,
       });
     }
 
@@ -277,8 +277,8 @@ const TeamInventoryEditForm = ({
                         <SelectValue placeholder="Select Question" />
                       </SelectTrigger>
                       <SelectContent>
-                        {questionList?.map((item) => (
-                          <SelectItem key={item.id} value={item.id.toString()}>
+                        {questionList?.map((item, index) => (
+                          <SelectItem key={index} value={item.id.toString()}>
                             {item.name}
                           </SelectItem>
                         ))}
@@ -317,14 +317,50 @@ const TeamInventoryEditForm = ({
                         <SelectValue placeholder="Select Traits Category" />
                       </SelectTrigger>
                       <SelectContent>
-                        {traitList?.map((item) => (
+                        {traitList?.map((item, index) => (
                           <SelectItem
-                            key={item.id}
+                            key={index}
                             value={item.id ? item.id.toString() : ""}
                           >
                             {item.name}
                           </SelectItem>
                         ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="order_id"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Order ID</FormLabel>
+                  <FormControl>
+                    <Input type="number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="status"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Display</FormLabel>
+                  <FormControl>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Display" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1">Show</SelectItem>
+                        <SelectItem value="0">Hide</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormControl>
@@ -362,6 +398,19 @@ const TeamInventoryEditForm = ({
               )}
             />
             <FormField
+              name="key_traits"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Key Highlights</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
               name="description"
               control={form.control}
               render={({ field }) => (
@@ -380,6 +429,45 @@ const TeamInventoryEditForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Strengths</FormLabel>
+                  <FormControl>
+                    <ReactQuill {...field} theme="snow" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="weakness"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Weakness</FormLabel>
+                  <FormControl>
+                    <ReactQuill {...field} theme="snow" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="opportunities"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Opportunities</FormLabel>
+                  <FormControl>
+                    <ReactQuill {...field} theme="snow" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="threats"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Threats</FormLabel>
                   <FormControl>
                     <ReactQuill {...field} theme="snow" />
                   </FormControl>
