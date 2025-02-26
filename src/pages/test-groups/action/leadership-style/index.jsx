@@ -1,10 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import Heading from "@/components/Heading";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { PencilIcon, TrashIcon } from "lucide-react";
-import { useGetAssessmentById } from "@/hooks/apis/test-group/useGetAssessmentById";
-import { useState } from "react";
 import {
   Dialog,
   DialogTrigger,
@@ -12,119 +9,49 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useGetAssessmentById } from "@/hooks/apis/test-group/useGetAssessmentById";
+import LeaderShipStyleDataTable from "./(components)/LeadershipStyleDataTable";
+import LeadershipStyleAddForm from "./(components)/LeadershipStyleAddForm";
 
-const Table = ({ moduleType, moduleData }) => {
-  let columns = [];
-  if (moduleType === "Leadership Styles") {
-    columns = ["ID", "Name", "Action"];
-  } else if (moduleType === "Questions") {
-    columns = ["ID", "Question", "Leadership Style", "Action"];
-  }
-
-  console.log("moduleData", moduleData);
-  return (
-    <div className="overflow-x-auto">
-      <table className="table-auto w-full border">
-        <thead>
-          <tr className="bg-gray-100 text-nowrap">
-            {columns.map((col, idx) => (
-              <th
-                key={idx}
-                className="border border-gray-300 px-4 py-2 text-left"
-              >
-                {col}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {moduleData?.data?.map((item) => (
-            <tr key={item.id}>
-              <td className="border border-gray-300 px-4 py-2 text-nowrap">
-                {item.id}
-              </td>
-              {moduleType === "Leadership Styles" && (
-                <>
-                  <td className="border border-gray-300 px-4 py-2 text-nowrap">
-                    {item.name}
-                  </td>
-                </>
-              )}
-              {moduleType === "Questions" && (
-                <>
-                  <td className="border border-gray-300 px-4 py-2 text-nowrap truncate max-w-[300px] overflow-hidden whitespace-nowrap">
-                    {item.question_name}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2 text-nowrap truncate max-w-[200px] overflow-hidden whitespace-nowrap">
-                    {item.leadership_style}
-                  </td>
-                </>
-              )}
-              <td className="border border-gray-300 px-4 py-2 text-nowrap">
-                <Button size="sm" variant="outline" className="rounded-sm mr-2">
-                  <PencilIcon className="stroke-Third" />
-                </Button>
-                <Button size="sm" variant="outline" className="rounded-sm">
-                  <TrashIcon className="stroke-Error" />
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-};
-const LeadershipStyle = () => {
+const LeadershipModules = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  // Error states
-  const [errors, setErrors] = useState({});
 
+  // Fetch assessment data
   const assessmentId = 6;
-  const shouldFetch = Boolean(assessmentId);
+  const { isLoading, error, assessmentByIdData, refetch } =
+    useGetAssessmentById(assessmentId, Boolean(assessmentId));
 
-  const { isLoading, error, assessmentByIdData } = useGetAssessmentById(
-    assessmentId,
-    shouldFetch
-  );
-  // Set initial value to prevent conditional hooks issue
   const initialModule =
-    assessmentByIdData?.data?.modules_data?.[0]?.module_type || "Questions";
-
+    assessmentByIdData?.data?.modules_data?.[0]?.module_type ||
+    "Leadership Styles";
   const [activeModule, setActiveModule] = useState(initialModule);
 
-  console.log("assessmentByIdData", assessmentByIdData);
-
+  // Function to get Add button text dynamically
   const getAddButtonText = (moduleType) => {
     switch (moduleType) {
       case "Leadership Styles":
         return "Add Leadership Style";
       case "Questions":
         return "Add Question";
+      case "Sub Questions":
+        return "Add Sub Question";
+      case "Traits":
+        return "Add Trait";
       default:
         return "Add";
     }
   };
 
-  const handleButtonClick = () => {
-    setIsDialogOpen(true);
-  };
+  // Show loading or error message
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
   return (
     <div className="rounded-sm mx-auto w-full max-w-[1300px]">
-      <Heading title="Test Options" />
+      <Heading title="Leadership Modules" />
       <div className="p-4 bg-White rounded-sm">
         <Tabs
-          defaultValue={
-            assessmentByIdData?.data?.modules_data?.[0]?.module_type
-          }
+          defaultValue={activeModule}
           className="w-full"
           onValueChange={setActiveModule}
         >
@@ -140,9 +67,11 @@ const LeadershipStyle = () => {
                 </TabsTrigger>
               ))}
             </TabsList>
+
+            {/* Add New Entry Dialog */}
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-Primary text-white  rounded-md">
+                <Button className="bg-Primary text-white rounded-md">
                   {getAddButtonText(activeModule)}
                 </Button>
               </DialogTrigger>
@@ -150,14 +79,22 @@ const LeadershipStyle = () => {
                 <DialogHeader>
                   <DialogTitle>{getAddButtonText(activeModule)}</DialogTitle>
                 </DialogHeader>
+                <LeadershipStyleAddForm
+                  moduleType={activeModule}
+                  refetch={refetch}
+                  setIsDialogOpen={setIsDialogOpen}
+                />
               </DialogContent>
             </Dialog>
           </div>
+
+          {/* Render DataTable for each module */}
           {assessmentByIdData?.data?.modules_data.map((module, index) => (
             <TabsContent key={index} value={module.module_type}>
-              <Table
+              <LeaderShipStyleDataTable
                 moduleType={module.module_type}
                 moduleData={module.module_data}
+                refetch={refetch}
               />
             </TabsContent>
           ))}
@@ -167,4 +104,4 @@ const LeadershipStyle = () => {
   );
 };
 
-export default LeadershipStyle;
+export default LeadershipModules;
