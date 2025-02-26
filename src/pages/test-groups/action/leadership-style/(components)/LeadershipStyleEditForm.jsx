@@ -69,7 +69,9 @@ const LeadershipStyleEditForm = ({
     allLeadershipStylesData: allLeadershipGroups,
     isFetching: isLeadershipStyleListFetching,
     isLoading: isLeadershipStyleListLoading,
-  } = useListOfStyle();
+  } = moduleType === "Questions"
+    ? useListOfStyle()
+    : { allLeadershipStylesData: null, isFetching: false, isLoading: false };
 
   useEffect(() => {
     if (allLeadershipGroups) {
@@ -101,8 +103,10 @@ const LeadershipStyleEditForm = ({
 
   const form = useForm({
     resolver: zodResolver(schema),
-    defaultValues: moduleType === "Leadership Styles" ? {} : {},
+    defaultValues: selectedItem || {},
   });
+
+  console.log("form errors", form.formState.errors);
 
   useEffect(() => {
     if (selectedItem) {
@@ -114,12 +118,12 @@ const LeadershipStyleEditForm = ({
     }
   }, [selectedItem, leadershipStyleDataById, leadershipQuestionDataById]);
 
-  console.log(
-    "leadershipStyleDataById",
-    leadershipStyleDataById,
-    "leadershipQuestionDataById",
-    leadershipQuestionDataById
-  );
+  //   console.log(
+  //     "leadershipStyleDataById",
+  //     leadershipStyleDataById,
+  //     "leadershipQuestionDataById",
+  //     leadershipQuestionDataById
+  //   );
 
   const {
     editStyleMutationInLeadershipStyle: editLeadershipStyleMutation,
@@ -134,7 +138,7 @@ const LeadershipStyleEditForm = ({
     let response;
     if (moduleType === "Leadership Styles") {
       response = await editLeadershipStyleMutation({
-        id: selectedItem.id,
+        styleId: selectedItem.id,
         post_data: data,
       });
     } else {
@@ -143,7 +147,7 @@ const LeadershipStyleEditForm = ({
         ...data,
       };
       response = await editLeadershipQuestionMutation({
-        id: selectedItem.id,
+        questionId: selectedItem.id,
         post_data: postData,
       });
     }

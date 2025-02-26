@@ -25,6 +25,8 @@ import { PencilIcon, TrashIcon } from "lucide-react";
 // import { useDeleteStyle } from "@/hooks/apis/test-group/leadership-style/";
 // import { useDeleteQuestion } from "@/hooks/apis/test-group/approach-assessment/useDeleteQuestion";
 import LeadershipStyleEditForm from "./LeadershipStyleEditForm";
+import { useDeleteStyle } from "@/hooks/apis/test-group/leadership-style/useDeleteStyle";
+import { useDeleteQuestion } from "@/hooks/apis/test-group/leadership-style/useDeleteQuestion";
 
 const LeaderShipStyleDataTable = ({ moduleType, moduleData, refetch }) => {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -82,25 +84,29 @@ const LeaderShipStyleDataTable = ({ moduleType, moduleData, refetch }) => {
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  //   const { deleteStyleMutation, isPending: isDeleteStylePending } =
-  //     useDeleteStyle();
-  //   const { deleteQuestionMutation, isPending: isDeleteQuestionPending } =
-  //     useDeleteQuestion();
+  const {
+    deleteStyleMutationInLeadershipStyle: deleteStyleMutation,
+    isPending: isDeleteStylePending,
+  } = useDeleteStyle();
+  const {
+    deleteQuestionMutationInLeadershipStyle: deleteQuestionMutation,
+    isPending: isDeleteQuestionPending,
+  } = useDeleteQuestion();
 
-  //   const handleDelete = async (id) => {
-  //     let response;
-  //     if (moduleType === "Leadership Styles") {
-  //       response = await deleteStyleMutation(id);
-  //     } else {
-  //       response = await deleteQuestionMutation(id);
-  //     }
-  //     if (response.data.status === "success") {
-  //       setIsDeleteDialogOpen(false);
-  //       refetch();
-  //     } else {
-  //       console.log("Error in delete response", response.data);
-  //     }
-  //   };
+  const handleDelete = async (id) => {
+    let response;
+    if (moduleType === "Leadership Styles") {
+      response = await deleteStyleMutation(id);
+    } else {
+      response = await deleteQuestionMutation(id);
+    }
+    if (response.data.status === "success") {
+      setIsDeleteDialogOpen(false);
+      refetch();
+    } else {
+      console.log("Error in delete response", response.data);
+    }
+  };
 
   return (
     <div className="overflow-x-auto border rounded-lg shadow-sm">

@@ -63,7 +63,13 @@ const LeadershipStyleAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
     allLeadershipStylesData: allLeadershipGroups,
     isFetching: isLeadershipGroupsFetching,
     isLoading: isLeadershipGroupsLoading,
-  } = useListOfStyle();
+  } = moduleType === "Questions"
+    ? useListOfStyle()
+    : {
+        allLeadershipStylesData: null,
+        isFetching: false,
+        isLoading: false,
+      };
   //   console.log(allLeadershipGroups);
   useEffect(() => {
     if (allLeadershipGroups) {
@@ -80,7 +86,7 @@ const LeadershipStyleAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
     defaultValues:
       moduleType === "Leadership Styles"
         ? {
-            question_name: "",
+            name: "",
             description: "",
             characteristics: "",
             challenges: "",
@@ -92,9 +98,9 @@ const LeadershipStyleAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
             examples: "",
           }
         : {
-            question: "",
+            question_name: "",
             leadership_group: "",
-            order_id: undefined,
+            order_id: "",
             status: "1",
           },
   });
@@ -291,13 +297,16 @@ const LeadershipStyleAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                 <FormItem>
                   <FormLabel>Leadership Group</FormLabel>
                   <FormControl>
-                    <Select value={field.value} onValueChange={field.onChange}>
+                    <Select
+                      value={field.value ? field.value.toString() : ""} // Ensure it's a string
+                      onValueChange={(value) => field.onChange(value)}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select Group" />
                       </SelectTrigger>
                       <SelectContent>
-                        {leadershipGroups.map((group) => (
-                          <SelectItem key={group.id} value={group.id}>
+                        {leadershipGroups.map((group, index) => (
+                          <SelectItem key={index} value={group.id.toString()}>
                             {group.name}
                           </SelectItem>
                         ))}
