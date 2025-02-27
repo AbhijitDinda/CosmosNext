@@ -41,11 +41,7 @@ const situationalQuestionSchema = z.object({
   order_id: z.optional(z.number().int().positive()),
 });
 
-const ExecutiveLeadershipEditForm = ({
-  selectedItem,
-  refetch,
-  setIsDialogOpen,
-}) => {
+const JuniorMidLevelEditForm = ({ selectedItem, refetch, setIsDialogOpen }) => {
   const form = useForm({
     resolver: zodResolver(situationalQuestionSchema),
     defaultValues: {
@@ -89,7 +85,7 @@ const ExecutiveLeadershipEditForm = ({
     const response = await editQuestionMutation({
       questionId: selectedItem.id,
       questionData: {
-        role: 7,
+        role: 8,
         question: data.question_name,
         ...data,
       },
@@ -234,4 +230,4 @@ const ExecutiveLeadershipEditForm = ({
   );
 };
 
-export default ExecutiveLeadershipEditForm;
+export default JuniorMidLevelEditForm;
