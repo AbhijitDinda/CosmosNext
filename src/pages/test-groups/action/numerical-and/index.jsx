@@ -1,10 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import Heading from "@/components/Heading";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { PencilIcon, TrashIcon } from "lucide-react";
-import { useGetAssessmentById } from "@/hooks/apis/test-group/useGetAssessmentById";
-import { useState } from "react";
 import {
   Dialog,
   DialogTrigger,
@@ -12,77 +9,95 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useGetAssessmentById } from "@/hooks/apis/test-group/useGetAssessmentById";
+import LogicalReasoningDataTable from "./(components)/logicalReasoningDataTable";
 
-const Table = ({ moduleType, moduleData }) => {
-  let columns = [];
-  if (moduleType === "Leadership Styles") {
-    columns = ["ID", "Name", "Action"];
-  } else if (moduleType === "Questions") {
-    columns = ["ID", "Question", "Leadership Style", "Action"];
-  }
+const NumericalReasoningPage = () => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  console.log("moduleData", moduleData);
+  // Fetch assessment data
+  const assessmentId = 11;
+  const { isLoading, error, assessmentByIdData, refetch } =
+    useGetAssessmentById(assessmentId, Boolean(assessmentId));
+
+  const initialModule =
+    assessmentByIdData?.data?.modules_data?.[0]?.module_type || "Sections";
+  const [activeModule, setActiveModule] = useState(initialModule);
+
+  console.log(assessmentByIdData);
+
+  // Function to get Add button text dynamically
+  const getAddButtonText = (moduleType) => {
+    switch (moduleType) {
+      case "Sections":
+        return "Add Sections";
+      case "Questions":
+        return "Add Question";
+      default:
+        return "Add";
+    }
+  };
+
+  // Show loading or error message
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+
   return (
-    <div className="overflow-x-auto">
-      <table className="table-auto w-full border">
-        <thead>
-          <tr className="bg-gray-100 text-nowrap">
-            {columns.map((col, idx) => (
-              <th
-                key={idx}
-                className="border border-gray-300 px-4 py-2 text-left"
-              >
-                {col}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {moduleData?.data?.map((item) => (
-            <tr key={item.id}>
-              <td className="border border-gray-300 px-4 py-2 text-nowrap">
-                {item.id}
-              </td>
-              {moduleType === "Leadership Styles" && (
-                <>
-                  <td className="border border-gray-300 px-4 py-2 text-nowrap">
-                    {item.name}
-                  </td>
-                </>
-              )}
-              {moduleType === "Questions" && (
-                <>
-                  <td className="border border-gray-300 px-4 py-2 text-nowrap truncate max-w-[300px] overflow-hidden whitespace-nowrap">
-                    {item.question_name}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2 text-nowrap truncate max-w-[200px] overflow-hidden whitespace-nowrap">
-                    {item.leadership_style}
-                  </td>
-                </>
-              )}
-              <td className="border border-gray-300 px-4 py-2 text-nowrap">
-                <Button size="sm" variant="outline" className="rounded-sm mr-2">
-                  <PencilIcon className="stroke-Third" />
+    <div className="rounded-sm mx-auto w-full max-w-[1300px]">
+      <Heading title="Leadership Modules" />
+      <div className="p-4 bg-White rounded-sm">
+        <Tabs
+          defaultValue={activeModule}
+          className="w-full"
+          onValueChange={setActiveModule}
+        >
+          <div className="flex justify-between">
+            <TabsList className="!h-auto bg-white justify-start gap-1 flex flex-wrap">
+              {assessmentByIdData?.data?.modules_data.map((module, index) => (
+                <TabsTrigger
+                  key={index}
+                  value={module.module_type}
+                  className="border capitalize border-Secondary_Text data-[state=active]:bg-Primary data-[state=active]:text-white focus-within:border-Primary rounded-none"
+                >
+                  {module.module_type}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+
+            {/* Add New Entry Dialog */}
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button className="bg-Primary text-white rounded-md">
+                  {getAddButtonText(activeModule)}
                 </Button>
-                <Button size="sm" variant="outline" className="rounded-sm">
-                  <TrashIcon className="stroke-Error" />
-                </Button>
-              </td>
-            </tr>
+              </DialogTrigger>
+              <DialogContent className="max-h-[80vh] overflow-y-auto max-w-[600px]">
+                <DialogHeader>
+                  <DialogTitle>{getAddButtonText(activeModule)}</DialogTitle>
+                </DialogHeader>
+                {/* <LeadershipStyleAddForm
+                  moduleType={activeModule}
+                  refetch={refetch}
+                  setIsDialogOpen={setIsDialogOpen}
+                /> */}
+              </DialogContent>
+            </Dialog>
+          </div>
+
+          {/* Render DataTable for each module */}
+          {assessmentByIdData?.data?.modules_data.map((module, index) => (
+            <TabsContent key={index} value={module.module_type}>
+              <LogicalReasoningDataTable
+                moduleType={module.module_type}
+                moduleData={module.module_data}
+                refetch={refetch}
+              />
+            </TabsContent>
           ))}
-        </tbody>
-      </table>
-    </div>
-  );
-};
-const Numerical = () => {
-  return (
-    <div>
-      <h1>Numerical Assessment</h1>
-      <p>Content specific to the numerical assessment will go here.</p>
-      {/* Additional components or information can be added */}
+        </Tabs>
+      </div>
     </div>
   );
 };
 
-export default Numerical;
+export default NumericalReasoningPage;

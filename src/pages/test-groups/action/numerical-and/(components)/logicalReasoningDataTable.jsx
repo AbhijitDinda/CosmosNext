@@ -22,11 +22,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { PencilIcon, TrashIcon } from "lucide-react";
-import LeadershipStyleEditForm from "./LeadershipStyleEditForm";
 import { useDeleteStyle } from "@/hooks/apis/test-group/leadership-style/useDeleteStyle";
 import { useDeleteQuestion } from "@/hooks/apis/test-group/leadership-style/useDeleteQuestion";
 
-const LeaderShipStyleDataTable = ({ moduleType, moduleData, refetch }) => {
+const LogicalReasoningDataTable = ({ moduleType, moduleData, refetch }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -43,11 +42,46 @@ const LeaderShipStyleDataTable = ({ moduleType, moduleData, refetch }) => {
 
   const columns = [
     { accessorKey: "id", header: "ID" },
-    ...(moduleType === "Leadership Styles"
-      ? [{ accessorKey: "name", header: "Name" }]
+    ...(moduleType === "Sections"
+      ? [
+          { accessorKey: "name", header: "Name" },
+          {
+            accessorKey: "image",
+            size: 200,
+            header: "Image",
+            cell: ({ row }) => <img src={row.original.image} alt="Section" />,
+          },
+        ]
       : [
           { accessorKey: "question_name", header: "Question" },
-          { accessorKey: "group_name", header: "Leadership Style" },
+          {
+            accessorKey: "section_image",
+            header: "Section Image",
+            cell: ({ row }) => (
+              <img src={row.original.section_image} alt="Section" />
+            ),
+          },
+          {
+            accessorKey: "options",
+            header: "Options",
+            cell: ({ row }) => (
+              <ol className="list-decimal px-4">
+                {row.original.options.map((option, index) => {
+                  if (option !== null) {
+                    return (
+                      <li className="list-decimal list-outside" key={index}>
+                        {option}
+                      </li>
+                    );
+                  }
+                })}
+              </ol>
+            ),
+          },
+          {
+            accessorKey: "right_option",
+            header: "Right Option",
+          },
         ]),
     {
       id: "actions",
@@ -129,6 +163,7 @@ const LeaderShipStyleDataTable = ({ moduleType, moduleData, refetch }) => {
               <TableRow key={row.id} className="hover:bg-gray-50">
                 {row.getVisibleCells().map((cell) => (
                   <TableCell
+                    width={cell.column.columnDef.size}
                     key={cell.id}
                     className="px-4 py-2 border border-gray-300"
                   >
@@ -199,18 +234,18 @@ const LeaderShipStyleDataTable = ({ moduleType, moduleData, refetch }) => {
           <DialogHeader>
             <DialogTitle>Edit {moduleType}</DialogTitle>
           </DialogHeader>
-          {selectedItem && (
+          {/* {selectedItem && (
             <LeadershipStyleEditForm
               moduleType={moduleType}
               selectedItem={selectedItem}
               refetch={refetch}
               setIsDialogOpen={setIsDialogOpen}
             />
-          )}
+          )} */}
         </DialogContent>
       </Dialog>
     </div>
   );
 };
 
-export default LeaderShipStyleDataTable;
+export default LogicalReasoningDataTable;
