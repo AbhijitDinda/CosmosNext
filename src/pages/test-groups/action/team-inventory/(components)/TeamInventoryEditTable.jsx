@@ -1,4 +1,3 @@
-import { questionSchema, subQuestionSchema, traitsSchema } from "./schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
@@ -29,10 +28,38 @@ import { useEditQuestion } from "@/hooks/apis/test-group/team-inventory/useEditQ
 import { useEditSubQuestion } from "@/hooks/apis/test-group/team-inventory/useEditSubQuestion";
 import { useEditTraits } from "@/hooks/apis/test-group/team-inventory/useEditTraits";
 import { useListOfAllQuestion } from "@/hooks/apis/test-group/team-inventory/useListOfAllQuestion";
-import { useListOfAllTraits } from "@/hooks/apis/test-group/team-inventory/useListOfAllTraits";
 import { useQuestionById } from "@/hooks/apis/test-group/team-inventory/useQuestionById";
 import { useTraitsById } from "@/hooks/apis/test-group/team-inventory/useTraitsById";
 import { useSubQuestionById } from "@/hooks/apis/test-group/team-inventory/useSubQuestionById";
+import { z } from "zod";
+
+const questionSchema = z.object({
+  question_name: z.string().min(1, { message: "Question is required" }),
+  status: z.string().min(1, { message: "Status is required" }),
+  order_id: z.number().optional(),
+});
+
+const subQuestionSchema = z.object({
+  question_id: z.string().min(1, { message: "Question ID is required" }),
+  question_name: z.string().min(1, { message: "Question Name is required" }),
+  traits_category: z
+    .string()
+    .min(1, { message: "Traits Category is required" }),
+  status: z.string().min(1, { message: "Display is required" }),
+  order_id: z.number().optional(),
+});
+
+const traitsSchema = z.object({
+  trait_name: z.string().min(1, { message: "Trait Name is required" }),
+  trait_code: z.string().min(1, { message: "Trait Code is required" }),
+  key_traits: z.string().min(1, { message: "Key Traits are required" }),
+  description: z.string().min(1, { message: "Description is required" }),
+  strengths: z.string().min(1, { message: "Strengths are required" }),
+  weakness: z.string().min(1, { message: "Weakness is required" }),
+  opportunities: z.string().min(1, { message: "Opportunities are required" }),
+  threats: z.string().min(1, { message: "Threats are required" }),
+  status: z.string().optional(),
+});
 
 const TeamInventoryEditForm = ({
   moduleType,

@@ -25,12 +25,38 @@ const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 
 import { useEffect, useState } from "react";
-import { questionSchema, subQuestionSchema, traitsSchema } from "./schema";
 import { useAddQuestion } from "@/hooks/apis/test-group/team-inventory/useAddQuestion";
 import { useAddSubQuestion } from "@/hooks/apis/test-group/team-inventory/useAddSubQuestion";
 import { useAddTraits } from "@/hooks/apis/test-group/team-inventory/useAddTraits";
 import { useListOfAllQuestion } from "@/hooks/apis/test-group/team-inventory/useListOfAllQuestion";
-import { useListOfAllTraits } from "@/hooks/apis/test-group/team-inventory/useListOfAllTraits";
+
+const questionSchema = z.object({
+  question_name: z.string().min(1, { message: "Question is required" }),
+  status: z.string().min(1, { message: "Status is required" }),
+  order_id: z.number().optional(),
+});
+
+const subQuestionSchema = z.object({
+  question_id: z.string().min(1, { message: "Question ID is required" }),
+  question_name: z.string().min(1, { message: "Question Name is required" }),
+  traits_category: z
+    .string()
+    .min(1, { message: "Traits Category is required" }),
+  status: z.string().min(1, { message: "Display is required" }),
+  order_id: z.number().optional(),
+});
+
+const traitsSchema = z.object({
+  trait_name: z.string().min(1, { message: "Trait Name is required" }),
+  trait_code: z.string().min(1, { message: "Trait Code is required" }),
+  key_traits: z.string().min(1, { message: "Key Traits are required" }),
+  description: z.string().min(1, { message: "Description is required" }),
+  strengths: z.string().min(1, { message: "Strengths are required" }),
+  weakness: z.string().min(1, { message: "Weakness is required" }),
+  opportunities: z.string().min(1, { message: "Opportunities are required" }),
+  threats: z.string().min(1, { message: "Threats are required" }),
+  status: z.string().optional(),
+});
 
 const TeamInventoryAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
   const [questionList, setQuestionList] = useState([]);
