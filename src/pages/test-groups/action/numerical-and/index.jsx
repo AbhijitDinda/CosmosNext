@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { useGetAssessmentById } from "@/hooks/apis/test-group/useGetAssessmentById";
 import LogicalReasoningDataTable from "./(components)/logicalReasoningDataTable";
+import LogicalReasoningAddForm from "./(components)/logicalReasoningAddForm";
 
 const NumericalReasoningPage = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -75,11 +76,11 @@ const NumericalReasoningPage = () => {
                 <DialogHeader>
                   <DialogTitle>{getAddButtonText(activeModule)}</DialogTitle>
                 </DialogHeader>
-                {/* <LeadershipStyleAddForm
+                <LogicalReasoningAddForm
                   moduleType={activeModule}
                   refetch={refetch}
                   setIsDialogOpen={setIsDialogOpen}
-                /> */}
+                />
               </DialogContent>
             </Dialog>
           </div>
