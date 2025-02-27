@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useAddSection } from "@/hooks/apis/test-group/numerical-and-logical-reasoning/useAddSection";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -32,8 +33,11 @@ const LogicalReasoningAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
       name: "",
     },
   });
+  const { addSectionMutation, isPending } = useAddSection();
   const onSubmit = async (data) => {
-    console.log(data);
+    await addSectionMutation(data);
+    refetch();
+    setIsDialogOpen(false);
   };
 
   return (

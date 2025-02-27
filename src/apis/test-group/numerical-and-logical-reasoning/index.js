@@ -1,7 +1,6 @@
 import axios from "@/config/axiosConfig";
 import { unauthorizedErrorResponse } from "@/utils/Responseobj/responseObject";
 
-
 //add
 export const addSectionInNumericalReasoning = async ({
   token,
@@ -15,7 +14,8 @@ export const addSectionInNumericalReasoning = async ({
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          Accept: "multipart/form-data",
+          Accept: "application/json",
+          "Content-Type": "multipart/form-data",
         },
       }
     );
@@ -192,7 +192,10 @@ export const getQuestionByIdInNumericalReasoning = async ({
       unauthorizedErrorResponse(logout);
       return;
     } else {
-      console.error("Error in get Question By Id In Numerical Reasoning", error);
+      console.error(
+        "Error in get Question By Id In Numerical Reasoning",
+        error
+      );
       // throw error;
     }
   }
@@ -225,6 +228,3 @@ export const getSectionByIdInNumericalReasoning = async ({
     }
   }
 };
-
-
-
