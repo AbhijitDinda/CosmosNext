@@ -49,7 +49,7 @@ const leadershipStyleSchema = z.object({
 const leadershipQuestionSchema = z.object({
   question_name: z.string().min(5, "Question is required"),
   leadership_group: z.string().min(1, "Leadership Group is required"),
-  order_id: z.number().optional(),
+  order_id: z.optional(z.number().int().positive()).nullable(),
   status: z.string().min(1, "Status is required"),
 });
 

@@ -78,7 +78,7 @@ const motivationGroupsSchema = z.object({
 const questionsSchema = z.object({
   question_name: z.string().min(5, "Question must be at least 5 characters"),
   group: z.string().min(1, "Group is required"),
-  order_id: z.number().int(),
+  order_id: z.optional(z.number().int().positive()).nullable(),
   status: z.string().min(1, "Status is required"),
 });
 

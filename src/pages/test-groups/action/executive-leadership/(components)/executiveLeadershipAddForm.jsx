@@ -38,7 +38,7 @@ const situationalQuestionSchema = z.object({
   right_option: z.string().min(1, "Right option is required"),
   ideal_scenario: z.string().min(10, "Ideal Scenario is required"),
   status: z.string().min(1, "Display status is required"),
-  order_id: z.optional(z.number().int().positive()),
+  order_id: z.optional(z.number().int().positive()).nullable(),
 });
 
 const ExecutiveLeadershipAddForm = ({

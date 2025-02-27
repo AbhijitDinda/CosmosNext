@@ -43,7 +43,7 @@ const leadershipStyleSchema = z.object({
 
 const questionSchema = z.object({
   question: z.string().min(5, "Question must be at least 5 characters"),
-  order_id: z.number().optional(),
+  order_id: z.optional(z.number().int().positive()).nullable(),
   status: z.string().min(1, "Status is required"),
 });
 

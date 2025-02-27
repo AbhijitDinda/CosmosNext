@@ -33,7 +33,7 @@ import { useListOfAllQuestion } from "@/hooks/apis/test-group/team-inventory/use
 const questionSchema = z.object({
   question_name: z.string().min(1, { message: "Question is required" }),
   status: z.string().min(1, { message: "Status is required" }),
-  order_id: z.number().optional(),
+  order_id: z.optional(z.number().int().positive()).nullable(),
 });
 
 const subQuestionSchema = z.object({
@@ -43,7 +43,7 @@ const subQuestionSchema = z.object({
     .string()
     .min(1, { message: "Traits Category is required" }),
   status: z.string().min(1, { message: "Display is required" }),
-  order_id: z.number().optional(),
+  order_id: z.optional(z.number().int().positive()).nullable(),
 });
 
 const traitsSchema = z.object({

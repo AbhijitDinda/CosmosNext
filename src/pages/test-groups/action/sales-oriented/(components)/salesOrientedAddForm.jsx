@@ -21,16 +21,15 @@ import {
 } from "@/components/ui/select";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
-import { useEditQuestion } from "@/hooks/apis/test-group/situational-judgement/useEditQuestion";
-import { useEffect } from "react";
-import { useGetQuestionById } from "@/hooks/apis/test-group/situational-judgement/useGetQuestionById";
+import { useAddQuestion } from "@/hooks/apis/test-group/situational-judgement/useAddQuestion";
 
 // Dynamically import ReactQuill for rich text input
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 // ✅ Define schema for validation
 const situationalQuestionSchema = z.object({
-  question_name: z.string().min(5, "Question must be at least 5 characters"),
+  role: z.number().int().positive(),
+  question: z.string().min(5, "Question must be at least 5 characters"),
   option1: z.string().min(2, "Option 1 is required"),
   option2: z.string().min(2, "Option 2 is required"),
   option3: z.string().min(2, "Option 3 is required"),
@@ -41,14 +40,11 @@ const situationalQuestionSchema = z.object({
   order_id: z.optional(z.number().int().positive()).nullable(),
 });
 
-const ExecutiveLeadershipEditForm = ({
-  selectedItem,
-  refetch,
-  setIsDialogOpen,
-}) => {
+const SalesOrientedAddForm = ({ refetch, setIsDialogOpen, assessmentId }) => {
   const form = useForm({
     resolver: zodResolver(situationalQuestionSchema),
     defaultValues: {
+      role: assessmentId,
       question: "",
       option1: "",
       option2: "",
@@ -61,57 +57,28 @@ const ExecutiveLeadershipEditForm = ({
     },
   });
 
-  useEffect(() => {
-    if (selectedItem) {
-      form.reset(selectedItem);
-    }
-  }, [selectedItem]);
-
-  const { SituationalJudgementQuestionDataById, isFetching, isLoading } =
-    useGetQuestionById(selectedItem.id);
-
-  useEffect(() => {
-    if (isLoading || isFetching) return;
-
-    if (SituationalJudgementQuestionDataById) {
-      form.reset(SituationalJudgementQuestionDataById?.data?.data);
-    }
-  }, [SituationalJudgementQuestionDataById]);
-
-  console.log(SituationalJudgementQuestionDataById);
-
   const {
-    editQuestionMutationInSituationalJudgement: editQuestionMutation,
-    isPending: isEditing,
-  } = useEditQuestion();
+    addQuestionMutationInSituationalJudgement: addQuestionMutation,
+    isPending: isAdding,
+  } = useAddQuestion();
 
   const onSubmit = async (data) => {
-    const response = await editQuestionMutation({
-      questionId: selectedItem.id,
-      questionData: {
-        role: 7,
-        question: data.question_name,
-        ...data,
-      },
-    });
-
+    const response = await addQuestionMutation(data);
     if (response.data.status === "success") {
       form.reset();
       setIsDialogOpen(false);
       refetch();
     } else {
-      console.error("Error updating question:", response.data);
+      console.error("Error adding question:", response.data);
     }
   };
-
-  if (isLoading || isFetching) return <div>Loading...</div>;
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         {/* Question */}
         <FormField
-          name="question_name"
+          name="question"
           control={form.control}
           render={({ field }) => (
             <FormItem>
@@ -226,12 +193,12 @@ const ExecutiveLeadershipEditForm = ({
         />
 
         {/* Submit Button */}
-        <Button type="submit" className="w-full mt-2" disabled={isEditing}>
-          {isEditing ? "Saving..." : "Save Changes"}
+        <Button type="submit" className="w-full mt-2" disabled={isAdding}>
+          {isAdding ? "Adding..." : "Add Question"}
         </Button>
       </form>
     </Form>
   );
 };
 
-export default ExecutiveLeadershipEditForm;
+export default SalesOrientedAddForm;
