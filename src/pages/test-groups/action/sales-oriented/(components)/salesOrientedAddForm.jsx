@@ -184,7 +184,13 @@ const SalesOrientedAddForm = ({ refetch, setIsDialogOpen, assessmentId }) => {
                 <Input
                   type="number"
                   {...field}
-                  onChange={(e) => field.onChange(parseInt(e.target.value))}
+                  onChange={(e) =>
+                    field.onChange(
+                      e.target.value.length > 0
+                        ? parseInt(e.target.value)
+                        : null
+                    )
+                  }
                 />
               </FormControl>
               <FormMessage />

@@ -355,8 +355,14 @@ const LeadershipStyleEditForm = ({
                   <FormControl>
                     <Input
                       type="number"
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(parseInt(e.target.value))}
+                      value={field.value}
+                      onChange={(e) =>
+                        field.onChange(
+                          e.target.value.length > 0
+                            ? parseInt(e.target.value)
+                            : null
+                        )
+                      }
                     />
                   </FormControl>
                   <FormMessage />

@@ -208,7 +208,9 @@ const LeadershipReadinessEditForm = ({
                       value={field.value}
                       onChange={(e) =>
                         field.onChange(
-                          e.target.value ? parseInt(e.target.value) : undefined
+                          e.target.value.length > 0
+                            ? parseInt(e.target.value)
+                            : null
                         )
                       }
                     />

@@ -540,7 +540,13 @@ const EditForm = ({ moduleType, selectedItem, setIsDialogOpen, refetch }) => {
                     <Input
                       type="number"
                       value={field.value}
-                      onChange={(e) => field.onChange(parseInt(e.target.value))}
+                      onChange={(e) =>
+                        field.onChange(
+                          e.target.value.length > 0
+                            ? parseInt(e.target.value)
+                            : null
+                        )
+                      }
                     />
                   </FormControl>
                   <FormMessage />
@@ -623,7 +629,7 @@ const AddForm = ({ moduleType, setIsDialogOpen, refetch }) => {
       motivation_techniques: "",
       question_name: "",
       group: "",
-      order_id: "",
+      order_id: undefined,
       status: "",
     },
   });
@@ -818,7 +824,13 @@ const AddForm = ({ moduleType, setIsDialogOpen, refetch }) => {
                     <Input
                       type="number"
                       value={field.value}
-                      onChange={(e) => field.onChange(parseInt(e.target.value))}
+                      onChange={(e) =>
+                        field.onChange(
+                          e.target.value.length > 0
+                            ? parseInt(e.target.value)
+                            : null
+                        )
+                      }
                     />
                   </FormControl>
                   <FormMessage />

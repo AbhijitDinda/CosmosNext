@@ -43,7 +43,7 @@ const styleSchema = z.object({
 const questionSchema = z.object({
   question: z.string().min(5, "Question must be at least 5 characters"),
   approach_style: z.string().min(1, "Approach style is required"),
-  order_id: z.number().int(),
+  order_id: z.optional(z.number().int().positive()).nullable(),
   status: z.string().min(1, "Display is required"),
 });
 
@@ -263,7 +263,13 @@ const AddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                     <Input
                       type="number"
                       value={field.value}
-                      onChange={(e) => field.onChange(parseInt(e.target.value))}
+                      onChange={(e) =>
+                        field.onChange(
+                          e.target.value.length > 0
+                            ? parseInt(e.target.value)
+                            : null
+                        )
+                      }
                     />
                   </FormControl>
                   <FormMessage />
@@ -296,8 +302,12 @@ const AddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
             />
           </>
         )}
-        <Button type="submit" className="w-full mt-2">
-          Add
+        <Button
+          type="submit"
+          className="w-full mt-2"
+          disabled={isStylePending || isQuestionPending}
+        >
+          {isStylePending || isQuestionPending ? "Adding..." : "Add"}
         </Button>
       </form>
     </Form>

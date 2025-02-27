@@ -98,7 +98,7 @@ const EditForm = ({ moduleType, selectedItem, refetch, setIsDialogOpen }) => {
     defaultValues: selectedItem || {},
   });
 
-  console.log(selectedItem);
+  // console.log(selectedItem);
   const { editQuestionMutation, isPending: isEditMutationEnding } =
     useEditQuestion();
   const { editStyleMutation, isPending: isEditStyleMutationEnding } =
@@ -314,8 +314,14 @@ const EditForm = ({ moduleType, selectedItem, refetch, setIsDialogOpen }) => {
             />
           </>
         )}
-        <Button type="submit" className="w-full mt-2">
-          Save Changes
+        <Button
+          type="submit"
+          className="w-full mt-2"
+          disabled={isEditMutationEnding || isEditStyleMutationEnding}
+        >
+          {isEditMutationEnding || isEditStyleMutationEnding
+            ? "Saving... "
+            : `Save Changes`}
         </Button>
       </form>
     </Form>

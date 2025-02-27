@@ -100,7 +100,7 @@ const LeadershipStyleAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
         : {
             question_name: "",
             leadership_group: "",
-            order_id: "",
+            order_id: undefined,
             status: "1",
           },
   });
@@ -327,7 +327,13 @@ const LeadershipStyleAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                     <Input
                       type="number"
                       value={field.value || ""}
-                      onChange={(e) => field.onChange(parseInt(e.target.value))}
+                      onChange={(e) =>
+                        field.onChange(
+                          e.target.value.length > 0
+                            ? parseInt(e.target.value)
+                            : null
+                        )
+                      }
                     />
                   </FormControl>
                   <FormMessage />

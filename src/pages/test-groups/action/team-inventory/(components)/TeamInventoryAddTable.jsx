@@ -171,7 +171,13 @@ const TeamInventoryAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                     <Input
                       type="number"
                       value={field.value}
-                      onChange={(e) => field.onChange(parseInt(e.target.value))}
+                      onChange={(e) =>
+                        field.onChange(
+                          e.target.value.length > 0
+                            ? parseInt(e.target.value)
+                            : null
+                        )
+                      }
                     />
                   </FormControl>
                   <FormMessage />
@@ -283,7 +289,13 @@ const TeamInventoryAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                     <Input
                       type="number"
                       value={field.value}
-                      onChange={(e) => field.onChange(parseInt(e.target.value))}
+                      onChange={(e) =>
+                        field.onChange(
+                          e.target.value.length > 0
+                            ? parseInt(e.target.value)
+                            : null
+                        )
+                      }
                     />
                   </FormControl>
                   <FormMessage />
