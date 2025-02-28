@@ -1,7 +1,27 @@
 import { useGetSectionList } from "@/hooks/apis/test-group/numerical-and-logical-reasoning/useGetSectionList";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
-import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { set, useForm } from "react-hook-form";
+import { z } from "zod";
+import { useQuestionById } from "@/hooks/apis/test-group/numerical-and-logical-reasoning/useQuestionById";
+import { useSectionById } from "@/hooks/apis/test-group/numerical-and-logical-reasoning/useSectionById";
 const sectionSchema = z.object({
   name: z.string().min(1, "Name is required"),
   section_image: z.any(),
@@ -9,7 +29,7 @@ const sectionSchema = z.object({
 });
 
 const questionSchema = z.object({
-  question: z.string().min(1, "Question is required"),
+  question_name: z.string().min(1, "Question is required"),
   section_id: z.string().min(1, "Section is required"),
   option1: z.optional(z.string()),
   option2: z.optional(z.string()),
@@ -19,10 +39,20 @@ const questionSchema = z.object({
   order_id: z.optional(z.number().int().positive()).nullable(),
   status: z.string().min(1, "Display status is required"),
 });
-const LogicalReasoningEditForm = ({ moduleType, refetch, setIsDialogOpen }) => {
+const LogicalReasoningEditForm = ({
+  moduleType,
+  refetch,
+  setIsDialogOpen,
+  selectedItem,
+}) => {
   const [sectionlist, setSectionList] = useState([]);
-  const { sectionListData, isLoading, isFetching } = useGetSectionList();
-  console.log(sectionListData);
+  const [sectionImage, setSectionImage] = useState(null);
+  const {
+    sectionListData,
+    isLoading: isSectionListLoading,
+    isFetching,
+  } = useGetSectionList();
+  //   console.log(sectionListData);
   const formSchema = moduleType === "Sections" ? sectionSchema : questionSchema;
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -39,6 +69,77 @@ const LogicalReasoningEditForm = ({ moduleType, refetch, setIsDialogOpen }) => {
       order_id: null,
     },
   });
+
+  const {
+    numericalReasoningQuestionDataById,
+    isLoading: isQuestionLoading,
+    isFetching: isQuestionFetching,
+  } = moduleType === "Questions"
+    ? useQuestionById(selectedItem?.id)
+    : {
+        numericalReasoningQuestionDataById: null,
+        isLoading: false,
+        isFetching: false,
+      };
+
+  const {
+    numericalReasoningSectionDataById,
+    isLoading: isSectionLoading,
+    isFetching: isSectionFetching,
+  } = moduleType === "Sections"
+    ? useSectionById(selectedItem?.id)
+    : {
+        numericalReasoningSectionDataById: null,
+        isLoading: false,
+        isFetching: false,
+      };
+
+  useEffect(() => {
+    if (moduleType === "Sections" && numericalReasoningSectionDataById) {
+      form.reset({
+        name: numericalReasoningSectionDataById?.data?.data?.name,
+        status: numericalReasoningSectionDataById?.data?.data?.status,
+      });
+      setSectionImage(numericalReasoningSectionDataById?.data?.data?.image);
+      //   console.log(numericalReasoningSectionDataById?.data?.data?.image);
+    } else if (
+      moduleType === "Questions" &&
+      numericalReasoningQuestionDataById
+    ) {
+      form.reset({
+        question_name:
+          numericalReasoningQuestionDataById?.data?.data?.question_name,
+        section_id: numericalReasoningQuestionDataById?.data?.data?.section_id,
+        option1: numericalReasoningQuestionDataById?.data?.data?.options[0],
+        option2: numericalReasoningQuestionDataById?.data?.data?.options[1],
+        option3: numericalReasoningQuestionDataById?.data?.data?.options[2],
+        option4: numericalReasoningQuestionDataById?.data?.data?.options[3],
+        right_option:
+          numericalReasoningQuestionDataById?.data?.data?.right_option,
+        order_id: numericalReasoningQuestionDataById?.data?.data?.order_id,
+        status: numericalReasoningQuestionDataById?.data?.data?.status,
+      });
+    }
+  }, [numericalReasoningQuestionDataById, numericalReasoningSectionDataById]);
+  useEffect(() => {
+    if (sectionListData) {
+      const list = sectionListData?.data?.data?.map((item) => ({
+        value: item.id,
+        label: item.name,
+        image: item.image,
+      }));
+      setSectionList(list);
+    }
+  }, [sectionListData]);
+  if (
+    isSectionLoading ||
+    isSectionFetching ||
+    isQuestionLoading ||
+    isQuestionFetching ||
+    isFetching
+  ) {
+    return <div>Loading...</div>;
+  }
 
   const onSubmit = async (data) => {};
 
@@ -67,13 +168,28 @@ const LogicalReasoningEditForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                 <FormItem>
                   <FormLabel>Section Image</FormLabel>
                   <FormControl>
-                    <Input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => {
-                        field.onChange(e.target.files[0]);
-                      }}
-                    />
+                    <>
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          field.onChange(e.target.files[0]);
+                        }}
+                      />
+                      {field.value ? (
+                        <img
+                          src={URL.createObjectURL(field.value)}
+                          alt="Section"
+                          className="size-32"
+                        />
+                      ) : (
+                        <img
+                          src={sectionImage}
+                          alt="Section"
+                          className="size-32"
+                        />
+                      )}
+                    </>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -104,7 +220,7 @@ const LogicalReasoningEditForm = ({ moduleType, refetch, setIsDialogOpen }) => {
         ) : (
           <>
             <FormField
-              name="question"
+              name="question_name"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
@@ -123,12 +239,27 @@ const LogicalReasoningEditForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                 <FormItem>
                   <FormLabel>Section</FormLabel>
                   <FormControl>
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger>
+                    <Select
+                      value={field.value ? field.value.toString() : ""} // Ensure it's a string
+                      onValueChange={(value) => field.onChange(value)}
+                      disabled={isSectionListLoading}
+                    >
+                      <SelectTrigger className="h-36">
                         <SelectValue placeholder="Select section" />
                       </SelectTrigger>
                       <SelectContent>
-                        {/* Map through sections here */}
+                        {sectionlist?.map((item, index) => (
+                          <SelectItem key={index} value={item.value.toString()}>
+                            <div className="flex items-center gap-2">
+                              <span className="truncate">{item.label}</span>
+                              <img
+                                src={item.image}
+                                alt={item.label}
+                                className="w-32 h-32"
+                              />
+                            </div>
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </FormControl>

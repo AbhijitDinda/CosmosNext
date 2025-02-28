@@ -150,7 +150,7 @@ export const deleteQuestionInSituationalJudgement = async ({
 }) => {
   try {
     const response = await axios.delete(
-      `/admin/situational-judgement/delete-question/${questionId}`,
+      `/admin/numerical-reasoning/questions/delete/${questionId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

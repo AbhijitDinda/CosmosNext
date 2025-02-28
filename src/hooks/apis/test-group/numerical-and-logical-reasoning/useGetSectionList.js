@@ -14,7 +14,7 @@ export const useGetSectionList = () => {
   } = useQuery({
     queryFn: () =>
       getSectionListInNumericalReasoning({ token: auth?.token, logout }),
-    queryKey: ["numericalReasoningQuestionById"],
+    queryKey: ["numericalReasoningList"],
   });
 
   return {

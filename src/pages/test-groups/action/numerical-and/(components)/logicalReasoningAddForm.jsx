@@ -15,13 +15,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useAddQuestion } from "@/hooks/apis/test-group/numerical-and-logical-reasoning/useAddQuestion";
-import { useAddSection } from "@/hooks/apis/test-group/numerical-and-logical-reasoning/useAddSection";
-import { useGetSectionList } from "@/hooks/apis/test-group/numerical-and-logical-reasoning/useGetSectionList";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useAddQuestion } from "@/hooks/apis/test-group/numerical-and-logical-reasoning/useAddQuestion";
+import { useAddSection } from "@/hooks/apis/test-group/numerical-and-logical-reasoning/useAddSection";
+import { useGetSectionList } from "@/hooks/apis/test-group/numerical-and-logical-reasoning/useGetSectionList";
 
 const sectionSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -330,7 +330,9 @@ const LogicalReasoningAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
             {/* Add more fields for questions here */}
           </>
         )}
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={isPending || isQuestionPending}>
+          {isPending || isQuestionPending ? "Saving..." : "Save"}
+        </Button>
       </form>
     </Form>
   );

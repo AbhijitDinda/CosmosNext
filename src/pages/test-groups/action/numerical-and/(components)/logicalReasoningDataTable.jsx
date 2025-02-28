@@ -22,8 +22,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { PencilIcon, TrashIcon } from "lucide-react";
-import { useDeleteStyle } from "@/hooks/apis/test-group/leadership-style/useDeleteStyle";
-import { useDeleteQuestion } from "@/hooks/apis/test-group/leadership-style/useDeleteQuestion";
+import { useDeleteSection } from "@/hooks/apis/test-group/numerical-and-logical-reasoning/useDeleteSection";
+import { useDeleteQuestion } from "@/hooks/apis/test-group/numerical-and-logical-reasoning/useDeleteQuestion";
+import LogicalReasoningEditForm from "./logicalReasoningEditForm";
 
 const LogicalReasoningDataTable = ({ moduleType, moduleData, refetch }) => {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -116,19 +117,15 @@ const LogicalReasoningDataTable = ({ moduleType, moduleData, refetch }) => {
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  const {
-    deleteStyleMutationInLeadershipStyle: deleteStyleMutation,
-    isPending: isDeleteStylePending,
-  } = useDeleteStyle();
-  const {
-    deleteQuestionMutationInLeadershipStyle: deleteQuestionMutation,
-    isPending: isDeleteQuestionPending,
-  } = useDeleteQuestion();
+  const { deleteSectionMutation, isPending: isDeleteSectionPending } =
+    useDeleteSection();
+  const { deleteQuestionMutation, isPending: isDeleteQuestionPending } =
+    useDeleteQuestion();
 
   const handleDelete = async (id) => {
     let response;
-    if (moduleType === "Leadership Styles") {
-      response = await deleteStyleMutation(id);
+    if (moduleType === "Sections") {
+      response = await deleteSectionMutation(id);
     } else {
       response = await deleteQuestionMutation(id);
     }
