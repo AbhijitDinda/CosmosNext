@@ -218,8 +218,11 @@ const LogicalReasoningDataTable = ({ moduleType, moduleData, refetch }) => {
             <Button
               className="bg-red-500"
               onClick={() => handleDelete(selectedItem.id)}
+              disabled={isDeleteSectionPending || isDeleteQuestionPending}
             >
-              Delete
+              {isDeleteSectionPending || isDeleteQuestionPending
+                ? "Deleting..."
+                : "Delete"}
             </Button>
           </div>
         </DialogContent>

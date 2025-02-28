@@ -73,6 +73,7 @@ export const updateSectionInNumericalReasoning = async ({
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "multipart/form-data",
+          "Content-Type": "multipart/form-data",
         },
       }
     );

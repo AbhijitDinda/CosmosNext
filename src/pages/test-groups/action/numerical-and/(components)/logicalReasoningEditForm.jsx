@@ -18,10 +18,12 @@ import {
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useQuestionById } from "@/hooks/apis/test-group/numerical-and-logical-reasoning/useQuestionById";
 import { useSectionById } from "@/hooks/apis/test-group/numerical-and-logical-reasoning/useSectionById";
+import { useEditQuestion } from "@/hooks/apis/test-group/numerical-and-logical-reasoning/useEditQuestion";
+import { useEditSection } from "@/hooks/apis/test-group/numerical-and-logical-reasoning/useEditSection";
 const sectionSchema = z.object({
   name: z.string().min(1, "Name is required"),
   section_image: z.any(),
@@ -47,6 +49,7 @@ const LogicalReasoningEditForm = ({
 }) => {
   const [sectionlist, setSectionList] = useState([]);
   const [sectionImage, setSectionImage] = useState(null);
+  const [imageName, setImageName] = useState(null);
   const {
     sectionListData,
     isLoading: isSectionListLoading,
@@ -101,6 +104,7 @@ const LogicalReasoningEditForm = ({
         status: numericalReasoningSectionDataById?.data?.data?.status,
       });
       setSectionImage(numericalReasoningSectionDataById?.data?.data?.image);
+      setImageName(numericalReasoningSectionDataById?.data?.data?.image_name);
       //   console.log(numericalReasoningSectionDataById?.data?.data?.image);
     } else if (
       moduleType === "Questions" &&
@@ -121,6 +125,7 @@ const LogicalReasoningEditForm = ({
       });
     }
   }, [numericalReasoningQuestionDataById, numericalReasoningSectionDataById]);
+
   useEffect(() => {
     if (sectionListData) {
       const list = sectionListData?.data?.data?.map((item) => ({
@@ -131,18 +136,67 @@ const LogicalReasoningEditForm = ({
       setSectionList(list);
     }
   }, [sectionListData]);
+
+  const { editQuestionMutation, isPending: isQuestionEditPending } =
+    useEditQuestion();
+  const { editSectionMutation, isPending: isSectionEditPending } =
+    useEditSection();
+  const onSubmit = async (data) => {
+    let response;
+    if (moduleType === "Sections") {
+      console.log("Section data:", data);
+      let payload;
+      if (data.section_image) {
+        payload = {
+          name: data.name,
+          section_image: data.section_image,
+          section_image_name: imageName,
+          status: data.status,
+        };
+      } else {
+        payload = {
+          name: data.name,
+          section_image_name: imageName,
+          status: data.status,
+        };
+      }
+      console.log(payload);
+      response = await editSectionMutation({
+        formData: payload,
+        sectionId: selectedItem?.id,
+      });
+    } else if (moduleType === "Questions") {
+      console.log("Question data:", data);
+      const options = [data.option1, data.option2, data.option3, data.option4];
+      const payload = {
+        question: data.question_name,
+        section_id: data.section_id,
+        options: options,
+        right_option: data.right_option,
+        order_id: data.order_id,
+        status: data.status,
+      };
+      response = await editQuestionMutation({
+        formData: payload,
+        questionId: selectedItem?.id,
+      });
+    }
+    if (response.data.status === "success") {
+      form.reset();
+      refetch();
+      setIsDialogOpen(false);
+    }
+  };
   if (
     isSectionLoading ||
     isSectionFetching ||
     isQuestionLoading ||
     isQuestionFetching ||
-    isFetching
+    isFetching ||
+    isSectionListLoading
   ) {
     return <div>Loading...</div>;
   }
-
-  const onSubmit = async (data) => {};
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -379,7 +433,12 @@ const LogicalReasoningEditForm = ({
             {/* Add more fields for questions here */}
           </>
         )}
-        <Button type="submit">Submit</Button>
+        <Button
+          type="submit"
+          disabled={isQuestionEditPending || isSectionEditPending}
+        >
+          Submit
+        </Button>
       </form>
     </Form>
   );
