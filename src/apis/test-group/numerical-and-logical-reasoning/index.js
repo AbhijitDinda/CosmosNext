@@ -73,6 +73,7 @@ export const updateSectionInNumericalReasoning = async ({
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "multipart/form-data",
+          "Content-Type": "multipart/form-data",
         },
       }
     );
@@ -150,7 +151,7 @@ export const deleteQuestionInSituationalJudgement = async ({
 }) => {
   try {
     const response = await axios.delete(
-      `/admin/situational-judgement/delete-question/${questionId}`,
+      `/admin/numerical-reasoning/questions/delete/${questionId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -224,6 +225,29 @@ export const getSectionByIdInNumericalReasoning = async ({
       return;
     } else {
       console.error("Error in get Section By Id In Numerical Reasoning", error);
+      // throw error;
+    }
+  }
+};
+
+export const getSectionListInNumericalReasoning = async ({ token, logout }) => {
+  try {
+    const response = await axios.get(
+      `/admin/numerical-reasoning/questions/get-sections`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      }
+    );
+    return response;
+  } catch (error) {
+    if (error.response?.status === 401) {
+      unauthorizedErrorResponse(logout);
+      return;
+    } else {
+      console.error("Error in get Section List In Numerical Reasoning", error);
       // throw error;
     }
   }
