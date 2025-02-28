@@ -228,3 +228,26 @@ export const getSectionByIdInNumericalReasoning = async ({
     }
   }
 };
+
+export const getSectionListInNumericalReasoning = async ({ token, logout }) => {
+  try {
+    const response = await axios.get(
+      `/admin/numerical-reasoning/questions/get-sections`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      }
+    );
+    return response;
+  } catch (error) {
+    if (error.response?.status === 401) {
+      unauthorizedErrorResponse(logout);
+      return;
+    } else {
+      console.error("Error in get Section List In Numerical Reasoning", error);
+      // throw error;
+    }
+  }
+};

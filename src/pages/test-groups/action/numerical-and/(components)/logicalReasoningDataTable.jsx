@@ -234,14 +234,14 @@ const LogicalReasoningDataTable = ({ moduleType, moduleData, refetch }) => {
           <DialogHeader>
             <DialogTitle>Edit {moduleType}</DialogTitle>
           </DialogHeader>
-          {/* {selectedItem && (
-            <LeadershipStyleEditForm
+          {selectedItem && (
+            <LogicalReasoningEditForm
               moduleType={moduleType}
               selectedItem={selectedItem}
               refetch={refetch}
               setIsDialogOpen={setIsDialogOpen}
             />
-          )} */}
+          )}
         </DialogContent>
       </Dialog>
     </div>
