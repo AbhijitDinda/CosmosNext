@@ -2,7 +2,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -24,88 +23,126 @@ import dynamic from "next/dynamic";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
-import { useAddStyle } from "@/hooks/apis/test-group/approac-assessment/useAddStyle";
-import { useAddQuestion } from "@/hooks/apis/test-group/approac-assessment/useAddQuestion";
 import { useEffect, useState } from "react";
-import { useListOfStyle } from "@/hooks/apis/test-group/approac-assessment/useListOfStyle";
+import { useAddStyle } from "@/hooks/apis/test-group/leadership-style/useAddStyle";
+import { useAddQuestion } from "@/hooks/apis/test-group/leadership-style/useAddQuestion";
+import { useListOfStyle } from "@/hooks/apis/test-group/leadership-style/useListOfStyle";
+// import { useListOfLeadershipGroups } from "@/hooks/apis/test-group/leadership/useListOfLeadershipGroups";
 
 // Define schemas
-const styleSchema = z.object({
+const leadershipStyleSchema = z.object({
   name: z.string().min(2, "Name is required"),
-  description: z.string().min(10, "Description must be at least 10 characters"),
-  main_chars: z.string().min(2, "Main Characteristics are required"),
+  description: z.string().min(10, "Description is required"),
+  characteristics: z.string().min(2, "Characteristics are required"),
   challenges: z.string().min(2, "Challenges are required"),
-  strengths: z.string().min(2, "Strengths are required"),
-  best_roles: z.string().min(2, "Best Roles are required"),
-  status: z.string().min(1, "Display is required"),
+  key_strengths: z.string().min(2, "Key Strengths are required"),
+  communication: z.string().min(2, "Communication details are required"),
+  motivation_techniques: z
+    .string()
+    .min(2, "Motivation Techniques are required"),
+  demographic_response: z.string().min(2, "Demographic Response is required"),
+  recommendations: z.string().min(2, "Recommendations are required"),
+  examples: z.string().min(2, "Examples are required"),
 });
 
-const questionSchema = z.object({
-  question: z.string().min(5, "Question must be at least 5 characters"),
-  approach_style: z.string().min(1, "Approach style is required"),
+const leadershipQuestionSchema = z.object({
+  question_name: z.string().min(5, "Question is required"),
+  leadership_group: z.string().min(1, "Leadership Group is required"),
   order_id: z.optional(z.number().int().positive()).nullable(),
-  status: z.string().min(1, "Display is required"),
+  status: z.string().min(1, "Status is required"),
 });
 
-const AddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
-  const [styleList, setStyleList] = useState([]);
-  const schema = moduleType === "Styles" ? styleSchema : questionSchema;
+const LeadershipStyleAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
+  const [leadershipGroups, setLeadershipGroups] = useState([]);
+  const schema =
+    moduleType === "Leadership Styles"
+      ? leadershipStyleSchema
+      : leadershipQuestionSchema;
 
   const {
-    allStyleData,
-    isFetching: isStyleListFetching,
-    isLoading: isStyleListLoading,
-  } = useListOfStyle();
-
+    allLeadershipStylesData: allLeadershipGroups,
+    isFetching: isLeadershipGroupsFetching,
+    isLoading: isLeadershipGroupsLoading,
+  } = moduleType === "Questions"
+    ? useListOfStyle()
+    : {
+        allLeadershipStylesData: null,
+        isFetching: false,
+        isLoading: false,
+      };
+  //   console.log(allLeadershipGroups);
   useEffect(() => {
-    if (allStyleData) {
-      const List = allStyleData?.data?.data?.map((item) => ({
+    if (allLeadershipGroups) {
+      const groupList = allLeadershipGroups?.data?.data?.map((item) => ({
         id: item.id,
         name: item.name,
       }));
-      setStyleList(List); // Updating to set the style list
+      setLeadershipGroups(groupList);
     }
-  }, [allStyleData]);
+  }, [allLeadershipGroups]);
+
   const form = useForm({
     resolver: zodResolver(schema),
-    defaultValues: {
-      name: "",
-      description: "",
-      main_chars: "",
-      challenges: "",
-      strengths: "",
-      best_roles: "",
-      display: "1",
-      question: "",
-      approach_style: "",
-    },
+    defaultValues:
+      moduleType === "Leadership Styles"
+        ? {
+            name: "",
+            description: "",
+            characteristics: "",
+            challenges: "",
+            key_strengths: "",
+            communication: "",
+            motivation_techniques: "",
+            demographic_response: "",
+            recommendations: "",
+            examples: "",
+          }
+        : {
+            question_name: "",
+            leadership_group: "",
+            order_id: undefined,
+            status: "1",
+          },
   });
 
-  const { addStyleMutation, isPending: isStylePending } = useAddStyle();
-  const { addQuestionMutation, isPending: isQuestionPending } =
-    useAddQuestion();
+  const {
+    addStyleMutationInLeadershipStyle: addLeadershipStyleMutation,
+    isPending: isAddLeadershipStylePending,
+  } = useAddStyle();
+  const {
+    addQuestionMutationInLeadershipStyle: addLeadershipQuestionMutation,
+    isPending: isAddLeadershipQuestionPending,
+  } = useAddQuestion();
 
   const onSubmit = async (data) => {
     let response;
-    console.log("moduleType", moduleType);
-    if (moduleType === "Styles") {
-      response = await addStyleMutation(data);
-    } else if (moduleType === "Questions") {
-      response = await addQuestionMutation(data);
+    if (moduleType === "Leadership Styles") {
+      response = await addLeadershipStyleMutation(data);
+    } else {
+      const payload = {
+        question: data.question_name,
+        ...data,
+      };
+      response = await addLeadershipQuestionMutation(payload);
+    }
+
+    if (response.error) {
+      console.error("Error:", response.error);
+      return;
     }
     if (response.data.status === "success") {
       form.reset();
       setIsDialogOpen(false);
       refetch();
-    } else {
-      console.log("Error in response", response.data);
     }
   };
+
+  if (isLeadershipGroupsLoading) return <div>Loading...</div>;
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        {moduleType === "Styles" ? (
+        {moduleType === "Leadership Styles" ? (
           <>
             <FormField
               name="name"
@@ -134,11 +171,11 @@ const AddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
               )}
             />
             <FormField
-              name="main_chars"
+              name="characteristics"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Main Characteristics</FormLabel>
+                  <FormLabel>Characteristics</FormLabel>
                   <FormControl>
                     <ReactQuill {...field} theme="snow" />
                   </FormControl>
@@ -160,11 +197,11 @@ const AddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
               )}
             />
             <FormField
-              name="strengths"
+              name="key_strengths"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Strengths</FormLabel>
+                  <FormLabel>Key Strengths</FormLabel>
                   <FormControl>
                     <ReactQuill {...field} theme="snow" />
                   </FormControl>
@@ -173,11 +210,11 @@ const AddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
               )}
             />
             <FormField
-              name="best_roles"
+              name="communication"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Best Suited Roles</FormLabel>
+                  <FormLabel>Communication</FormLabel>
                   <FormControl>
                     <ReactQuill {...field} theme="snow" />
                   </FormControl>
@@ -186,24 +223,52 @@ const AddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
               )}
             />
             <FormField
-              name="status"
+              name="motivation_techniques"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Display Status</FormLabel>
+                  <FormLabel>Motivation Techniques</FormLabel>
                   <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger className="">
-                        <SelectValue placeholder="Select Status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="1">Show</SelectItem>
-                        <SelectItem value="0">Hide</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <ReactQuill {...field} theme="snow" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="demographic_response"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Demographic Response</FormLabel>
+                  <FormControl>
+                    <ReactQuill {...field} theme="snow" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="recommendations"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Recommendations</FormLabel>
+                  <FormControl>
+                    <ReactQuill {...field} theme="snow" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="examples"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Examples</FormLabel>
+                  <FormControl>
+                    <ReactQuill {...field} theme="snow" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -213,7 +278,7 @@ const AddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
         ) : (
           <>
             <FormField
-              name="question"
+              name="question_name"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
@@ -226,23 +291,23 @@ const AddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
               )}
             />
             <FormField
-              name="approach_style"
+              name="leadership_group"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Approach Style</FormLabel>
+                  <FormLabel>Leadership Group</FormLabel>
                   <FormControl>
                     <Select
                       value={field.value ? field.value.toString() : ""} // Ensure it's a string
                       onValueChange={(value) => field.onChange(value)}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Select Style" />
+                        <SelectValue placeholder="Select Group" />
                       </SelectTrigger>
                       <SelectContent>
-                        {styleList?.map((item) => (
-                          <SelectItem key={item.id} value={item.id.toString()}>
-                            {item.name}
+                        {leadershipGroups.map((group, index) => (
+                          <SelectItem key={index} value={group.id.toString()}>
+                            {group.name}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -252,17 +317,16 @@ const AddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                 </FormItem>
               )}
             />
-
             <FormField
               name="order_id"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Order Id</FormLabel>
+                  <FormLabel>Order ID</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
-                      value={field.value}
+                      value={field.value || ""}
                       onChange={(e) =>
                         field.onChange(
                           e.target.value.length > 0
@@ -281,13 +345,10 @@ const AddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Display Status</FormLabel>
+                  <FormLabel>Status</FormLabel>
                   <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger className="">
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger>
                         <SelectValue placeholder="Select Status" />
                       </SelectTrigger>
                       <SelectContent>
@@ -305,13 +366,15 @@ const AddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
         <Button
           type="submit"
           className="w-full mt-2"
-          disabled={isStylePending || isQuestionPending}
+          disabled={
+            isAddLeadershipStylePending || isAddLeadershipQuestionPending
+          }
         >
-          {isStylePending || isQuestionPending ? "Adding..." : "Add"}
+          Add {moduleType}
         </Button>
       </form>
     </Form>
   );
 };
 
-export default AddForm;
+export default LeadershipStyleAddForm;

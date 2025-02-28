@@ -16,17 +16,17 @@ import {
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { PencilIcon, TrashIcon } from "lucide-react";
-import { useDeleteTraitsTeamInventory } from "@/hooks/apis/test-group/team-inventory/useDeleteTraitsTeamInventory";
-import { useDeleteSubQuestionTeamInventory } from "@/hooks/apis/test-group/team-inventory/useDeleteSubQuestionTeamInventory";
-import { useDeleteQuestionTeamInventory } from "@/hooks/apis/test-group/team-inventory/useDeleteQuestionTeamInventory";
-import TeamInventoryEditForm from "./TeamInventoryEditTable";
+import LeadershipStyleEditForm from "./LeadershipStyleEditForm";
+import { useDeleteStyle } from "@/hooks/apis/test-group/leadership-style/useDeleteStyle";
+import { useDeleteQuestion } from "@/hooks/apis/test-group/leadership-style/useDeleteQuestion";
 
-const TeamInventoryDataTable = ({ moduleType, moduleData, refetch }) => {
+const LeaderShipStyleDataTable = ({ moduleType, moduleData, refetch }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -43,16 +43,12 @@ const TeamInventoryDataTable = ({ moduleType, moduleData, refetch }) => {
 
   const columns = [
     { accessorKey: "id", header: "ID" },
-    ...(moduleType === "Traits"
-      ? [{ accessorKey: "trait_name", header: "Trait Name" }]
-      : moduleType === "Sub Questions"
-      ? [
-          { accessorKey: "main_question", header: "Question" },
-          { accessorKey: "question_name", header: "Sub Question" },
-          { accessorKey: "traits_category", header: "Traits Category" },
-        ]
-      : [{ accessorKey: "question_name", header: "Question" }]),
-
+    ...(moduleType === "Leadership Styles"
+      ? [{ accessorKey: "name", header: "Name" }]
+      : [
+          { accessorKey: "question_name", header: "Question" },
+          { accessorKey: "group_name", header: "Leadership Style" },
+        ]),
     {
       id: "actions",
       header: "Action",
@@ -86,23 +82,21 @@ const TeamInventoryDataTable = ({ moduleType, moduleData, refetch }) => {
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  const { deleteTraitsTeamInventory, isPending: isDeleteTraitsPending } =
-    useDeleteTraitsTeamInventory();
   const {
-    deleteSubQuestionTeamInventory,
-    isPending: isDeleteSubQuestionPending,
-  } = useDeleteSubQuestionTeamInventory();
-  const { deleteQuestionTeamInventory, isPending: isDeleteQuestionPending } =
-    useDeleteQuestionTeamInventory();
+    deleteStyleMutationInLeadershipStyle: deleteStyleMutation,
+    isPending: isDeleteStylePending,
+  } = useDeleteStyle();
+  const {
+    deleteQuestionMutationInLeadershipStyle: deleteQuestionMutation,
+    isPending: isDeleteQuestionPending,
+  } = useDeleteQuestion();
 
   const handleDelete = async (id) => {
     let response;
-    if (moduleType === "Traits") {
-      response = await deleteTraitsTeamInventory(id);
-    } else if (moduleType === "Sub Questions") {
-      response = await deleteSubQuestionTeamInventory(id);
+    if (moduleType === "Leadership Styles") {
+      response = await deleteStyleMutation(id);
     } else {
-      response = await deleteQuestionTeamInventory(id);
+      response = await deleteQuestionMutation(id);
     }
     if (response.data.status === "success") {
       setIsDeleteDialogOpen(false);
@@ -152,6 +146,8 @@ const TeamInventoryDataTable = ({ moduleType, moduleData, refetch }) => {
           )}
         </TableBody>
       </Table>
+
+      {/* Pagination Controls */}
       <div className="flex items-center justify-end space-x-2 p-4">
         <Button
           variant="outline"
@@ -170,7 +166,8 @@ const TeamInventoryDataTable = ({ moduleType, moduleData, refetch }) => {
           Next
         </Button>
       </div>
-      {/* Delete Confirmation Dialog */}
+
+      {/* Delete Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent className="max-h-[80vh] overflow-y-auto max-w-[600px]">
           <DialogHeader>
@@ -189,11 +186,6 @@ const TeamInventoryDataTable = ({ moduleType, moduleData, refetch }) => {
             <Button
               className="bg-red-500"
               onClick={() => handleDelete(selectedItem.id)}
-              disabled={
-                isDeleteTraitsPending ||
-                isDeleteSubQuestionPending ||
-                isDeleteQuestionPending
-              }
             >
               Delete
             </Button>
@@ -208,7 +200,7 @@ const TeamInventoryDataTable = ({ moduleType, moduleData, refetch }) => {
             <DialogTitle>Edit {moduleType}</DialogTitle>
           </DialogHeader>
           {selectedItem && (
-            <TeamInventoryEditForm
+            <LeadershipStyleEditForm
               moduleType={moduleType}
               selectedItem={selectedItem}
               refetch={refetch}
@@ -221,4 +213,4 @@ const TeamInventoryDataTable = ({ moduleType, moduleData, refetch }) => {
   );
 };
 
-export default TeamInventoryDataTable;
+export default LeaderShipStyleDataTable;

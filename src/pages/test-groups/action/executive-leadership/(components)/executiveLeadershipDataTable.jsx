@@ -20,13 +20,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+// import EditForm from "@/components/EditForm"; // Ensure you import the correct path
 import { PencilIcon, TrashIcon } from "lucide-react";
-import { useDeleteTraitsTeamInventory } from "@/hooks/apis/test-group/team-inventory/useDeleteTraitsTeamInventory";
-import { useDeleteSubQuestionTeamInventory } from "@/hooks/apis/test-group/team-inventory/useDeleteSubQuestionTeamInventory";
-import { useDeleteQuestionTeamInventory } from "@/hooks/apis/test-group/team-inventory/useDeleteQuestionTeamInventory";
-import TeamInventoryEditForm from "./TeamInventoryEditTable";
+import ExecutiveLeadershipEditForm from "./executiveLeadershipEditForm";
+import { useDeleteQuestion } from "@/hooks/apis/test-group/situational-judgement/useDeleteQuestion";
+// import { useDeleteQuestion } from "@/hooks/apis/test-group/assessment/useDeleteQuestion";
 
-const TeamInventoryDataTable = ({ moduleType, moduleData, refetch }) => {
+const ExecutiveLeadershipDataTable = ({ moduleType, moduleData, refetch }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -42,20 +42,31 @@ const TeamInventoryDataTable = ({ moduleType, moduleData, refetch }) => {
   };
 
   const columns = [
-    { accessorKey: "id", header: "ID" },
-    ...(moduleType === "Traits"
-      ? [{ accessorKey: "trait_name", header: "Trait Name" }]
-      : moduleType === "Sub Questions"
-      ? [
-          { accessorKey: "main_question", header: "Question" },
-          { accessorKey: "question_name", header: "Sub Question" },
-          { accessorKey: "traits_category", header: "Traits Category" },
-        ]
-      : [{ accessorKey: "question_name", header: "Question" }]),
-
+    { accessorKey: "id", header: "ID", size: 50 },
+    {
+      accessorKey: "question_name",
+      header: "Question",
+      size: 300,
+    },
+    {
+      id: "options",
+      header: "Options",
+      size: 400,
+      cell: ({ row }) => (
+        <ol className="list-decimal px-4">
+          {[1, 2, 3, 4].map((option) => (
+            <li className="list-decimal list-outside" key={option}>
+              {row.original[`option${option}`]}
+            </li>
+          ))}
+        </ol>
+      ),
+    },
+    { accessorKey: "right_option", header: "Right Option", size: 20 },
     {
       id: "actions",
       header: "Action",
+      size: 50,
       cell: ({ row }) => (
         <div className="flex gap-2">
           <Button
@@ -86,24 +97,13 @@ const TeamInventoryDataTable = ({ moduleType, moduleData, refetch }) => {
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  const { deleteTraitsTeamInventory, isPending: isDeleteTraitsPending } =
-    useDeleteTraitsTeamInventory();
   const {
-    deleteSubQuestionTeamInventory,
-    isPending: isDeleteSubQuestionPending,
-  } = useDeleteSubQuestionTeamInventory();
-  const { deleteQuestionTeamInventory, isPending: isDeleteQuestionPending } =
-    useDeleteQuestionTeamInventory();
+    deleteQuestionMutationInSituationalJudgement: deleteQuestionMutation,
+    isPending: isDeletePending,
+  } = useDeleteQuestion();
 
   const handleDelete = async (id) => {
-    let response;
-    if (moduleType === "Traits") {
-      response = await deleteTraitsTeamInventory(id);
-    } else if (moduleType === "Sub Questions") {
-      response = await deleteSubQuestionTeamInventory(id);
-    } else {
-      response = await deleteQuestionTeamInventory(id);
-    }
+    const response = await deleteQuestionMutation(id);
     if (response.data.status === "success") {
       setIsDeleteDialogOpen(false);
       refetch();
@@ -119,7 +119,10 @@ const TeamInventoryDataTable = ({ moduleType, moduleData, refetch }) => {
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id} className="bg-gray-100">
               {headerGroup.headers.map((header) => (
-                <TableHead key={header.id} className="px-4 py-2">
+                <TableHead
+                  key={header.id}
+                  className="px-4 py-2 border border-gray-300 text-nowrap"
+                >
                   {flexRender(
                     header.column.columnDef.header,
                     header.getContext()
@@ -137,6 +140,7 @@ const TeamInventoryDataTable = ({ moduleType, moduleData, refetch }) => {
                   <TableCell
                     key={cell.id}
                     className="px-4 py-2 border border-gray-300"
+                    width={cell.column.columnDef.size}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
@@ -170,14 +174,13 @@ const TeamInventoryDataTable = ({ moduleType, moduleData, refetch }) => {
           Next
         </Button>
       </div>
-      {/* Delete Confirmation Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent className="max-h-[80vh] overflow-y-auto max-w-[600px]">
           <DialogHeader>
-            <DialogTitle>Delete {moduleType}</DialogTitle>
+            <DialogTitle>Delete Question</DialogTitle>
           </DialogHeader>
           <div className="p-4">
-            Are you sure you want to delete this {moduleType}?
+            Are you sure you want to delete this Question?
           </div>
           <div className="flex justify-end p-4 space-x-2">
             <Button
@@ -189,26 +192,20 @@ const TeamInventoryDataTable = ({ moduleType, moduleData, refetch }) => {
             <Button
               className="bg-red-500"
               onClick={() => handleDelete(selectedItem.id)}
-              disabled={
-                isDeleteTraitsPending ||
-                isDeleteSubQuestionPending ||
-                isDeleteQuestionPending
-              }
+              disabled={isDeletePending}
             >
-              Delete
+              {isDeletePending ? "Deleting..." : "Delete"}
             </Button>
           </div>
         </DialogContent>
       </Dialog>
-
-      {/* Edit Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-h-[80vh] overflow-y-auto max-w-[600px]">
           <DialogHeader>
-            <DialogTitle>Edit {moduleType}</DialogTitle>
+            <DialogTitle>Edit Question</DialogTitle>
           </DialogHeader>
           {selectedItem && (
-            <TeamInventoryEditForm
+            <ExecutiveLeadershipEditForm
               moduleType={moduleType}
               selectedItem={selectedItem}
               refetch={refetch}
@@ -221,4 +218,4 @@ const TeamInventoryDataTable = ({ moduleType, moduleData, refetch }) => {
   );
 };
 
-export default TeamInventoryDataTable;
+export default ExecutiveLeadershipDataTable;

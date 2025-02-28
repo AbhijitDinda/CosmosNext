@@ -1,9 +1,7 @@
+import { useEffect, useState } from "react";
 import Heading from "@/components/Heading";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { PencilIcon, TrashIcon } from "lucide-react";
-import { useGetAssessmentById } from "@/hooks/apis/test-group/useGetAssessmentById";
-import { useState } from "react";
 import {
   Dialog,
   DialogTrigger,
@@ -11,89 +9,31 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useGetAssessmentById } from "@/hooks/apis/test-group/useGetAssessmentById";
+import JuniorMidLevelDataTable from "./(components)/juniorMidLevelDataTable";
+import JuniorMidLevelAddForm from "./(components)/juniorMidLevelAddForm";
 
-const Table = ({ moduleType, moduleData }) => {
-  let columns = [];
-  if (moduleType === "Questions") {
-    columns = ["ID", "Question", "Options", "Right Option", "Action"];
-  }
-
-  console.log("moduleData", moduleData);
-  return (
-    <div className="overflow-x-auto">
-      <table className="table-auto w-full border">
-        <thead>
-          <tr className="bg-gray-100 text-nowrap">
-            {columns.map((col, idx) => (
-              <th
-                key={idx}
-                className="border border-gray-300 px-4 py-2 text-left"
-              >
-                {col}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {moduleData?.data?.map((item) => (
-            <tr key={item.id}>
-              <td className="border border-gray-300 px-4 py-2 text-nowrap">
-                {item.id}
-              </td>
-              {moduleType === "Questions" && (
-                <>
-                  <td className="border border-gray-300 px-4 py-2  max-w-[300px]">
-                    {item.question_name}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2 max-w-[300px]">
-                    <ol>
-                      {[1, 2, 3, 4].map((option) => (
-                        <li key={option} className="list-decimal">
-                          {item[`option${option}`]}
-                        </li>
-                      ))}
-                    </ol>
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2  max-w-[300px]">
-                    {item.right_option}
-                  </td>
-                </>
-              )}
-              <td className="border border-gray-300 px-4 py-2 text-nowrap">
-                <Button size="sm" variant="outline" className="rounded-sm mr-2">
-                  <PencilIcon className="stroke-Third" />
-                </Button>
-                <Button size="sm" variant="outline" className="rounded-sm">
-                  <TrashIcon className="stroke-Error" />
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-};
-
-const JuniorMidlevel = () => {
+const JuniorMidLevel = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  // Error states
-  const [errors, setErrors] = useState({});
-
   const assessmentId = 8;
   const shouldFetch = Boolean(assessmentId);
 
-  const { isLoading, error, assessmentByIdData } = useGetAssessmentById(
-    assessmentId,
-    shouldFetch
-  );
+  const { isLoading, error, assessmentByIdData, refetch } =
+    useGetAssessmentById(assessmentId, shouldFetch);
 
+  // Set default module from API response
   const [activeModule, setActiveModule] = useState(
-    assessmentByIdData?.data?.modules_data[0]?.module_type || "Questions"
+    assessmentByIdData?.data?.modules_data?.[0]?.module_type || "Questions"
   );
 
-  console.log("assessmentByIdData", assessmentByIdData);
+  // Ensure state updates correctly when API data changes
+  useEffect(() => {
+    if (assessmentByIdData?.data?.modules_data?.[0]?.module_type) {
+      setActiveModule(assessmentByIdData.data.modules_data[0].module_type);
+    }
+  }, [assessmentByIdData]);
 
+  // Define button labels for each module type
   const getAddButtonText = (moduleType) => {
     switch (moduleType) {
       case "Questions":
@@ -103,30 +43,20 @@ const JuniorMidlevel = () => {
     }
   };
 
-  const handleButtonClick = () => {
-    setIsDialogOpen(true);
-  };
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div className="rounded-sm mx-auto w-full max-w-[1300px]">
-      <Heading title="Test Options" />
+      <Heading title="Situational Judgement Assessment" />
       <div className="p-4 bg-White rounded-sm">
         <Tabs
-          defaultValue={
-            assessmentByIdData?.data?.modules_data?.[0]?.module_type
-          }
+          defaultValue={activeModule}
           className="w-full"
           onValueChange={setActiveModule}
         >
           <div className="flex justify-between">
+            {/* Tabs Navigation */}
             <TabsList className="!h-auto bg-white justify-start gap-1 flex flex-wrap">
               {assessmentByIdData?.data?.modules_data.map((module, index) => (
                 <TabsTrigger
@@ -138,9 +68,11 @@ const JuniorMidlevel = () => {
                 </TabsTrigger>
               ))}
             </TabsList>
+
+            {/* Add New Item Button */}
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-Primary text-white  rounded-md">
+                <Button className="bg-Primary text-white rounded-md">
                   {getAddButtonText(activeModule)}
                 </Button>
               </DialogTrigger>
@@ -148,14 +80,24 @@ const JuniorMidlevel = () => {
                 <DialogHeader>
                   <DialogTitle>{getAddButtonText(activeModule)}</DialogTitle>
                 </DialogHeader>
+                {/* Add Form */}
+                <JuniorMidLevelAddForm
+                  // moduleType={activeModule}
+                  refetch={refetch}
+                  setIsDialogOpen={setIsDialogOpen}
+                  assessmentId={assessmentId}
+                />
               </DialogContent>
             </Dialog>
           </div>
+
+          {/* Dynamic DataTable for Each Module */}
           {assessmentByIdData?.data?.modules_data.map((module, index) => (
             <TabsContent key={index} value={module.module_type}>
-              <Table
+              <JuniorMidLevelDataTable
                 moduleType={module.module_type}
                 moduleData={module.module_data}
+                refetch={refetch}
               />
             </TabsContent>
           ))}
@@ -165,4 +107,4 @@ const JuniorMidlevel = () => {
   );
 };
 
-export default JuniorMidlevel;
+export default JuniorMidLevel;
