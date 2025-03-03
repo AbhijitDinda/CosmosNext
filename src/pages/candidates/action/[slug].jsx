@@ -10,19 +10,33 @@ const CandidateAction = () => {
     const [test_token, candidate_id] = slug ? slug.split('&') : [];
 
     const shouldFetch = test_token && candidate_id; // Ensure valid params before API call
-    const { isLoading, TestReport } = useTestReport({ test_token, candidate_id, enabled: shouldFetch });
+    const { isLoading, isError, error, TestReport } = useTestReport({ test_token, candidate_id, enabled: shouldFetch });
 
-    console.log("TestReport",TestReport?.data?.pdf_download_url)
+    // console.log("TestReport",TestReport?.data?.pdf_download_url);
 
     return (
+
         <section className='w-full max-w-screen-xl mx-auto rounded-sm'>
             <Heading title="Candidate Action" />
-            <div className='bg-white flex items-center rounded-b-sm justify-between gap-4 p-4'>
-                <CandidateFilterAndAnalytics name={TestReport?.data?.data?.testData?.user_name} email={TestReport?.data?.data?.testData?.user_email} report_url={TestReport?.data?.pdf_download_url} />
-            </div>
-            <div className='mt-4'>
-                <CandidateActionTabs data={TestReport} isLoading={isLoading}  />
-            </div>
+            {isError ? (
+                <div className='bg-red-100 text-red-600 p-4 rounded'>
+                    <p>No data found. Please check the URL or try again later.</p>
+                </div>
+
+            ) : (
+                <div>
+                    <div className='bg-white flex items-center rounded-b-sm justify-between gap-4 p-4'>
+                        <CandidateFilterAndAnalytics name={TestReport?.data?.data?.testData?.user_name} email={TestReport?.data?.data?.testData?.user_email} report_url={TestReport?.data?.pdf_download_url} />
+                    </div>
+                    <div className='mt-4'>
+                        <CandidateActionTabs data={TestReport} isLoading={isLoading} />
+                    </div>
+
+                </div>
+            )
+            }
+
+
         </section>
     )
 }
