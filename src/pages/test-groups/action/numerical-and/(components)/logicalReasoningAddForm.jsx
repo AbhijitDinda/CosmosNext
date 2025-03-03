@@ -48,7 +48,7 @@ const LogicalReasoningAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
     isLoading: isSectionListLoading,
     isFetching,
   } = useGetSectionList();
-  console.log(sectionListData);
+  // console.log(sectionListData);
   useEffect(() => {
     if (sectionListData) {
       const list = sectionListData?.data?.data?.map((item) => ({
