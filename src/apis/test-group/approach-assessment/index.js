@@ -21,7 +21,7 @@ export const addStyleInApproach = async ({ token, logout, post_data }) => {
       return;
     } else {
       console.error("Error in add style In Approach", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -45,7 +45,7 @@ export const addQuestionInApproach = async ({ token, logout, post_data }) => {
       return;
     } else {
       console.error("Error in add question In Approach", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -70,7 +70,7 @@ export const editStyleInApproach = async ({ token, logout, post_data, id }) => {
       return;
     } else {
       console.error("Error in edit style In Approach", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -99,7 +99,7 @@ export const editQuestionInApproach = async ({
       return;
     } else {
       console.error("Error in edit question In Approach", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -123,7 +123,7 @@ export const deleteStyleInApproach = async ({ token, logout, id }) => {
       return;
     } else {
       console.error("Error in delete style In Approach", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -146,7 +146,7 @@ export const deleteQuestionInApproach = async ({ token, logout, id }) => {
       return;
     } else {
       console.error("Error in delete question In Approach", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -170,7 +170,7 @@ export const getStyleById = async ({ token, logout, id }) => {
       return;
     } else {
       console.error("Error in get style by id", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -194,7 +194,7 @@ export const getQuestionById = async ({ token, logout, id }) => {
       return;
     } else {
       console.error("Error in get question by id", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -217,7 +217,7 @@ export const getListOfStyles = async ({ token, logout }) => {
       return;
     } else {
       console.error("Error in get list of styles", error);
-      throw error;
+      // throw error;
     }
   }
 };

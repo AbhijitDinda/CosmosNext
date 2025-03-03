@@ -36,14 +36,14 @@ const router = useRouter(); // Next.js router for navigation
         />
 
         {/* Create Assessment Button */}
-        <Button
+        {/* <Button
           size="sm"
           variant="outline"
           className="rounded-sm hover:border hover:border-Primary hover:text-Primary text-white bg-Primary"
           onClick={() => router.push("/test-groups/create")} // Navigate to create assessment page
         >
           Create Test
-        </Button>
+        </Button> */}
       </div>
 
       <div className="flex flex-wrap gap-3 w-full justify-between text-Secondary_Text items-center">

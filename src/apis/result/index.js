@@ -17,7 +17,7 @@ export const getTestReport = async ({ token,logout,test_token,candidate_id}) => 
             return;
         } else {
             console.error("Error in Get Test Report", error);
-            throw error;
+            // throw error;
         }
 
     }

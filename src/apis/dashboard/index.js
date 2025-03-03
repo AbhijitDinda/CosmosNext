@@ -16,7 +16,7 @@ export const getDashboardDetails = async ({ token },logout) => {
             return;
         } else {
             console.error("error in Get dashboard details", error);
-            throw error;
+            // throw error;
         }
 
     }
@@ -40,7 +40,7 @@ export const getDesignationChart = async (designation_name, {token} ,logout) => 
             return;
         } else {
             console.error("error in Get Designation details", error);
-            throw error;
+            // throw error;
         }
 
     }

@@ -25,7 +25,7 @@ export const addMotivationGroupInMotivationDrive = async ({
       return;
     } else {
       console.error("Error in add Motivation Group In MotivationDrive", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -53,7 +53,7 @@ export const addQuestionInMotivationDrive = async ({
       return;
     } else {
       console.error("Error in add Question In MotivationDrive", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -84,7 +84,7 @@ export const editMotivationGroupInMotivationDrive = async ({
       return;
     } else {
       console.error("Error in edit Motivation Group In MotivationDrive", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -113,7 +113,7 @@ export const editQuestionInMotivationDrive = async ({
       return;
     } else {
       console.error("Error in edit Question In MotivationDrive", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -145,7 +145,7 @@ export const deleteMotivationGroupInMotivationDrive = async ({
         "Error in delete Motivation Group In MotivationDrive",
         error
       );
-      throw error;
+      // throw error;
     }
   }
 };
@@ -172,7 +172,7 @@ export const deleteQuestionInMotivationDrive = async ({
       return;
     } else {
       console.error("Error in delete Question In MotivationDrive", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -196,7 +196,7 @@ export const getMotivationGroupById = async ({ token, logout, groupId }) => {
       return;
     } else {
       console.error("Error in get Motivation Group By Id", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -221,7 +221,7 @@ export const getQuestionById = async ({ token, logout, questionId }) => {
       return;
     } else {
       console.error("Error in get Question By Id", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -243,7 +243,7 @@ export const getAllMotivationGroups = async ({ token, logout }) => {
       return;
     } else {
       console.error("Error in get All Motivation Groups", error);
-      throw error;
+      // throw error;
     }
   }
 };

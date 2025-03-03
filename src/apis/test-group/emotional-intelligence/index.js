@@ -21,7 +21,7 @@ export const addQuestionInEmotionalIntelligence = async ({ token, logout, post_d
       return;
     } else {
       console.error("Error in add Question In Emotional Intelligence", error);
-      throw error;
+    //   throw error;
     }
   }
 };
@@ -48,7 +48,7 @@ export const addApproachStyleInEmotionalIntelligence = async ({ token, logout, p
             return;
         } else {
             console.error("Error in add Approach Style In Emotional Intelligence", error);
-            throw error;
+            // throw error;
         }
     }
 };
@@ -73,7 +73,7 @@ export const editQuestionInEmotionalIntelligence = async ({ token, logout, post_
             return;
         } else {
             console.error("Error in edit Question In Emotional Intelligence", error);
-            throw error;
+            // throw error;
         }
     }
 };
@@ -97,7 +97,7 @@ export const editApproachStyleInEmotionalIntelligence = async ({ token, logout, 
             return;
         } else {
             console.error("Error in edit Approach Style In Emotional Intelligence", error);
-            throw error;
+            // throw error;
         }
     }
 };
@@ -121,7 +121,7 @@ export const deleteQuestionInEmotionalIntelligence = async ({ token, logout, que
             return;
         } else {
             console.error("Error in delete Question In Emotional Intelligence", error);
-            throw error;
+            // throw error;
         }
     }
 };
@@ -144,7 +144,7 @@ export const deleteApproachStyleInEmotionalIntelligence = async ({ token, logout
             return;
         } else {
             console.error("Error in delete Approach Style In Emotional Intelligence", error);
-            throw error;
+            // throw error;
         }
     }
 };
@@ -168,7 +168,7 @@ export const getQuestionByIdInEmotionalIntelligence = async ({ token, logout, qu
             return;
         } else {
             console.error("Error in get Question By Id In Emotional Intelligence", error);
-            throw error;
+            // throw error;
         }
     }
 };
@@ -193,7 +193,7 @@ export const getApproachStyleByIdInEmotionalIntelligence = async ({ token, logou
             return;
         } else {
             console.error("Error in get Approach Style By Id In Emotional Intelligence", error);
-            throw error;
+            // throw error;
         }
     }
 };
@@ -218,7 +218,7 @@ export const getAllApproachStylesInEmotionalIntelligence = async ({ token, logou
             return;
         } else {
             console.error("Error in get All Approach Styles In Emotional Intelligence", error);
-            throw error;
+            // throw error;
         }
     }
 };

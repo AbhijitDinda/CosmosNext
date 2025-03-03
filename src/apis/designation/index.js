@@ -17,7 +17,7 @@ export const getListOfDesignationpagination = async ({ token,logout,page}) => {
             return;
         } else {
             console.error("Error in Get list of Designation details", error);
-            throw error;
+            // throw error;
         }
 
     }
@@ -70,7 +70,7 @@ export const getListOfDesignation = async ({ token, logout }) => {
             return;
         } else {
             console.error("Error fetching all designations", error);
-            throw error;
+            // throw error;
         }
     }
 };
@@ -92,7 +92,7 @@ export const addDesignation = async ({designationData , token, logout }) => {
             return;
         } else {
             console.error("Error adding designation", error);
-            throw error;
+            // throw error;
         }
     }
 };
@@ -113,7 +113,7 @@ export const deleteDesignationapi = async ({ designationId, token, logout}) => {
             return;
         } else {
             console.error("Error deleting designation", error);
-            throw error;
+            // throw error;
         }
     }
 };
@@ -135,7 +135,7 @@ export const updateDesignation = async ({ designation_id, designation_name, toke
             return;
         } else {
             console.error("Error updating designation", error);
-            throw error;
+            // throw error;
         }
     }
 };

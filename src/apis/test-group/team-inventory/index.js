@@ -26,7 +26,7 @@ export const addQuestionInTeamInventory = async ({
       return;
     } else {
       console.error("Error in Fatch Assessment details", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -55,7 +55,7 @@ export const addSubQuestionInTeamInventory = async ({
       return;
     } else {
       console.error("Error in Fatch Assessment details", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -84,7 +84,7 @@ export const addTraitsInTeamInventory = async ({
       return;
     } else {
       console.error("Error in Fatch Assessment details", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -116,7 +116,7 @@ export const editQuestionInTeamInventory = async ({
       return;
     } else {
       console.error("Error in Edit Question", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -146,7 +146,7 @@ export const editSubQuestionInTeamInventory = async ({
       return;
     } else {
       console.error("Error in Edit sub Question", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -176,7 +176,7 @@ export const editTraitInTeamInventory = async ({
       return;
     } else {
       console.error("Error in Edit Traits", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -205,7 +205,7 @@ export const deleteQuestionInTeamInventory = async ({
       return;
     } else {
       console.error("Error in Delete Question", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -232,7 +232,7 @@ export const deleteSubQuestionInTeamInventory = async ({
       return;
     } else {
       console.error("Error in Delete Question", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -259,7 +259,7 @@ export const deleteTraitInTeamInventory = async ({
       return;
     } else {
       console.error("Error in Delete Question", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -283,7 +283,7 @@ export const getQuestionById = async ({ token, logout, q_id }) => {
       return;
     } else {
       console.error("Error in Get Question by ID", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -307,7 +307,7 @@ export const getTraitById = async ({ token, logout, traits_id }) => {
       return;
     } else {
       console.error("Error in Get Trait by ID", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -331,7 +331,7 @@ export const getSubQuestionById = async ({ token, logout, SubQ_id }) => {
       return;
     } else {
       console.error("Error in Get Sub Question by ID", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -352,7 +352,7 @@ export const getAllQuestions = async ({ token, logout }) => {
       return;
     } else {
       console.error("Error in Get All Questions", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -373,7 +373,7 @@ export const getAllTraits = async ({ token, logout }) => {
       return;
     } else {
       console.error("Error in Get All Traits", error);
-      throw error;
+      // throw error;
     }
   }
 };

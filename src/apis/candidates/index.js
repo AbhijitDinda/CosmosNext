@@ -16,7 +16,7 @@ export const getAllCandidates = async ({ token },logout, page = 1) => {
             return;
         } else {
             console.error("Error in Get all Candidates", error);
-            throw error;
+            // throw error;
         }
 
     }
@@ -43,6 +43,6 @@ export const filterAllCandidates = async ({ token}, logout, search = "", designa
         } else {
             console.error("Error in fetching candidates:", error);
         }
-        throw error;
+        // throw error;
     }
 };

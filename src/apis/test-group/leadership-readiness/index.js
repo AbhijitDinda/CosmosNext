@@ -26,7 +26,7 @@ export const addQuestionInLeadershipReadiness = async ({
       return;
     } else {
       console.error("Error in add Question In Leadership Readiness", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -57,7 +57,7 @@ export const addStyleInLeadershipReadiness = async ({
         "Error in add Leadership Style In Leadership Readiness",
         error
       );
-      throw error;
+      // throw error;
     }
   }
 };
@@ -87,7 +87,7 @@ export const editQuestionInLeadershipReadiness = async ({
       return;
     } else {
       console.error("Error in edit Question In Leadership Readiness", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -116,7 +116,7 @@ export const editStyleInLeadershipReadiness = async ({
       return;
     } else {
       console.error("Error in edit Style In Leadership Readiness", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -145,7 +145,7 @@ export const deleteQuestionInLeadershipReadiness = async ({
       return;
     } else {
       console.error("Error in delete Question In Leadership Readiness", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -172,7 +172,7 @@ export const deleteStyleInLeadershipReadiness = async ({
       return;
     } else {
       console.error("Error in delete Style In Leadership Readiness", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -203,7 +203,7 @@ export const getQuestionByIdInLeadershipReadiness = async ({
         "Error in get Question By Id In Leadership Readiness",
         error
       );
-      throw error;
+      // throw error;
     }
   }
 };
@@ -231,7 +231,7 @@ export const getStyleByIdInLeadershipReadiness = async ({
       return;
     } else {
       console.error("Error in get Style By Id In Leadership Readiness", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -255,7 +255,7 @@ export const getAllStylesInLeadershipReadiness = async ({ token, logout }) => {
       return;
     } else {
       console.error("Error in get All Styles In Leadership Readiness", error);
-      throw error;
+      // throw error;
     }
   }
 };

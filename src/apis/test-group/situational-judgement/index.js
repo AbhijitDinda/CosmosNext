@@ -19,7 +19,7 @@ export const getSpecificGroupData = async ({ token, logout, groupId }) => {
             return;
         } else {
             console.error("Error in get Specific Group Data", error);
-            throw error;
+            // throw error;
         }
     }
 };
@@ -44,7 +44,7 @@ export const addQuestion = async ({ token, logout, questionData }) => {
             return;
         } else {
             console.error("Error in add Question", error);
-            throw error;
+            // throw error;
         }
     }
 };
@@ -68,7 +68,7 @@ export const getQuestionById = async ({ token, logout, questionId }) => {
             return;
         } else {
             console.error("Error in get Question By Id", error);
-            throw error;
+            // throw error;
         }
     }
 };
@@ -94,7 +94,7 @@ export const editQuestion = async ({ token, logout, questionId, questionData }) 
             return;
         } else {
             console.error("Error in edit Question", error);
-            throw error;
+            // throw error;
         }
     }
 };
@@ -118,7 +118,7 @@ export const deleteQuestion = async ({ token, logout, questionId }) => {
             return;
         } else {
             console.error("Error in delete Question", error);
-            throw error;
+            // throw error;
         }
     }
 };

@@ -19,7 +19,7 @@ export const getListOfAssesments = async ({ token },logout,page,search) => {
             return;
         } else {
             console.error("Error in Get list of Assesments details", error);
-            throw error;
+            // throw error;
         }
 
     }
@@ -41,7 +41,7 @@ export const getCreateAssesmentsFieldsData = async ({ token,logout}) => {
             return;
         } else {
             console.error("Error in Get Create Assesments Fields Data details", error);
-            throw error;
+            // throw error;
         }
 
     }
@@ -66,7 +66,7 @@ export const CreateAssessment = async ({ token, logout,test_variant,dataObj }) =
             return;
         } else {
             console.error("Error in craete Assessment", error);
-            throw error;
+            // throw error;
         }
     }
 };
@@ -88,7 +88,7 @@ export const getAssessmentsAllUser = async ({ token,logout,assessment_id}) => {
             return;
         } else {
             console.error("Error in Assesments All User Data details", error);
-            throw error;
+            // throw error;
         }
 
     }
@@ -109,7 +109,7 @@ export const compareAssessmentUser = async ({ token, logout, assessment_id }) =>
             return;
         } else {
             console.error("Error in Compare Assessment User", error);
-            throw error;
+            // throw error;
         }
     }
 };

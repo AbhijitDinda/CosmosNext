@@ -25,7 +25,7 @@ export const addQuestionInLeadershipStyle = async ({
       return;
     } else {
       console.error("Error in add Question In Leadership Style", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -53,7 +53,7 @@ export const addStyleInLeadershipStyle = async ({
       return;
     } else {
       console.error("Error in add Style In Leadership Style", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -84,7 +84,7 @@ export const updateQuestionInLeadershipStyle = async ({
       return;
     } else {
       console.error("Error in update Question In Leadership Style", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -113,7 +113,7 @@ export const updateStyleInLeadershipStyle = async ({
       return;
     } else {
       console.error("Error in update Style In Leadership Style", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -141,7 +141,7 @@ export const deleteStyleInLeadershipStyle = async ({
       return;
     } else {
       console.error("Error in delete Style In Leadership Style", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -168,7 +168,7 @@ export const deleteQuestionInLeadershipStyle = async ({
       return;
     } else {
       console.error("Error in delete Question In Leadership Style", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -192,7 +192,7 @@ export const getQuestionById = async ({ token, logout, questionId }) => {
       return;
     } else {
       console.error("Error in get Question By Id", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -217,7 +217,7 @@ export const getStyleById = async ({ token, logout, styleId }) => {
       return;
     } else {
       console.error("Error in get Style By Id", error);
-      throw error;
+      // throw error;
     }
   }
 };
@@ -238,7 +238,7 @@ export const getAllStyles = async ({ token, logout }) => {
       return;
     } else {
       console.error("Error in get All Styles", error);
-      throw error;
+      // throw error;
     }
   }
 };
