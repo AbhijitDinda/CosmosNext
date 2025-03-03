@@ -21,6 +21,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { PencilIcon, TrashIcon } from "lucide-react";
+import VerbalReasoningEditForm from "./verbalReasoningEditForm";
 
 const VerbalReasoningDataTable = ({ moduleType, moduleData, refetch }) => {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -90,7 +91,7 @@ const VerbalReasoningDataTable = ({ moduleType, moduleData, refetch }) => {
       size: 10,
     },
   ];
-  console.log(moduleData);
+  //   console.log(moduleData);
 
   const table = useReactTable({
     data: moduleData?.data || [],
@@ -196,14 +197,14 @@ const VerbalReasoningDataTable = ({ moduleType, moduleData, refetch }) => {
           <DialogHeader>
             <DialogTitle>Edit {moduleType}</DialogTitle>
           </DialogHeader>
-          {/* {selectedItem && (
-            <LogicalReasoningEditForm
+          {selectedItem && (
+            <VerbalReasoningEditForm
               moduleType={moduleType}
-              selectedItem={selectedItem}
               refetch={refetch}
+              selectedItem={selectedItem}
               setIsDialogOpen={setIsDialogOpen}
             />
-          )} */}
+          )}
         </DialogContent>
       </Dialog>
     </div>

@@ -25,7 +25,7 @@ const VerbalReasoning = () => {
     assessmentByIdData?.data?.modules_data?.[0]?.module_type || "Questions";
   const [activeModule, setActiveModule] = useState(initialModule);
 
-  console.log(assessmentByIdData);
+  // console.log(assessmentByIdData);
 
   // Function to get Add button text dynamically
   const getAddButtonText = (moduleType) => {
