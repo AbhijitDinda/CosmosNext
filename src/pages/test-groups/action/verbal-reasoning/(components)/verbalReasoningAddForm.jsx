@@ -22,6 +22,7 @@ import "react-quill/dist/quill.snow.css";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
+import { useAddQuestion } from "@/hooks/apis/test-group/verbal-reasoning/useAddQuestion";
 const addform = z.object({
   passage: z.string().min(1, "Passage is required"),
   questions: z.array(z.string().min(1, "Question is required")),
@@ -29,7 +30,7 @@ const addform = z.object({
   order_id: z.optional(z.number().int().positive()).nullable(),
   status: z.string().min(1, "Display status is required"),
 });
-const VerbalReasoningAddForm = () => {
+const VerbalReasoningAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
   const form = useForm({
     resolver: zodResolver(addform),
     defaultValues: {
@@ -51,9 +52,17 @@ const VerbalReasoningAddForm = () => {
     control,
     name: "right_answers",
   });
-
-  const onSubmit = (data) => {
+  const { addQuestionMutationInVerbalReasoning, isPending } = useAddQuestion();
+  const onSubmit = async (data) => {
     console.log(data);
+    const response = await addQuestionMutationInVerbalReasoning(data);
+    if (response.data.status === "success") {
+      form.reset();
+      setIsDialogOpen(false);
+      refetch();
+    } else {
+      console.error("Error adding question:", response.data);
+    }
   };
   return (
     <Form {...form}>
