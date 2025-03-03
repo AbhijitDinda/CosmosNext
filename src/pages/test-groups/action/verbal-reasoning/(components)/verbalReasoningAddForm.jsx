@@ -113,6 +113,7 @@ const VerbalReasoningAddForm = () => {
               {questionsFieldArray.fields.length > 1 && (
                 <Button
                   variant="destructive"
+                  className="w-1/4"
                   onClick={() => {
                     questionsFieldArray.remove(index);
                     answersFieldArray.remove(index);
@@ -191,7 +192,9 @@ const VerbalReasoningAddForm = () => {
         />
 
         {/* Submit Button */}
-        <Button type="submit">Submit</Button>
+        <Button type="submit" className="bg-Primary text-white rounded-md">
+          Submit
+        </Button>
       </form>
     </Form>
   );
