@@ -6,29 +6,39 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
 import Pagination from "../Pagination"; // Adjust path based on your setup
 import { Button } from "../ui/button";
 import { PencilIcon, Trash2 } from "lucide-react";
 import EditAdmin from "./EditAdmin";
+import ConfirmationDialog from "./ConfirmationDialog.jsx"; // New confirmation component
 
-const AdminList = ({data = [],totalPages,currentPage,onPageChange,handleDeleteAdmin,refetch} ) => {
-    console.log("data",data);
+const AdminList = ({data = [], totalPages, currentPage, onPageChange, handleDeleteAdmin, refetch}) => {
+    console.log("data", data);
     const [deletingAdminId, setDeletingAdminId] = useState(null);
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+    const [adminToDelete, setAdminToDelete] = useState(null);
 
-    const handleClick = async (adminId) => {
-        setDeletingAdminId(adminId); // Mark this admin as being processed
+    const handleDeleteClick = (adminId) => {
+        setAdminToDelete(adminId);
+        setIsConfirmOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        setIsConfirmOpen(false);
+        setDeletingAdminId(adminToDelete);
         try {
-            await handleDeleteAdmin(adminId); // Call the delete function
+            await handleDeleteAdmin(adminToDelete);
         } catch (error) {
             console.error("Error deleting admin:", error);
         } finally {
-            setDeletingAdminId(null); // Clear the processing state
+            setDeletingAdminId(null);
+            setAdminToDelete(null);
         }
     };
 
-    const [editDialog,setEditDialog] = useState(false);
+    const [editDialog, setEditDialog] = useState(false);
     const [selectedAdmin, setSelectedAdmin] = useState(null);
 
     const handleEditAdmin = (admin) => {
@@ -36,8 +46,6 @@ const AdminList = ({data = [],totalPages,currentPage,onPageChange,handleDeleteAd
         setSelectedAdmin(admin); // Set the selected admin
         setEditDialog(true); // Open the dialog
     };
-
-
 
     return (
         <div>
@@ -61,13 +69,12 @@ const AdminList = ({data = [],totalPages,currentPage,onPageChange,handleDeleteAd
                             <TableCell>{admin.id}</TableCell>
                             <TableCell>{admin.test_created}</TableCell>
                             <TableCell className="flex items-center gap-2">
-
                                 <Button size="icon" variant="outline" className="hover:text-Primary" onClick={() => handleEditAdmin(admin)}>
-                                <PencilIcon />
+                                    <PencilIcon />
                                 </Button>
-
-                                <Button size="icon" variant="outline" className="hover:text-Error" disabled={deletingAdminId === admin.id} onClick={() => handleClick(admin.id)}><Trash2 /></Button>
-
+                                <Button size="icon" variant="outline" className="hover:text-Error" disabled={deletingAdminId === admin.id} onClick={() => handleDeleteClick(admin.id)}>
+                                    <Trash2 />
+                                </Button>
                             </TableCell>
                         </TableRow>
                     ))}
@@ -90,6 +97,14 @@ const AdminList = ({data = [],totalPages,currentPage,onPageChange,handleDeleteAd
                 />
             )}
 
+            {/* Confirmation Dialog */}
+            <ConfirmationDialog
+                isOpen={isConfirmOpen}
+                onClose={() => setIsConfirmOpen(false)}
+                onConfirm={confirmDelete}
+                title="Delete Admin"
+                message="Are you sure you want to delete this admin? This action cannot be undone."
+            />
         </div>
     );
 };
