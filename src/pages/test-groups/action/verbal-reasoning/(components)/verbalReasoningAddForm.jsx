@@ -202,7 +202,7 @@ const VerbalReasoningAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
 
         {/* Submit Button */}
         <Button type="submit" className="bg-Primary text-white rounded-md">
-          Submit
+          {isPending ? "Adding..." : "Add Question"}
         </Button>
       </form>
     </Form>

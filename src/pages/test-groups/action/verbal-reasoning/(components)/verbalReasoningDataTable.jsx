@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/dialog";
 import { PencilIcon, TrashIcon } from "lucide-react";
 import VerbalReasoningEditForm from "./verbalReasoningEditForm";
+import { useDeleteQuestion } from "@/hooks/apis/test-group/verbal-reasoning/useDeleteQuestion";
 
 const VerbalReasoningDataTable = ({ moduleType, moduleData, refetch }) => {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -99,6 +100,21 @@ const VerbalReasoningDataTable = ({ moduleType, moduleData, refetch }) => {
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+
+  const {
+    deleteQuestionMutationInVerbalReasoning,
+    isPending: isDeleteQuestionPending,
+  } = useDeleteQuestion();
+
+  const handleDelete = async (id) => {
+    const response = await deleteQuestionMutationInVerbalReasoning(id);
+    if (response.status === "success") {
+      setIsDeleteDialogOpen(false);
+      refetch();
+    } else {
+      console.log("Error in delete response", response.data);
+    }
+  };
   return (
     <div className="overflow-x-auto border rounded-lg shadow-sm">
       <Table className="border border-gray-300">
@@ -180,12 +196,9 @@ const VerbalReasoningDataTable = ({ moduleType, moduleData, refetch }) => {
             <Button
               className="bg-red-500"
               onClick={() => handleDelete(selectedItem.id)}
-              //   disabled={isDeleteSectionPending || isDeleteQuestionPending}
+              disabled={isDeleteQuestionPending}
             >
-              {/* {isDeleteSectionPending || isDeleteQuestionPending
-                ? "Deleting..."
-                : "Delete"} */}
-              Delete
+              {isDeleteQuestionPending ? "Deleting..." : "Delete"}
             </Button>
           </div>
         </DialogContent>
