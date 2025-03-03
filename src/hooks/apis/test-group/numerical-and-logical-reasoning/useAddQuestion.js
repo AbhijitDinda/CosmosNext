@@ -8,10 +8,10 @@ export const useAddQuestion = () => {
     const { isPending, mutateAsync: addQuestionMutation } = useMutation({
         mutationFn: (formData) => addQuestionInNumericalReasoning({ token: auth?.token, logout,formData}),
         onSuccess: (response) => {
-            console.log('Successfully updated the Question Numerical Reasoning', response);
+            console.log('Successfully Add the Question Numerical Reasoning', response);
         },
         onError: (error) => {
-            console.error('Failed to update the Question Numerical Reasoning', error);
+            console.error('Failed to Add the Question Numerical Reasoning', error);
         },
     });
 
