@@ -10,14 +10,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useGetAssessmentById } from "@/hooks/apis/test-group/useGetAssessmentById";
-import VerbalReasoningAddForm from "./(components)/verbalReasoningAddForm";
-import VerbalReasoningDataTable from "./(components)/verbalReasoningDataTable";
+import LogicalDataTable from "./(components)/logicalDataTable";
+import LogicalAddForm from "./(components)/logicalAddForm";
 
-const VerbalReasoning = () => {
+const LogicalReasoning = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // Fetch assessment data
-  const assessmentId = 12;
+  const assessmentId = 13;
   const { isLoading, error, assessmentByIdData, refetch } =
     useGetAssessmentById(assessmentId, Boolean(assessmentId));
 
@@ -25,7 +25,7 @@ const VerbalReasoning = () => {
     assessmentByIdData?.data?.modules_data?.[0]?.module_type || "Questions";
   const [activeModule, setActiveModule] = useState(initialModule);
 
-  // console.log(assessmentByIdData);
+  console.log(assessmentByIdData);
 
   // Function to get Add button text dynamically
   const getAddButtonText = (moduleType) => {
@@ -43,7 +43,7 @@ const VerbalReasoning = () => {
 
   return (
     <div className="rounded-sm mx-auto w-full max-w-[1300px]">
-      <Heading title="Verbal Reasoning" />
+      <Heading title="Logical Reasoning" />
       <div className="p-4 bg-White rounded-sm">
         <Tabs
           defaultValue={activeModule}
@@ -74,7 +74,7 @@ const VerbalReasoning = () => {
                 <DialogHeader>
                   <DialogTitle>{getAddButtonText(activeModule)}</DialogTitle>
                 </DialogHeader>
-                <VerbalReasoningAddForm
+                <LogicalAddForm
                   moduleType={activeModule}
                   refetch={refetch}
                   setIsDialogOpen={setIsDialogOpen}
@@ -86,7 +86,7 @@ const VerbalReasoning = () => {
           {/* Render DataTable for each module */}
           {assessmentByIdData?.data?.modules_data.map((module, index) => (
             <TabsContent key={index} value={module.module_type}>
-              <VerbalReasoningDataTable
+              <LogicalDataTable
                 moduleType={module.module_type}
                 moduleData={module.module_data}
                 refetch={refetch}
@@ -99,4 +99,4 @@ const VerbalReasoning = () => {
   );
 };
 
-export default VerbalReasoning;
+export default LogicalReasoning;

@@ -48,7 +48,7 @@ const LeadershipModules = () => {
 
   return (
     <div className="rounded-sm mx-auto w-full max-w-[1300px]">
-      <Heading title="Leadership Modules" />
+      <Heading title="Leadership Style" />
       <div className="p-4 bg-White rounded-sm">
         <Tabs
           defaultValue={activeModule}
