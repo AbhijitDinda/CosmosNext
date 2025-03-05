@@ -10,33 +10,28 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useGetAssessmentById } from "@/hooks/apis/test-group/useGetAssessmentById";
-import LeaderShipStyleDataTable from "./(components)/LeadershipStyleDataTable";
-import LeadershipStyleAddForm from "./(components)/LeadershipStyleAddForm";
+import LogicalDataTable from "./(components)/logicalDataTable";
+import LogicalAddForm from "./(components)/logicalAddForm";
 
-const LeadershipModules = () => {
+const LogicalReasoning = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // Fetch assessment data
-  const assessmentId = 6;
+  const assessmentId = 13;
   const { isLoading, error, assessmentByIdData, refetch } =
     useGetAssessmentById(assessmentId, Boolean(assessmentId));
 
   const initialModule =
-    assessmentByIdData?.data?.modules_data?.[0]?.module_type ||
-    "Leadership Styles";
+    assessmentByIdData?.data?.modules_data?.[0]?.module_type || "Questions";
   const [activeModule, setActiveModule] = useState(initialModule);
+
+  console.log(assessmentByIdData);
 
   // Function to get Add button text dynamically
   const getAddButtonText = (moduleType) => {
     switch (moduleType) {
-      case "Leadership Styles":
-        return "Add Leadership Style";
       case "Questions":
         return "Add Question";
-      case "Sub Questions":
-        return "Add Sub Question";
-      case "Traits":
-        return "Add Trait";
       default:
         return "Add";
     }
@@ -48,7 +43,7 @@ const LeadershipModules = () => {
 
   return (
     <div className="rounded-sm mx-auto w-full max-w-[1300px]">
-      <Heading title="Leadership Style" />
+      <Heading title="Logical Reasoning" />
       <div className="p-4 bg-White rounded-sm">
         <Tabs
           defaultValue={activeModule}
@@ -79,7 +74,7 @@ const LeadershipModules = () => {
                 <DialogHeader>
                   <DialogTitle>{getAddButtonText(activeModule)}</DialogTitle>
                 </DialogHeader>
-                <LeadershipStyleAddForm
+                <LogicalAddForm
                   moduleType={activeModule}
                   refetch={refetch}
                   setIsDialogOpen={setIsDialogOpen}
@@ -91,7 +86,7 @@ const LeadershipModules = () => {
           {/* Render DataTable for each module */}
           {assessmentByIdData?.data?.modules_data.map((module, index) => (
             <TabsContent key={index} value={module.module_type}>
-              <LeaderShipStyleDataTable
+              <LogicalDataTable
                 moduleType={module.module_type}
                 moduleData={module.module_data}
                 refetch={refetch}
@@ -104,4 +99,4 @@ const LeadershipModules = () => {
   );
 };
 
-export default LeadershipModules;
+export default LogicalReasoning;

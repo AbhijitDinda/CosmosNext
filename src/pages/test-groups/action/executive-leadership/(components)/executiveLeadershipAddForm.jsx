@@ -22,7 +22,6 @@ import {
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import { useAddQuestion } from "@/hooks/apis/test-group/situational-judgement/useAddQuestion";
-import { useState } from "react";
 
 // Dynamically import ReactQuill for rich text input
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
