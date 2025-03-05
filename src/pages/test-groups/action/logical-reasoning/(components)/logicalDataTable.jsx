@@ -22,6 +22,8 @@ import {
 } from "@/components/ui/dialog";
 import { PencilIcon, TrashIcon } from "lucide-react";
 import Image from "next/image";
+import { useDeleteQuestion } from "@/hooks/apis/test-group/logical-reasoning/useDeleteQuestion";
+import LogicalEditForm from "./logicalEditForm";
 
 const LogicalDataTable = ({ moduleType, refetch, moduleData }) => {
   const [tableData, setTableData] = useState([]);
@@ -120,6 +122,18 @@ const LogicalDataTable = ({ moduleType, refetch, moduleData }) => {
     getPaginationRowModel: getPaginationRowModel(),
   });
 
+  const { deleteQuestionMutationInLogicalReasoning, isPending } =
+    useDeleteQuestion();
+
+  const handleDelete = async (id) => {
+    const response = await deleteQuestionMutationInLogicalReasoning(id);
+    if (response.data.status === "success") {
+      setIsDeleteDialogOpen(false);
+      refetch();
+    } else {
+      console.error("Error deleting question:", response.data);
+    }
+  };
   // console.log("moduleData", moduleData);
 
   return (
@@ -203,11 +217,9 @@ const LogicalDataTable = ({ moduleType, refetch, moduleData }) => {
             <Button
               className="bg-red-500"
               onClick={() => handleDelete(selectedItem.id)}
-              //   disabled={isDeleteSectionPending || isDeleteQuestionPending}
+              disabled={isPending}
             >
-              {/* {isDeleteSectionPending || isDeleteQuestionPending
-                ? "Deleting..."
-                : "Delete"} */}
+              {isPending ? "Deleting..." : "Delete"}
             </Button>
           </div>
         </DialogContent>
