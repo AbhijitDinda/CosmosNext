@@ -920,7 +920,7 @@ const MotivationDriveAction = () => {
 
   return (
     <div className="rounded-sm mx-auto w-full max-w-[1300px]">
-      <Heading title="Test Options" />
+      <Heading title="Motivation Drive" />
       <div className="p-4 bg-White rounded-sm">
         <Tabs
           defaultValue={

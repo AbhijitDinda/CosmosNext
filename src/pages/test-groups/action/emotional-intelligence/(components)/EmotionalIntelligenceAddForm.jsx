@@ -60,6 +60,7 @@ export default function EmotionalIntelligenceAddForm({
       competencies: "",
       question: "",
       group: "",
+      order_id: null,
       status: "1",
     },
   });
@@ -143,7 +144,7 @@ export default function EmotionalIntelligenceAddForm({
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="order_id"
               render={({ field }) => (
@@ -183,7 +184,7 @@ export default function EmotionalIntelligenceAddForm({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </>
         ) : (
           <>
@@ -236,7 +237,7 @@ export default function EmotionalIntelligenceAddForm({
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="status"
               render={({ field }) => (
@@ -259,11 +260,15 @@ export default function EmotionalIntelligenceAddForm({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </>
         )}
-        <Button type="submit" className="w-full mt-2">
-          Add
+        <Button
+          type="submit"
+          className="w-full mt-2 bg-Primary hover:bg-Secondary_Text text-white"
+          disabled={isPending || stylePending}
+        >
+          {isPending || stylePending ? "Adding..." : "Add New"}
         </Button>
       </form>
     </Form>
