@@ -29,6 +29,7 @@ import { useGetStyleById } from "@/hooks/apis/test-group/approac-assessment/useG
 import { use, useEffect, useState } from "react";
 import { useEditQuestion } from "@/hooks/apis/test-group/approac-assessment/useEditQuestion";
 import { useListOfStyle } from "@/hooks/apis/test-group/approac-assessment/useListOfStyle";
+import { Skeleton } from "@/components/ui/skeleton";
 const styleSchema = z.object({
   name: z.string().min(2, "Name is required"),
   description: z.string().min(10, "Description must be at least 10 characters"),
@@ -129,7 +130,20 @@ const EditForm = ({ moduleType, selectedItem, refetch, setIsDialogOpen }) => {
   };
 
   if (isStyleFetching || isStyleLoading || isFetching || isLoading) {
-    return <div>Loading...</div>;
+    return isStyleFetching || isStyleLoading ? (
+      <div className="space-y-6">
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-32 w-full" />
+        <Skeleton className="h-32 w-full" />
+        <Skeleton className="h-32 w-full" />
+      </div>
+    ) : (
+      <div className="space-y-11">
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+      </div>
+    );
   }
   return (
     <Form {...form}>
@@ -214,7 +228,7 @@ const EditForm = ({ moduleType, selectedItem, refetch, setIsDialogOpen }) => {
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="status"
               render={({ field }) => (
@@ -234,7 +248,7 @@ const EditForm = ({ moduleType, selectedItem, refetch, setIsDialogOpen }) => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </>
         ) : (
           <>
@@ -278,7 +292,7 @@ const EditForm = ({ moduleType, selectedItem, refetch, setIsDialogOpen }) => {
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               name="order_id"
               control={form.control}
               render={({ field }) => (
@@ -311,12 +325,12 @@ const EditForm = ({ moduleType, selectedItem, refetch, setIsDialogOpen }) => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </>
         )}
         <Button
           type="submit"
-          className="w-full mt-2"
+          className="w-full mt-2 bg-Primary hover:bg-Secondary_Text text-white"
           disabled={isEditMutationEnding || isEditStyleMutationEnding}
         >
           {isEditMutationEnding || isEditStyleMutationEnding

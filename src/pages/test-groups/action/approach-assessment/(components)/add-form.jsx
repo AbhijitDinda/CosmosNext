@@ -75,7 +75,8 @@ const AddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
       challenges: "",
       strengths: "",
       best_roles: "",
-      display: "1",
+      status: "1",
+      order_id: null,
       question: "",
       approach_style: "",
     },
@@ -185,7 +186,7 @@ const AddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               name="status"
               control={form.control}
               render={({ field }) => (
@@ -208,7 +209,7 @@ const AddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </>
         ) : (
           <>
@@ -253,7 +254,7 @@ const AddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
               )}
             />
 
-            <FormField
+            {/* <FormField
               name="order_id"
               control={form.control}
               render={({ field }) => (
@@ -299,15 +300,15 @@ const AddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </>
         )}
         <Button
           type="submit"
-          className="w-full mt-2"
+          className="w-full mt-2 bg-Primary hover:bg-Secondary_Text text-white"
           disabled={isStylePending || isQuestionPending}
         >
-          {isStylePending || isQuestionPending ? "Adding..." : "Add"}
+          {isStylePending || isQuestionPending ? "Adding..." : "Add New"}
         </Button>
       </form>
     </Form>
