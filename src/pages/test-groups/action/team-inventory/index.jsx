@@ -46,7 +46,7 @@ const ParentPage = () => {
 
   return (
     <div className="rounded-sm mx-auto w-full max-w-[1300px]">
-      <Heading title="Assessment Management" />
+      <Heading title="Team Inventory" />
       <div className="p-4 bg-White rounded-sm">
         <Tabs
           defaultValue={activeModule}
