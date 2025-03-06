@@ -53,13 +53,10 @@ import "react-quill/dist/quill.snow.css";
 import { useAddMotivationGroup } from "@/hooks/apis/test-group/motivation-drive/useAddMotivationGroup";
 import { useAddQuestion } from "@/hooks/apis/test-group/motivation-drive/useAddQuestion";
 import { useGetAllMotivationGroup } from "@/hooks/apis/test-group/motivation-drive/useGetAllMotivationGroup";
-import { list } from "postcss";
 import { useMotivationGroupById } from "@/hooks/apis/test-group/motivation-drive/useMotivationGroupById";
-import { se } from "date-fns/locale";
 import { useQuestionById } from "@/hooks/apis/test-group/motivation-drive/useQuestionById";
 import { useEditMotivationGroup } from "@/hooks/apis/test-group/motivation-drive/useEditMotivationGroup";
 import { useEditQuestion } from "@/hooks/apis/test-group/motivation-drive/useEditQuestion";
-import { editQuestionInMotivationDrive } from "@/apis/test-group/motivation-drive";
 import { useDeleteMotivationGroup } from "@/hooks/apis/test-group/motivation-drive/useDeleteMotivationGroup";
 import { useDeleteQuestion } from "@/hooks/apis/test-group/motivation-drive/useDeleteQuestion";
 // Define separate schemas for each module type
@@ -247,8 +244,11 @@ const DataTable = ({ moduleType, moduleData, refetch }) => {
             <Button
               className="bg-red-500"
               onClick={() => handleDelete(selectedItem.id)}
+              disabled={isDeleteQuestionPending || isDeletePending}
             >
-              Delete
+              {isDeleteQuestionPending || isDeletePending
+                ? "Deleting..."
+                : "Delete"}
             </Button>
           </div>
         </DialogContent>
@@ -460,7 +460,7 @@ const EditForm = ({ moduleType, selectedItem, setIsDialogOpen, refetch }) => {
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="status"
               render={({ field }) => (
@@ -483,7 +483,7 @@ const EditForm = ({ moduleType, selectedItem, setIsDialogOpen, refetch }) => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </>
         ) : (
           <>
@@ -530,7 +530,7 @@ const EditForm = ({ moduleType, selectedItem, setIsDialogOpen, refetch }) => {
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="order_id"
               render={({ field }) => (
@@ -552,8 +552,8 @@ const EditForm = ({ moduleType, selectedItem, setIsDialogOpen, refetch }) => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
-            <FormField
+            /> */}
+            {/* <FormField
               control={form.control}
               name="status"
               render={({ field }) => (
@@ -576,15 +576,17 @@ const EditForm = ({ moduleType, selectedItem, setIsDialogOpen, refetch }) => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </>
         )}
         <Button
           type="submit"
-          className="w-full mt-2"
+          className="w-full mt-2 bg-Primary hover:bg-Secondary_Text text-white"
           disabled={isMotivationGroupPending || isQuestionPending}
         >
-          Save Changes
+          {isMotivationGroupPending || isQuestionPending
+            ? "Saving Changes..."
+            : "Save Changes"}
         </Button>
       </form>
     </Form>
@@ -629,8 +631,8 @@ const AddForm = ({ moduleType, setIsDialogOpen, refetch }) => {
       motivation_techniques: "",
       question_name: "",
       group: "",
-      order_id: undefined,
-      status: "",
+      order_id: null,
+      status: "1",
     },
   });
   const { isPending: isGroupPending, addMotivationGroupMutation } =
@@ -744,7 +746,7 @@ const AddForm = ({ moduleType, setIsDialogOpen, refetch }) => {
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="status"
               render={({ field }) => (
@@ -767,7 +769,7 @@ const AddForm = ({ moduleType, setIsDialogOpen, refetch }) => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </>
         ) : (
           <>
@@ -814,7 +816,7 @@ const AddForm = ({ moduleType, setIsDialogOpen, refetch }) => {
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="order_id"
               render={({ field }) => (
@@ -836,8 +838,8 @@ const AddForm = ({ moduleType, setIsDialogOpen, refetch }) => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
-            <FormField
+            /> */}
+            {/* <FormField
               control={form.control}
               name="status"
               render={({ field }) => (
@@ -860,15 +862,15 @@ const AddForm = ({ moduleType, setIsDialogOpen, refetch }) => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </>
         )}
         <Button
           type="submit"
-          className="w-full mt-2"
+          className="w-full mt-2 bg-Primary hover:bg-Secondary_Text text-white"
           disabled={isGroupPending || isQuestionPending}
         >
-          Add
+          {isGroupPending || isQuestionPending ? "Adding..." : "Add New"}
         </Button>
       </form>
     </Form>
@@ -895,7 +897,7 @@ const MotivationDriveAction = () => {
   //   setActiveModule(assessmentByIdData?.data?.modules_data[0]?.module_type);
   // }, [assessmentByIdData]);
 
-  console.log("assessmentByIdData", assessmentByIdData);
+  // console.log("assessmentByIdData", assessmentByIdData);
 
   const getAddButtonText = (moduleType) => {
     switch (moduleType) {

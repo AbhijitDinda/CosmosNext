@@ -25,7 +25,7 @@ const ParentPage = () => {
     assessmentByIdData?.data?.modules_data[0]?.module_type || "Traits"
   );
 
-  console.log(assessmentByIdData);
+  // console.log(assessmentByIdData);
 
   const getAddButtonText = (moduleType) => {
     switch (moduleType) {
