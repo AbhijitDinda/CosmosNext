@@ -22,6 +22,7 @@ import { z } from "zod";
 import { useAddQuestion } from "@/hooks/apis/test-group/numerical-and-logical-reasoning/useAddQuestion";
 import { useAddSection } from "@/hooks/apis/test-group/numerical-and-logical-reasoning/useAddSection";
 import { useGetSectionList } from "@/hooks/apis/test-group/numerical-and-logical-reasoning/useGetSectionList";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const sectionSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -73,6 +74,7 @@ const LogicalReasoningAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
       option4: "",
       right_option: "",
       order_id: null,
+      status: "1",
     },
   });
 
@@ -108,7 +110,22 @@ const LogicalReasoningAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
     }
   };
 
-  if (isSectionListLoading || isFetching) return <div>Loading...</div>;
+  if (isSectionListLoading || isFetching)
+    return moduleType === "Questions" ? (
+      <div className="space-y-7">
+        <Skeleton className="h-20 w-full" />
+        <Skeleton className="h-44 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+      </div>
+    ) : (
+      <div className="space-y-7">
+        <Skeleton className="h-20 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+      </div>
+    );
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -146,7 +163,7 @@ const LogicalReasoningAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               name="status"
               control={form.control}
               render={({ field }) => (
@@ -166,7 +183,7 @@ const LogicalReasoningAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </>
         ) : (
           <>
@@ -206,7 +223,7 @@ const LogicalReasoningAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                               <img
                                 src={item.image}
                                 alt={item.label}
-                                className="w-32 h-32"
+                                className="w-32 h-32 object-contain"
                               />
                             </div>
                           </SelectItem>
@@ -283,7 +300,7 @@ const LogicalReasoningAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               name="order_id"
               control={form.control}
               render={({ field }) => (
@@ -326,11 +343,15 @@ const LogicalReasoningAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             {/* Add more fields for questions here */}
           </>
         )}
-        <Button type="submit" disabled={isPending || isQuestionPending}>
+        <Button
+          type="submit"
+          className="bg-Primary hover:bg-Secondary_Text text-White w-full mt-2"
+          disabled={isPending || isQuestionPending}
+        >
           {isPending || isQuestionPending ? "Saving..." : "Save"}
         </Button>
       </form>

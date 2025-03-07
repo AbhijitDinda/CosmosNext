@@ -75,7 +75,7 @@ const JuniorMidLevel = () => {
 
   return (
     <div className="rounded-sm mx-auto w-full max-w-[1300px]">
-      <Heading title="Situational Judgement Assessment" />
+      <Heading title="Junior-Mid Level Roles" />
       <div className="p-4 bg-White rounded-sm">
         <Tabs
           defaultValue={"Questions"}
