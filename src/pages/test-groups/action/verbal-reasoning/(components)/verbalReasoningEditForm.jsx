@@ -252,7 +252,7 @@ const VerbalReasoningEditForm = ({
         <Button
           type="submit"
           variant="ghost"
-          className="bg-Primary text-white rounded-md"
+          className="bg-Primary hover:bg-Secondary_Text hover:text-white text-white w-full rounded-md"
           disabled={isEditPending}
         >
           {isEditPending ? "Saving Changes..." : "Save Changes"}
