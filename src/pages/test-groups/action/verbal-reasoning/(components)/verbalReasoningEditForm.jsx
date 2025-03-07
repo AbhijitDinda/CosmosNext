@@ -24,6 +24,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { useGetQuestionById } from "@/hooks/apis/test-group/verbal-reasoning/useGetQuestionById";
 import { useEditQuestion } from "@/hooks/apis/test-group/verbal-reasoning/useEditQuestion";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const addform = z.object({
   passage: z.string().min(1, "Passage is required"),
@@ -73,9 +74,14 @@ const VerbalReasoningEditForm = ({
     ) {
       form.reset(verbalReasoningQuestionDataById?.data);
     }
-  }, [selectedItem, verbalReasoningQuestionDataById]);
+  }, [
+    selectedItem,
+    verbalReasoningQuestionDataById,
+    isQuestionFetching,
+    isQuestionLoading,
+  ]);
 
-  //   console.log(verbalReasoningQuestionDataById);
+  // console.log(verbalReasoningQuestionDataById?.data);
 
   const { editQuestionMutationInVerbalReasoning, isPending: isEditPending } =
     useEditQuestion();
@@ -96,7 +102,15 @@ const VerbalReasoningEditForm = ({
     }
   };
 
-  if (isQuestionLoading || isQuestionFetching) return <div>Loading...</div>;
+  if (isQuestionLoading || isQuestionFetching)
+    return (
+      <div className="space-y-4">
+        <Skeleton className="h-80 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-20 w-full" />
+        <Skeleton className="h-12 w-full" />
+      </div>
+    );
 
   return (
     <Form {...form}>
@@ -183,7 +197,7 @@ const VerbalReasoningEditForm = ({
         </div>
 
         {/* Order ID */}
-        <FormField
+        {/* <FormField
           name="order_id"
           control={form.control}
           render={({ field }) => (
@@ -205,10 +219,10 @@ const VerbalReasoningEditForm = ({
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
         {/* Display Status */}
-        <FormField
+        {/* <FormField
           name="status"
           control={form.control}
           render={({ field }) => (
@@ -232,7 +246,7 @@ const VerbalReasoningEditForm = ({
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
         {/* Submit Button */}
         <Button
@@ -241,7 +255,7 @@ const VerbalReasoningEditForm = ({
           className="bg-Primary text-white rounded-md"
           disabled={isEditPending}
         >
-          {isEditPending ? "Saving..." : "Save Changes"}
+          {isEditPending ? "Saving Changes..." : "Save Changes"}
         </Button>
       </form>
     </Form>

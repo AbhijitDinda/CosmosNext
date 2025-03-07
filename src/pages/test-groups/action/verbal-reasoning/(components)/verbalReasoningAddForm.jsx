@@ -38,7 +38,7 @@ const VerbalReasoningAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
       questions: [""],
       right_answers: [""],
       order_id: null,
-      status: "",
+      status: "1",
     },
   });
 
@@ -149,7 +149,7 @@ const VerbalReasoningAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
         </div>
 
         {/* Order ID */}
-        <FormField
+        {/* <FormField
           name="order_id"
           control={form.control}
           render={({ field }) => (
@@ -171,10 +171,10 @@ const VerbalReasoningAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
         {/* Display Status */}
-        <FormField
+        {/* <FormField
           name="status"
           control={form.control}
           render={({ field }) => (
@@ -198,11 +198,15 @@ const VerbalReasoningAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
         {/* Submit Button */}
-        <Button type="submit" className="bg-Primary text-white rounded-md">
-          {isPending ? "Adding..." : "Add Question"}
+        <Button
+          type="submit"
+          className="bg-Primary text-white rounded-md w-full mt-4"
+          disabled={isPending}
+        >
+          {isPending ? "Adding..." : "Add New"}
         </Button>
       </form>
     </Form>
