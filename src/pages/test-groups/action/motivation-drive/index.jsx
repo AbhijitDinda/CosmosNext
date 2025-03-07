@@ -59,6 +59,7 @@ import { useEditMotivationGroup } from "@/hooks/apis/test-group/motivation-drive
 import { useEditQuestion } from "@/hooks/apis/test-group/motivation-drive/useEditQuestion";
 import { useDeleteMotivationGroup } from "@/hooks/apis/test-group/motivation-drive/useDeleteMotivationGroup";
 import { useDeleteQuestion } from "@/hooks/apis/test-group/motivation-drive/useDeleteQuestion";
+import { Skeleton } from "@/components/ui/skeleton";
 // Define separate schemas for each module type
 const motivationGroupsSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -375,7 +376,20 @@ const EditForm = ({ moduleType, selectedItem, setIsDialogOpen, refetch }) => {
   };
 
   if (isMotivationFetching || isQuestionFetching) {
-    return <div>Loading...</div>;
+    return isMotivationFetching ? (
+      <div className="space-y-8">
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-60 w-full" />
+        <Skeleton className="h-20 w-full" />
+      </div>
+    ) : (
+      <div className="space-y-5">
+        <Skeleton className="h-28 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+      </div>
+    );
   }
   return (
     <Form {...form} key={selectedItem.id}>
@@ -885,16 +899,16 @@ const MotivationDriveAction = () => {
   const assessmentId = 2;
   const shouldFetch = Boolean(assessmentId);
 
-  const { isLoading, error, refetch, assessmentByIdData } =
+  const { isLoading, isFetching, error, refetch, assessmentByIdData } =
     useGetAssessmentById(assessmentId, shouldFetch);
 
   const [activeModule, setActiveModule] = useState("Motivation Groups");
 
-  // useEffect(() => {
-  //   setActiveModule(assessmentByIdData?.data?.modules_data[0]?.module_type);
-  // }, [assessmentByIdData]);
+  useEffect(() => {
+    setActiveModule(assessmentByIdData?.data?.modules_data[0]?.module_type);
+  }, [assessmentByIdData]);
 
-  // console.log("assessmentByIdData", assessmentByIdData);
+  console.log("assessmentByIdData", assessmentByIdData);
 
   const getAddButtonText = (moduleType) => {
     switch (moduleType) {
@@ -907,8 +921,35 @@ const MotivationDriveAction = () => {
     }
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (isLoading || isFetching) {
+    return (
+      <div className="rounded-sm mx-auto w-full max-w-[1300px]">
+        <Skeleton className="h-14 w-full rounded-b-none" />
+        <div className="p-4 bg-White rounded-sm">
+          <Tabs className="w-full">
+            <div className="flex justify-between">
+              <TabsList className="!h-auto bg-white justify-start gap-1 flex flex-wrap">
+                {Array.from({ length: 2 }, (_, index) => (
+                  <Skeleton
+                    key={index}
+                    className="h-10 w-32 rounded-sm bg-gray-200"
+                  />
+                ))}
+              </TabsList>
+              <Skeleton className="h-10 w-32 rounded-sm bg-gray-200" />
+            </div>
+            <div className="flex flex-col gap-4 mt-4">
+              {Array.from({ length: 1 }, (_, index) => (
+                <Skeleton
+                  key={index}
+                  className="min-h-screen w-full rounded-sm bg-gray-200"
+                />
+              ))}
+            </div>
+          </Tabs>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
@@ -920,9 +961,7 @@ const MotivationDriveAction = () => {
       <Heading title="Motivation Drive" />
       <div className="p-4 bg-White rounded-sm">
         <Tabs
-          defaultValue={
-            assessmentByIdData?.data?.modules_data?.[0]?.module_type
-          }
+          defaultValue={"Motivation Groups"}
           value={activeModule}
           className="w-full"
           onValueChange={setActiveModule}
