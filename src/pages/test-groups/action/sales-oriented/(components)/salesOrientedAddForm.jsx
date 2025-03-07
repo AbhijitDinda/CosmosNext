@@ -29,13 +29,13 @@ const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 // ✅ Define schema for validation
 const situationalQuestionSchema = z.object({
   role: z.number().int().positive(),
-  question: z.string().min(5, "Question must be at least 5 characters"),
-  option1: z.string().min(2, "Option 1 is required"),
-  option2: z.string().min(2, "Option 2 is required"),
-  option3: z.string().min(2, "Option 3 is required"),
-  option4: z.string().min(2, "Option 4 is required"),
+  question: z.string().min(1, "Question must be at least 5 characters"),
+  option1: z.string().min(1, "Option 1 is required"),
+  option2: z.string().min(1, "Option 2 is required"),
+  option3: z.string().min(1, "Option 3 is required"),
+  option4: z.string().min(1, "Option 4 is required"),
   right_option: z.string().min(1, "Right option is required"),
-  ideal_scenario: z.string().min(10, "Ideal Scenario is required"),
+  ideal_scenario: z.string().min(1, "Ideal Scenario is required"),
   status: z.string().min(1, "Display status is required"),
   order_id: z.optional(z.number().int().positive()).nullable(),
 });
@@ -53,7 +53,7 @@ const SalesOrientedAddForm = ({ refetch, setIsDialogOpen, assessmentId }) => {
       right_option: "",
       ideal_scenario: "",
       status: "1",
-      order_id: undefined,
+      order_id: null,
     },
   });
 
@@ -151,7 +151,7 @@ const SalesOrientedAddForm = ({ refetch, setIsDialogOpen, assessmentId }) => {
         />
 
         {/* Display Status */}
-        <FormField
+        {/* <FormField
           name="status"
           control={form.control}
           render={({ field }) => (
@@ -171,10 +171,10 @@ const SalesOrientedAddForm = ({ refetch, setIsDialogOpen, assessmentId }) => {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
         {/* Order ID (Optional) */}
-        <FormField
+        {/* <FormField
           name="order_id"
           control={form.control}
           render={({ field }) => (
@@ -196,11 +196,15 @@ const SalesOrientedAddForm = ({ refetch, setIsDialogOpen, assessmentId }) => {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
         {/* Submit Button */}
-        <Button type="submit" className="w-full mt-2" disabled={isAdding}>
-          {isAdding ? "Adding..." : "Add Question"}
+        <Button
+          type="submit"
+          className="bg-Primary hover:bg-Secondary_Text text-White w-full mt-2"
+          disabled={isAdding}
+        >
+          {isAdding ? "Adding..." : "Add New"}
         </Button>
       </form>
     </Form>
