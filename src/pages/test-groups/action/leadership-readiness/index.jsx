@@ -23,10 +23,7 @@ const LeadershipReadiness = () => {
   const { isLoading, error, assessmentByIdData, refetch, isFetching } =
     useGetAssessmentById(assessmentId, shouldFetch);
 
-  const [activeModule, setActiveModule] = useState(
-    assessmentByIdData?.data?.modules_data[0]?.module_type ||
-      "Leadership Styles"
-  );
+  const [activeModule, setActiveModule] = useState("Leadership Styles");
 
   const getAddButtonText = (moduleType) => {
     switch (moduleType) {
@@ -79,7 +76,8 @@ const LeadershipReadiness = () => {
       <Heading title="Leadership Readiness" />
       <div className="p-4 bg-White rounded-sm">
         <Tabs
-          defaultValue={activeModule}
+          defaultValue={"Leadership Styles"}
+          value={activeModule}
           className="w-full"
           onValueChange={setActiveModule}
         >

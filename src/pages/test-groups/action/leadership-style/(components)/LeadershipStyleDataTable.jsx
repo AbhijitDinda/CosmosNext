@@ -186,8 +186,11 @@ const LeaderShipStyleDataTable = ({ moduleType, moduleData, refetch }) => {
             <Button
               className="bg-red-500"
               onClick={() => handleDelete(selectedItem.id)}
+              disabled={isDeleteStylePending || isDeleteQuestionPending}
             >
-              Delete
+              {isDeleteStylePending || isDeleteQuestionPending
+                ? "Deleting..."
+                : "Delete"}
             </Button>
           </div>
         </DialogContent>

@@ -888,10 +888,7 @@ const MotivationDriveAction = () => {
   const { isLoading, error, refetch, assessmentByIdData } =
     useGetAssessmentById(assessmentId, shouldFetch);
 
-  const [activeModule, setActiveModule] = useState(
-    assessmentByIdData?.data?.modules_data[0]?.module_type ||
-      "Motivation Groups"
-  );
+  const [activeModule, setActiveModule] = useState("Motivation Groups");
 
   // useEffect(() => {
   //   setActiveModule(assessmentByIdData?.data?.modules_data[0]?.module_type);
@@ -926,6 +923,7 @@ const MotivationDriveAction = () => {
           defaultValue={
             assessmentByIdData?.data?.modules_data?.[0]?.module_type
           }
+          value={activeModule}
           className="w-full"
           onValueChange={setActiveModule}
         >

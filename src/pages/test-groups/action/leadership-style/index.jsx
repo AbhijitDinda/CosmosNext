@@ -12,19 +12,17 @@ import {
 import { useGetAssessmentById } from "@/hooks/apis/test-group/useGetAssessmentById";
 import LeaderShipStyleDataTable from "./(components)/LeadershipStyleDataTable";
 import LeadershipStyleAddForm from "./(components)/LeadershipStyleAddForm";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const LeadershipModules = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // Fetch assessment data
   const assessmentId = 6;
-  const { isLoading, error, assessmentByIdData, refetch } =
+  const { isLoading, error, assessmentByIdData, refetch, isFetching } =
     useGetAssessmentById(assessmentId, Boolean(assessmentId));
 
-  const initialModule =
-    assessmentByIdData?.data?.modules_data?.[0]?.module_type ||
-    "Leadership Styles";
-  const [activeModule, setActiveModule] = useState(initialModule);
+  const [activeModule, setActiveModule] = useState("Leadership Styles");
 
   // Function to get Add button text dynamically
   const getAddButtonText = (moduleType) => {
@@ -43,7 +41,35 @@ const LeadershipModules = () => {
   };
 
   // Show loading or error message
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading || isFetching)
+    return (
+      <div className="rounded-sm mx-auto w-full max-w-[1300px]">
+        <Skeleton className="h-14 w-full rounded-b-none" />
+        <div className="p-4 bg-White rounded-sm">
+          <Tabs className="w-full">
+            <div className="flex justify-between">
+              <TabsList className="!h-auto bg-white justify-start gap-1 flex flex-wrap">
+                {Array.from({ length: 2 }, (_, index) => (
+                  <Skeleton
+                    key={index}
+                    className="h-10 w-32 rounded-sm bg-gray-200"
+                  />
+                ))}
+              </TabsList>
+              <Skeleton className="h-10 w-32 rounded-sm bg-gray-200" />
+            </div>
+            <div className="flex flex-col gap-4 mt-4">
+              {Array.from({ length: 1 }, (_, index) => (
+                <Skeleton
+                  key={index}
+                  className="min-h-screen w-full rounded-sm bg-gray-200"
+                />
+              ))}
+            </div>
+          </Tabs>
+        </div>
+      </div>
+    );
   if (error) return <div>Error: {error.message}</div>;
 
   return (
@@ -51,7 +77,8 @@ const LeadershipModules = () => {
       <Heading title="Leadership Style" />
       <div className="p-4 bg-White rounded-sm">
         <Tabs
-          defaultValue={activeModule}
+          defaultValue={"Leadership Styles"}
+          value={activeModule}
           className="w-full"
           onValueChange={setActiveModule}
         >

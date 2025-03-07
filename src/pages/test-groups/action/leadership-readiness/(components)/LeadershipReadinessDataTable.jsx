@@ -43,7 +43,7 @@ const LeadershipReadinessDataTable = ({ moduleType, moduleData, refetch }) => {
     setSelectedItem(item);
     setIsDeleteDialogOpen(true);
   };
-  console.log(moduleData);
+  // console.log(moduleData);
   const columns = [
     { accessorKey: "id", header: "ID" },
     ...(moduleType === "Leadership Styles"
