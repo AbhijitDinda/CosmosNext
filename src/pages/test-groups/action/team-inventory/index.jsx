@@ -12,6 +12,7 @@ import {
 import TeamInventoryDataTable from "./(components)/TeamInventoryDataTable";
 import TeamInventoryAddForm from "./(components)/TeamInventoryAddTable";
 import { useGetAssessmentById } from "@/hooks/apis/test-group/useGetAssessmentById";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const ParentPage = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -21,9 +22,7 @@ const ParentPage = () => {
   const { isLoading, error, assessmentByIdData, refetch, isFetching } =
     useGetAssessmentById(assessmentId, shouldFetch);
 
-  const [activeModule, setActiveModule] = useState(
-    assessmentByIdData?.data?.modules_data[0]?.module_type || "Traits"
-  );
+  const [activeModule, setActiveModule] = useState("Traits");
 
   // console.log(assessmentByIdData);
 
@@ -41,7 +40,34 @@ const ParentPage = () => {
   };
 
   if (isLoading || isFetching) {
-    return <div>Loading...</div>;
+    return (
+      <div className="rounded-sm mx-auto w-full max-w-[1300px]">
+        <Skeleton className="h-14 w-full rounded-b-none" />
+        <div className="p-4 bg-White rounded-sm">
+          <Tabs className="w-full">
+            <div className="flex justify-between">
+              <TabsList className="!h-auto bg-white justify-start gap-1 flex flex-wrap">
+                {Array.from({ length: 3 }, (_, index) => (
+                  <Skeleton
+                    key={index}
+                    className="h-10 w-32 rounded-sm bg-gray-200"
+                  />
+                ))}
+              </TabsList>
+              <Skeleton className="h-10 w-32 rounded-sm bg-gray-200" />
+            </div>
+            <div className="flex flex-col gap-4 mt-4">
+              {Array.from({ length: 1 }, (_, index) => (
+                <Skeleton
+                  key={index}
+                  className="min-h-screen w-full rounded-sm bg-gray-200"
+                />
+              ))}
+            </div>
+          </Tabs>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -49,7 +75,8 @@ const ParentPage = () => {
       <Heading title="Team Inventory" />
       <div className="p-4 bg-White rounded-sm">
         <Tabs
-          defaultValue={activeModule}
+          defaultValue={"Traits"}
+          value={activeModule}
           className="w-full"
           onValueChange={setActiveModule}
         >

@@ -7,6 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetAssessmentById } from "@/hooks/apis/test-group/useGetAssessmentById";
 import EmotionalIntelligenceAddForm from "@/pages/test-groups/action/emotional-intelligence/(components)/EmotionalIntelligenceAddForm";
@@ -24,9 +25,7 @@ const EmotionalIntelligence = () => {
   const { isLoading, refetch, error, assessmentByIdData } =
     useGetAssessmentById(assessmentId, shouldFetch);
 
-  const [activeModule, setActiveModule] = useState(
-    assessmentByIdData?.data?.modules_data[0]?.module_type || "Questions"
-  );
+  const [activeModule, setActiveModule] = useState("Approach Styles");
 
   const getAddButtonText = (moduleType) => {
     switch (moduleType) {
@@ -44,7 +43,34 @@ const EmotionalIntelligence = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="rounded-sm mx-auto w-full max-w-[1300px]">
+        <Skeleton className="h-14 w-full rounded-b-none" />
+        <div className="p-4 bg-White rounded-sm">
+          <Tabs className="w-full">
+            <div className="flex justify-between">
+              <TabsList className="!h-auto bg-white justify-start gap-1 flex flex-wrap">
+                {Array.from({ length: 2 }, (_, index) => (
+                  <Skeleton
+                    key={index}
+                    className="h-10 w-32 rounded-sm bg-gray-200"
+                  />
+                ))}
+              </TabsList>
+              <Skeleton className="h-10 w-32 rounded-sm bg-gray-200" />
+            </div>
+            <div className="flex flex-col gap-4 mt-4">
+              {Array.from({ length: 1 }, (_, index) => (
+                <Skeleton
+                  key={index}
+                  className="min-h-screen w-full rounded-sm bg-gray-200"
+                />
+              ))}
+            </div>
+          </Tabs>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
@@ -56,9 +82,8 @@ const EmotionalIntelligence = () => {
       <Heading title="Emotional Intelligence Assessments" />
       <div className="p-4 bg-White rounded-sm">
         <Tabs
-          defaultValue={
-            assessmentByIdData?.data?.modules_data?.[0]?.module_type
-          }
+          defaultValue={"Approach Styles"}
+          value={activeModule}
           className="w-full"
           onValueChange={setActiveModule}
         >

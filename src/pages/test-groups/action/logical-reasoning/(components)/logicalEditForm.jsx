@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useEditQuestion } from "@/hooks/apis/test-group/logical-reasoning/useEditQuestion";
 import { useGetQuestionById } from "@/hooks/apis/test-group/logical-reasoning/useGetQuestionById";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -148,7 +149,17 @@ const LogicalEditForm = ({
     }
   };
 
-  if (isQuestionLoading || isQuestionFetching) return <div>Loading...</div>;
+  if (isQuestionLoading || isQuestionFetching)
+    return (
+      <div className="space-y-8">
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-32 w-1/2 mx-auto" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-32 w-1/2 mx-auto" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-32 w-1/2 mx-auto" />
+      </div>
+    );
 
   return (
     <Form {...form}>
@@ -376,7 +387,7 @@ const LogicalEditForm = ({
             </FormItem>
           )}
         />
-        <FormField
+        {/* <FormField
           name="order_id"
           control={form.control}
           render={({ field }) => (
@@ -419,11 +430,11 @@ const LogicalEditForm = ({
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
         <Button
           type="submit"
-          className="bg-Primary text-white rounded-md"
+          className="bg-Primary hover:bg-Secondary_Text hover:text-White text-white w-full rounded-md"
           disabled={isQuestionLoading || isQuestionFetching || isEditPending}
         >
           {isQuestionLoading || isQuestionFetching || isEditPending

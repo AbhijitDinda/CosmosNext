@@ -32,6 +32,7 @@ import { useQuestionById } from "@/hooks/apis/test-group/team-inventory/useQuest
 import { useTraitsById } from "@/hooks/apis/test-group/team-inventory/useTraitsById";
 import { useSubQuestionById } from "@/hooks/apis/test-group/team-inventory/useSubQuestionById";
 import { z } from "zod";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const questionSchema = z.object({
   question_name: z.string().min(1, { message: "Question is required" }),
@@ -219,17 +220,45 @@ const TeamInventoryEditForm = ({
       refetch();
     }
   };
+  // console.log(
+  //   "isQuestionFetching",
+  //   isQuestionFetching,
+  //   "isSubQuestionFetching",
+  //   isSubQuestionFetching,
+  //   "isTraitFetching",
+  //   isTraitFetching
+  // );
+  if (isQuestionFetching) {
+    return (
+      <div className="space-y-2">
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-12 w-full" />
+        <Skeleton className="h-10 w-full" />
+      </div>
+    );
+  }
 
-  if (
-    isQuestionListFetching ||
-    isQuestionLoading ||
-    isSubQuestionLoading ||
-    isTraitLoading ||
-    isQuestionFetching ||
-    isTraitFetching ||
-    isSubQuestionFetching
-  ) {
-    return <div>Loading...</div>;
+  if (isSubQuestionFetching) {
+    return (
+      <div className="space-y-2">
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-32 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-20 w-full" />
+      </div>
+    );
+  }
+
+  if (isTraitFetching) {
+    return (
+      <div className="space-y-10">
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-52 w-full" />
+        <Skeleton className="h-4 w-full" />
+      </div>
+    );
   }
 
   return (

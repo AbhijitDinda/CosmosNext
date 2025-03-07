@@ -54,6 +54,7 @@ const questionSchema = z
       path: ["options"],
     }
   );
+
 const LogicalAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
   const form = useForm({
     resolver: zodResolver(questionSchema),
@@ -61,12 +62,12 @@ const LogicalAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
       question: null,
       right_option: "",
       order_id: null,
-      status: "",
+      status: "1",
     },
   });
   const { addQuestionMutationInLogicalReasoning, isPending } = useAddQuestion();
   const onSubmit = async (data) => {
-    console.log(data);
+    // console.log(data);
     const response = await addQuestionMutationInLogicalReasoning(data);
     if (response.data.status === "success") {
       form.reset();
@@ -282,7 +283,7 @@ const LogicalAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
             </FormItem>
           )}
         />
-        <FormField
+        {/* <FormField
           name="order_id"
           control={form.control}
           render={({ field }) => (
@@ -325,11 +326,11 @@ const LogicalAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
         <Button
           type="submit"
-          className="bg-Primary text-white rounded-md"
+          className="bg-Primary hover:bg-Secondary_Text hover:text-White text-white w-full rounded-md"
           disabled={isPending}
         >
           {isPending ? "Saving..." : "Save"}

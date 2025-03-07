@@ -24,6 +24,8 @@ import { useQuestionById } from "@/hooks/apis/test-group/numerical-and-logical-r
 import { useSectionById } from "@/hooks/apis/test-group/numerical-and-logical-reasoning/useSectionById";
 import { useEditQuestion } from "@/hooks/apis/test-group/numerical-and-logical-reasoning/useEditQuestion";
 import { useEditSection } from "@/hooks/apis/test-group/numerical-and-logical-reasoning/useEditSection";
+import { Skeleton } from "@/components/ui/skeleton";
+import { is } from "date-fns/locale";
 const sectionSchema = z.object({
   name: z.string().min(1, "Name is required"),
   section_image: z.any(),
@@ -195,7 +197,22 @@ const LogicalReasoningEditForm = ({
     isFetching ||
     isSectionListLoading
   ) {
-    return <div>Loading...</div>;
+    return isSectionFetching || isSectionLoading ? (
+      <div className="space-y-3">
+        <Skeleton className="h-20 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-36 w-36" />
+        <Skeleton className="h-10 w-full" />
+      </div>
+    ) : (
+      <div className="space-y-10">
+        <Skeleton className="h-20 w-full" />
+        <Skeleton className="h-44 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+      </div>
+    );
   }
   return (
     <Form {...form}>
@@ -249,7 +266,7 @@ const LogicalReasoningEditForm = ({
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               name="status"
               control={form.control}
               render={({ field }) => (
@@ -269,7 +286,7 @@ const LogicalReasoningEditForm = ({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </>
         ) : (
           <>
@@ -309,7 +326,7 @@ const LogicalReasoningEditForm = ({
                               <img
                                 src={item.image}
                                 alt={item.label}
-                                className="w-32 h-32"
+                                className="w-32 h-32 object-contain"
                               />
                             </div>
                           </SelectItem>
@@ -386,7 +403,7 @@ const LogicalReasoningEditForm = ({
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               name="order_id"
               control={form.control}
               render={({ field }) => (
@@ -429,15 +446,18 @@ const LogicalReasoningEditForm = ({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             {/* Add more fields for questions here */}
           </>
         )}
         <Button
           type="submit"
+          className="bg-Primary hover:bg-Secondary_Text text-White w-full mt-2"
           disabled={isQuestionEditPending || isSectionEditPending}
         >
-          Submit
+          {isQuestionEditPending || isSectionEditPending
+            ? "Saving Changes..."
+            : "Save Changes"}
         </Button>
       </form>
     </Form>
