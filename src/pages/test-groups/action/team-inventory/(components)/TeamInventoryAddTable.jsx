@@ -97,7 +97,7 @@ const TeamInventoryAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
     resolver: zodResolver(schema),
     defaultValues: {
       question: "",
-      order_id: "",
+      order_id: null,
       status: "1",
       question_id: "",
       question_name: "",
@@ -143,6 +143,8 @@ const TeamInventoryAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
     }
   };
 
+  // console.log("Error", form.formState.errors);
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -161,7 +163,7 @@ const TeamInventoryAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               name="order_id"
               control={form.control}
               render={({ field }) => (
@@ -183,8 +185,8 @@ const TeamInventoryAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
-            <FormField
+            /> */}
+            {/* <FormField
               name="status"
               control={form.control}
               render={({ field }) => (
@@ -204,7 +206,7 @@ const TeamInventoryAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </>
         ) : moduleType === "Sub Questions" ? (
           <>
@@ -279,7 +281,7 @@ const TeamInventoryAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
               )}
             />
 
-            <FormField
+            {/* <FormField
               name="order_id"
               control={form.control}
               render={({ field }) => (
@@ -301,9 +303,9 @@ const TeamInventoryAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
-            <FormField
+            {/* <FormField
               name="status"
               control={form.control}
               render={({ field }) => (
@@ -323,7 +325,7 @@ const TeamInventoryAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </>
         ) : (
           <>
@@ -432,7 +434,7 @@ const TeamInventoryAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
               )}
             />
 
-            <FormField
+            {/* <FormField
               name="status"
               control={form.control}
               render={({ field }) => (
@@ -452,16 +454,18 @@ const TeamInventoryAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </>
         )}
 
         <Button
           type="submit"
-          className="w-full mt-2"
+          className="w-full mt-2 bg-Primary hover:bg-Secondary_Text text-white"
           disabled={isQuestionPending || isSubQuestionPending || isTraitPending}
         >
-          Add
+          {isQuestionPending || isSubQuestionPending || isTraitPending
+            ? "Adding..."
+            : `Add ${moduleType}`}
         </Button>
       </form>
     </Form>

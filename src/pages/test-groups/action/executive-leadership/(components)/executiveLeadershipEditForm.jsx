@@ -24,6 +24,7 @@ import "react-quill/dist/quill.snow.css";
 import { useEditQuestion } from "@/hooks/apis/test-group/situational-judgement/useEditQuestion";
 import { useEffect } from "react";
 import { useGetQuestionById } from "@/hooks/apis/test-group/situational-judgement/useGetQuestionById";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Dynamically import ReactQuill for rich text input
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -104,7 +105,17 @@ const ExecutiveLeadershipEditForm = ({
     }
   };
 
-  if (isLoading || isFetching) return <div>Loading...</div>;
+  if (isLoading || isFetching)
+    return (
+      <div className="space-y-12">
+        <Skeleton className="h-20 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+      </div>
+    );
 
   return (
     <Form {...form}>
@@ -184,7 +195,7 @@ const ExecutiveLeadershipEditForm = ({
         />
 
         {/* Display Status */}
-        <FormField
+        {/* <FormField
           name="status"
           control={form.control}
           render={({ field }) => (
@@ -204,10 +215,10 @@ const ExecutiveLeadershipEditForm = ({
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
         {/* Order ID (Optional) */}
-        <FormField
+        {/* <FormField
           name="order_id"
           control={form.control}
           render={({ field }) => (
@@ -229,10 +240,14 @@ const ExecutiveLeadershipEditForm = ({
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
         {/* Submit Button */}
-        <Button type="submit" className="w-full mt-2" disabled={isEditing}>
+        <Button
+          type="submit"
+          className="bg-Primary hover:bg-Secondary_Text text-White w-full mt-2"
+          disabled={isEditing}
+        >
           {isEditing ? "Saving..." : "Save Changes"}
         </Button>
       </form>

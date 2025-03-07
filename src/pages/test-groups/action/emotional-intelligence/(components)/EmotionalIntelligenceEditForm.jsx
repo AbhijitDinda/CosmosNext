@@ -146,6 +146,23 @@ export default function EmotionalIntelligenceEditForm({
     }
   };
 
+  if (isFetching || isLoading || styleLoading || styleFetching) {
+    return styleLoading || styleFetching ? (
+      <div className="space-y-4">
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-32 w-full" />
+        <Skeleton className="h-32 w-full" />
+        <Skeleton className="h-32 w-full" />
+      </div>
+    ) : (
+      <div className="space-y-11">
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+      </div>
+    );
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -191,7 +208,7 @@ export default function EmotionalIntelligenceEditForm({
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="order_id"
               render={({ field }) => (
@@ -231,7 +248,7 @@ export default function EmotionalIntelligenceEditForm({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </>
         ) : (
           <>
@@ -284,7 +301,7 @@ export default function EmotionalIntelligenceEditForm({
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="status"
               render={({ field }) => (
@@ -307,11 +324,17 @@ export default function EmotionalIntelligenceEditForm({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </>
         )}
-        <Button type="submit" className="w-full mt-2">
-          Save
+        <Button
+          type="submit"
+          className="w-full mt-2 bg-Primary hover:bg-Secondary_Text text-white"
+          disabled={isQuestionPending || isStylePending}
+        >
+          {isQuestionPending || isStylePending
+            ? "Saving Changes..."
+            : "Save Changes"}
         </Button>
       </form>
     </Form>

@@ -57,7 +57,7 @@ const ExecutiveLeadershipAddForm = ({
       right_option: "",
       ideal_scenario: "",
       status: "1",
-      order_id: undefined,
+      order_id: null,
     },
   });
 
@@ -155,7 +155,7 @@ const ExecutiveLeadershipAddForm = ({
         />
 
         {/* Display Status */}
-        <FormField
+        {/* <FormField
           name="status"
           control={form.control}
           render={({ field }) => (
@@ -175,10 +175,10 @@ const ExecutiveLeadershipAddForm = ({
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
         {/* Order ID (Optional) */}
-        <FormField
+        {/* <FormField
           name="order_id"
           control={form.control}
           render={({ field }) => (
@@ -200,11 +200,15 @@ const ExecutiveLeadershipAddForm = ({
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
         {/* Submit Button */}
-        <Button type="submit" className="w-full mt-2" disabled={isAdding}>
-          {isAdding ? "Adding..." : "Add Question"}
+        <Button
+          type="submit"
+          className="bg-Primary hover:bg-Secondary_Text text-White w-full mt-2"
+          disabled={isAdding}
+        >
+          {isAdding ? "Adding..." : "Add New"}
         </Button>
       </form>
     </Form>

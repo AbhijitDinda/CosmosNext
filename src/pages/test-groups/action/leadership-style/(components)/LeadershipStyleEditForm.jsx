@@ -29,6 +29,7 @@ import { useGetStyleById } from "@/hooks/apis/test-group/leadership-style/useGet
 import { useGetQuestionById } from "@/hooks/apis/test-group/leadership-style/useGetQuestionById";
 import { useEditStyle } from "@/hooks/apis/test-group/leadership-style/useEditStyle";
 import { useEditQuestion } from "@/hooks/apis/test-group/leadership-style/useEditQuestion";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Define schemas
 const leadershipStyleSchema = z.object({
@@ -106,7 +107,7 @@ const LeadershipStyleEditForm = ({
     defaultValues: selectedItem || {},
   });
 
-  console.log("form errors", form.formState.errors);
+  // console.log("form errors", form.formState.errors);
 
   useEffect(() => {
     if (selectedItem) {
@@ -165,7 +166,18 @@ const LeadershipStyleEditForm = ({
   };
 
   if (isStyleFetching || isQuestionFetching) {
-    return <div>Loading...</div>;
+    return isStyleFetching ? (
+      <div className="space-y-6">
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-96 w-full" />
+      </div>
+    ) : (
+      <div className="space-y-6">
+        <Skeleton className="h-20 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+      </div>
+    );
   }
 
   return (
@@ -346,7 +358,7 @@ const LeadershipStyleEditForm = ({
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               name="order_id"
               control={form.control}
               render={({ field }) => (
@@ -389,17 +401,19 @@ const LeadershipStyleEditForm = ({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </>
         )}
         <Button
           type="submit"
-          className="w-full mt-2"
+          className="bg-Primary hover:bg-Secondary_Text text-White w-full mt-2"
           disabled={
             isEditLeadershipStylePending || isEditLeadershipQuestionPending
           }
         >
-          Save Changes
+          {isEditLeadershipStylePending || isEditLeadershipQuestionPending
+            ? "Saving Changes..."
+            : "Save Changes"}
         </Button>
       </form>
     </Form>

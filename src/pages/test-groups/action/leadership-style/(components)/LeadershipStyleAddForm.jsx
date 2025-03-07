@@ -137,7 +137,7 @@ const LeadershipStyleAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
     }
   };
 
-  if (isLeadershipGroupsLoading) return <div>Loading...</div>;
+  // if (isLeadershipGroupsLoading) return <div>Loading...</div>;
 
   return (
     <Form {...form}>
@@ -300,6 +300,9 @@ const LeadershipStyleAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                     <Select
                       value={field.value ? field.value.toString() : ""} // Ensure it's a string
                       onValueChange={(value) => field.onChange(value)}
+                      disabled={
+                        isLeadershipGroupsFetching || isLeadershipGroupsLoading
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select Group" />
@@ -317,7 +320,7 @@ const LeadershipStyleAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               name="order_id"
               control={form.control}
               render={({ field }) => (
@@ -360,17 +363,19 @@ const LeadershipStyleAddForm = ({ moduleType, refetch, setIsDialogOpen }) => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </>
         )}
         <Button
           type="submit"
-          className="w-full mt-2"
+          className="bg-Primary hover:bg-Secondary_Text text-White w-full mt-2"
           disabled={
             isAddLeadershipStylePending || isAddLeadershipQuestionPending
           }
         >
-          Add {moduleType}
+          {isAddLeadershipStylePending || isAddLeadershipQuestionPending
+            ? "Adding..."
+            : "Add New"}
         </Button>
       </form>
     </Form>

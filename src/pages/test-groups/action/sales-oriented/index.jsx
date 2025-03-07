@@ -12,6 +12,7 @@ import {
 import { useGetAssessmentById } from "@/hooks/apis/test-group/useGetAssessmentById";
 import SalesOrientedAddForm from "./(components)/salesOrientedAddForm";
 import SalesOrientedDataTable from "./(components)/salesOrientedDataTable";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const SalesOriented = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -22,9 +23,7 @@ const SalesOriented = () => {
     useGetAssessmentById(assessmentId, shouldFetch);
 
   // Set default module from API response
-  const [activeModule, setActiveModule] = useState(
-    assessmentByIdData?.data?.modules_data?.[0]?.module_type || "Questions"
-  );
+  const [activeModule, setActiveModule] = useState("Questions");
 
   // Ensure state updates correctly when API data changes
   useEffect(() => {
@@ -43,15 +42,44 @@ const SalesOriented = () => {
     }
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <div className="rounded-sm mx-auto w-full max-w-[1300px]">
+        <Skeleton className="h-14 w-full rounded-b-none" />
+        <div className="p-4 bg-White rounded-sm">
+          <Tabs className="w-full">
+            <div className="flex justify-between">
+              <TabsList className="!h-auto bg-white justify-start gap-1 flex flex-wrap">
+                {Array.from({ length: 1 }, (_, index) => (
+                  <Skeleton
+                    key={index}
+                    className="h-10 w-32 rounded-sm bg-gray-200"
+                  />
+                ))}
+              </TabsList>
+              <Skeleton className="h-10 w-32 rounded-sm bg-gray-200" />
+            </div>
+            <div className="flex flex-col gap-4 mt-4">
+              {Array.from({ length: 1 }, (_, index) => (
+                <Skeleton
+                  key={index}
+                  className="min-h-screen w-full rounded-sm bg-gray-200"
+                />
+              ))}
+            </div>
+          </Tabs>
+        </div>
+      </div>
+    );
   if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div className="rounded-sm mx-auto w-full max-w-[1300px]">
-      <Heading title="Situational Judgement Assessment" />
+      <Heading title="Sales Oriented Roles" />
       <div className="p-4 bg-White rounded-sm">
         <Tabs
-          defaultValue={activeModule}
+          defaultValue={"Questions"}
+          value={activeModule}
           className="w-full"
           onValueChange={setActiveModule}
         >

@@ -195,7 +195,11 @@ const TeamInventoryDataTable = ({ moduleType, moduleData, refetch }) => {
                 isDeleteQuestionPending
               }
             >
-              Delete
+              {isDeleteTraitsPending ||
+              isDeleteSubQuestionPending ||
+              isDeleteQuestionPending
+                ? "Deleting..."
+                : "Delete"}
             </Button>
           </div>
         </DialogContent>
