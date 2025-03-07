@@ -21,7 +21,6 @@ import {
 } from "@/components/ui/select";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-// import { useAddLeadershipStyle } from "@/hooks/apis/test-group/leadership-readiness/useAddLeadershipStyle";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
@@ -64,7 +63,7 @@ const LeadershipReadinessAddForm = ({
       beneficial_trainings: "",
       status: "1",
       question: "",
-      order_id: undefined,
+      order_id: null,
     },
   });
 
@@ -151,7 +150,7 @@ const LeadershipReadinessAddForm = ({
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               name="status"
               control={form.control}
               render={({ field }) => (
@@ -174,7 +173,7 @@ const LeadershipReadinessAddForm = ({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </>
         ) : (
           <>
@@ -192,7 +191,7 @@ const LeadershipReadinessAddForm = ({
               )}
             />
 
-            <FormField
+            {/* <FormField
               name="order_id"
               control={form.control}
               render={({ field }) => (
@@ -238,15 +237,17 @@ const LeadershipReadinessAddForm = ({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </>
         )}
         <Button
           type="submit"
-          className="w-full mt-2"
+          className="bg-Primary hover:bg-Secondary_Text text-White w-full mt-2"
           disabled={isAddingStylePending || isAddingQuestionPending}
         >
-          Add {moduleType}
+          {isAddingStylePending || isAddingQuestionPending
+            ? "Adding..."
+            : "Add New"}
         </Button>
       </form>
     </Form>

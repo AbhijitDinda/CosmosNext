@@ -28,6 +28,7 @@ import { useGetStyleById } from "@/hooks/apis/test-group/leadership-readiness/us
 import { useGetQuestionById } from "@/hooks/apis/test-group/leadership-readiness/useGetQuestionById";
 import { useEditStyle } from "@/hooks/apis/test-group/leadership-readiness/useEditStyle";
 import { useEditQuestion } from "@/hooks/apis/test-group/leadership-readiness/useEditQuestion";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Define schemas
 const leadershipStyleSchema = z.object({
@@ -56,18 +57,21 @@ const LeadershipReadinessEditForm = ({
   const schema =
     moduleType === "Leadership Styles" ? leadershipStyleSchema : questionSchema;
 
-  const { LeadershipReadinessStyleDataById, isFetching: isStyleFetching } =
-    moduleType === "Leadership Styles"
-      ? useGetStyleById(selectedItem.id)
-      : { LeadershipReadinessStyleDataById: null, isFetching: false };
+  const {
+    LeadershipReadinessStyleDataById,
+    isFetching: isStyleFetching,
+    isLoading: isStyleLoading,
+  } = moduleType === "Leadership Styles"
+    ? useGetStyleById(selectedItem.id)
+    : { LeadershipReadinessStyleDataById: null, isFetching: false };
 
   const {
     LeadershipReadinessQuestionDataById,
     isFetching: isQuestionFetching,
-  } =
-    moduleType === "Questions"
-      ? useGetQuestionById(selectedItem.id)
-      : { LeadershipReadinessQuestionDataById: null, isFetching: false };
+    isLoading: isQuestionLoading,
+  } = moduleType === "Questions"
+    ? useGetQuestionById(selectedItem.id)
+    : { LeadershipReadinessQuestionDataById: null, isFetching: false };
 
   const form = useForm({
     resolver: zodResolver(schema),
@@ -118,8 +122,23 @@ const LeadershipReadinessEditForm = ({
     }
   };
 
-  if (isStyleFetching || isQuestionFetching) {
-    return <div>Loading...</div>;
+  if (
+    isStyleFetching ||
+    isQuestionFetching ||
+    isStyleLoading ||
+    isQuestionLoading
+  ) {
+    return isStyleFetching || isStyleLoading ? (
+      <div className="space-y-6">
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-96 w-full" />
+      </div>
+    ) : (
+      <div className="space-y-6">
+        <Skeleton className="h-20 w-full" />
+        <Skeleton className="h-10 w-full" />
+      </div>
+    );
   }
 
   return (
@@ -196,7 +215,7 @@ const LeadershipReadinessEditForm = ({
               )}
             />
 
-            <FormField
+            {/* <FormField
               name="order_id"
               control={form.control}
               render={({ field }) => (
@@ -239,15 +258,17 @@ const LeadershipReadinessEditForm = ({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </>
         )}
         <Button
           type="submit"
-          className="w-full mt-2"
+          className="bg-Primary hover:bg-Secondary_Text text-White w-full mt-2"
           disabled={isEditingStylePending || isEditingQuestionPending}
         >
-          Save Changes
+          {isEditingStylePending || isEditingQuestionPending
+            ? "Saving Changes..."
+            : "Save Changes"}
         </Button>
       </form>
     </Form>
