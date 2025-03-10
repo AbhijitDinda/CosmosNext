@@ -90,6 +90,17 @@ const AdminPage = () => {
         }
     }
 
+    if (isError) {
+        return (
+          <section className="mx-auto rounded-sm w-full max-w-screen-xl">
+            <div className="flex flex-col items-center justify-center py-10">
+              <h2 className="text-2xl font-semibold text-red-600">Error Loading Dashboard</h2>
+              <p className="text-gray-600 mt-2">An error occurred while fetching the dashboard data. Please try again later.</p>
+            </div>
+          </section>
+        );
+      }
+
     return (
         <section className="mx-auto rounded-sm w-full max-w-screen-xl">
             <Heading title="Admin Accounts" />

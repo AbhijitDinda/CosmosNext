@@ -14,7 +14,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { useAuth } from "@/hooks/context/uesAuth";
 const Dashboard = () => {
   const { toast } = useToast()
-  const { isFetching, isLoading, isSuccess, error, dashboardData } = useGetDashboard();
+  const { isFetching, isLoading, isSuccess,isError, error, dashboardData } = useGetDashboard();
 
   const totalUsers = dashboardData?.data?.data?.total_users;
   const totalTests = dashboardData?.data?.data?.total_tests;
@@ -33,17 +33,18 @@ const Dashboard = () => {
     }
   }, [error, toast]);
 
-  // if (isLoading || isFetching) {
-  //   return (
-  // <div className="flex items-center space-x-4">
-  //   <Skeleton className="h-12 w-12 rounded-full" />
-  //   <div className="space-y-2">
-  //     <Skeleton className="h-4 w-[250px]" />
-  //     <Skeleton className="h-4 w-[200px]" />
-  //   </div>
-  // </div>
-  // }
 
+
+  if (isError) {
+    return (
+      <section className="mx-auto rounded-sm w-full max-w-screen-xl">
+        <div className="flex flex-col items-center justify-center py-10">
+          <h2 className="text-2xl font-semibold text-red-600">Error Loading Dashboard</h2>
+          <p className="text-gray-600 mt-2">An error occurred while fetching the dashboard data. Please try again later.</p>
+        </div>
+      </section>
+    );
+  }
 
 
 

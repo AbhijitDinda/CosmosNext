@@ -19,7 +19,7 @@ const ParentPage = () => {
   const assessmentId = 1;
   const shouldFetch = Boolean(assessmentId);
 
-  const { isLoading, error, assessmentByIdData, refetch, isFetching } =
+  const { isLoading,isError, error, assessmentByIdData, refetch, isFetching } =
     useGetAssessmentById(assessmentId, shouldFetch);
 
   const [activeModule, setActiveModule] = useState("Traits");
@@ -38,6 +38,18 @@ const ParentPage = () => {
         return "Add";
     }
   };
+
+  if (isError) {
+    return (
+      <div className="rounded-sm mx-auto w-full max-w-[1300px]">
+        <Heading title="Error" />
+        <div className="p-4 bg-White rounded-sm">
+          <p className="text-red-500">An error occurred</p>
+          
+        </div>
+      </div>
+    );
+  }
 
   if (isLoading || isFetching) {
     return (

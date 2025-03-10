@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/context/uesAuth";
 
 export const useAllcandidates = (page) => {
     const {auth,logout} = useAuth();
-    const {isFetching,isLoading,isSuccess,error,data:allCandidatesData } = useQuery({
+    const {isFetching,isLoading,isSuccess,isError,error,data:allCandidatesData } = useQuery({
         queryFn: () => getAllCandidates({ token: auth?.token },logout,page),
         queryKey: ["getCandidates", page],
         retry: false,
@@ -16,6 +16,7 @@ export const useAllcandidates = (page) => {
         isFetching,
         isLoading,
         isSuccess,
+        isError,
         error,
         allCandidatesData
     }

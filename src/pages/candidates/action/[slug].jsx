@@ -14,6 +14,18 @@ const CandidateAction = () => {
 
     // console.log("TestReport",TestReport?.data?.pdf_download_url);
 
+
+    if (isError) {
+        return (
+            <section className='w-full max-w-screen-xl mx-auto rounded-sm'>
+                <Heading title="Candidate Action" />
+                <div className='bg-red-100 text-red-600 p-4 rounded'>
+                    <p>No data found. Please check the URL or try again later.</p>
+                </div>
+            </section>
+        );
+    }
+
     return (
 
         <section className='w-full max-w-screen-xl mx-auto rounded-sm'>
