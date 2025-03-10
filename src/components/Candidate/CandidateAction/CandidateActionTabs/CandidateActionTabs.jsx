@@ -15,6 +15,7 @@ import ExpertRating from './ExpertRating';
 import { Button } from '@/components/ui/button';
 import AskAi from '@/components/AskAi';
 import SvgStars from '@/svgs/SvgStars';
+import { Skeleton } from "@/components/ui/skeleton"
 
 const tabsConfig = [
     { value: "AA", label: "Approach Assessment (AA)", component: ApproachAssessment },
@@ -86,8 +87,38 @@ const CandidateActionTabs = ({ data, isLoading }) => {
 
     if (isLoading) {
         return (
-            <div className="flex justify-center items-center h-64">
-                <div className="loader">Loading...</div>
+            <div className="flex flex-col md:flex-row gap-6">
+                {/* Sidebar with assessment types */}
+                <div className="w-full md:w-96 space-y-4">
+                    <Skeleton className="h-16 w-full rounded-md bg-teal-600" />
+                    {[...Array(8)].map((_, i) => (
+                        <Skeleton key={i} className="h-14 w-full rounded-md" />
+                    ))}
+                </div>
+
+                {/* Main content area */}
+                <div className="flex-1 space-y-6">
+                    {/* Test statistics */}
+                    <Skeleton className="h-32 w-full rounded-md bg-slate-400" />
+
+                    {/* Profile section */}
+                    <Skeleton className="h-24 w-full rounded-md bg-slate-100" />
+
+                    {/* Grid layout for SWOT analysis */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {/* Strengths panel */}
+                        <Skeleton className="h-64 w-full rounded-md bg-green-100" />
+
+                        {/* Weaknesses panel */}
+                        <Skeleton className="h-64 w-full rounded-md bg-red-100" />
+
+                        {/* Threats panel */}
+                        <Skeleton className="h-64 w-full rounded-md bg-yellow-100" />
+
+                        {/* Opportunities panel */}
+                        <Skeleton className="h-64 w-full rounded-md bg-blue-100" />
+                    </div>
+                </div>
             </div>
         );
     }
@@ -111,9 +142,9 @@ const CandidateActionTabs = ({ data, isLoading }) => {
                             <span className='w-[80%]  truncate'>{tab.label}</span>
                         </TabsTrigger>
                     ))}
-                    <Button onClick={handleAI} size="sm" className="my-4 text-xs">
+                    {/* <Button onClick={handleAI} size="sm" className="my-4 text-xs">
                         <SvgStars /> Ask AI
-                    </Button>
+                    </Button> */}
                 </TabsList>
 
                 <div className="flex-1 px-4 overflow-y-auto">

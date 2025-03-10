@@ -26,7 +26,7 @@ const CandidateAction = () => {
             ) : (
                 <div>
                     <div className='bg-white flex items-center rounded-b-sm justify-between gap-4 p-4'>
-                        <CandidateFilterAndAnalytics name={TestReport?.data?.data?.testData?.user_name} email={TestReport?.data?.data?.testData?.user_email} report_url={TestReport?.data?.pdf_download_url} />
+                        <CandidateFilterAndAnalytics isLoading={isLoading} name={TestReport?.data?.data?.testData?.user_name} email={TestReport?.data?.data?.testData?.user_email} report_url={TestReport?.data?.pdf_download_url} />
                     </div>
                     <div className='mt-4'>
                         <CandidateActionTabs data={TestReport} isLoading={isLoading} />

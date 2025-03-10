@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { DownloadIcon, PencilIcon, XCircleIcon } from 'lucide-react';
 import SvgCorrect from '@/svgs/SvgCorrect';
+import { Skeleton } from "@/components/ui/skeleton"
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -67,7 +68,7 @@ const testResults = [
 
 
 
-const CandidateFilterAndAnalytics = ({name,email,report_url}) => {
+const CandidateFilterAndAnalytics = ({isLoading,name,email,report_url}) => {
   
   
   const [isLinkAvailable, setIsLinkAvailable] = useState(false);
@@ -89,9 +90,31 @@ const CandidateFilterAndAnalytics = ({name,email,report_url}) => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="w-full  mx-auto p-4">
+      <div className="flex flex-col md:flex-row gap-4 items-start justify-between">
+        <div className="w-full md:w-1/3 space-y-2">
+          <Skeleton className="h-6 w-16" />
+          <Skeleton className="h-12 w-full rounded-md" />
+        </div>
+
+        <div className="w-full md:w-1/3 space-y-2">
+          <Skeleton className="h-6 w-16" />
+          <Skeleton className="h-12 w-full rounded-md" />
+        </div>
+
+        <div className="w-full md:w-1/4 flex items-end">
+          <Skeleton className="h-12 w-full rounded-md" />
+        </div>
+      </div>
+    </div>
+    )
+  }
 
   return (
     <div className="w-full space-y-4">
+
       <div className="flex justify-between items-center">
         <div className=" w-full flex lg:flex-row flex-col max-md:flex-wrap lg:justify-center justify-start lg:items-end gap-3 md:gap-6">
           <div>
@@ -185,7 +208,7 @@ const CandidateFilterAndAnalytics = ({name,email,report_url}) => {
       </div>
 
       {/* Anti-Cheating Monitor Section */}
-      <div className='space-y-2'>
+      {/* <div className='space-y-2'>
         <h2>Anti Cheating Monitor</h2>
         <div className="flex flex-wrap items-center gap-2 ">
           {antiCheatingMonitor.map((type, index) => (
@@ -200,7 +223,7 @@ const CandidateFilterAndAnalytics = ({name,email,report_url}) => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/*List of Assessment Section */}
       {/* <div className='space-y-2'>
@@ -216,7 +239,7 @@ const CandidateFilterAndAnalytics = ({name,email,report_url}) => {
       </div> */}
 
       {/* {Test Performance Section} */}
-      <div className="pt-6 grid grid-cols-12 gap-4">
+      {/* <div className="pt-6 grid grid-cols-12 gap-4">
         {testResults.map((type, index) => (
           <div
             key={index}
@@ -230,7 +253,7 @@ const CandidateFilterAndAnalytics = ({name,email,report_url}) => {
             </span>
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };

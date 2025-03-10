@@ -160,7 +160,7 @@ const TestList = ({ cosmos_tests = [], expert_rating_tests = [],selectedTests,se
             <div>~0 sec/question</div>
           </div>
         </div>
-        <div className="flex flex-wrap items-center gap-2 mb-4">
+        {/* <div className="flex flex-wrap items-center gap-2 mb-4">
           <div className="flex items-center gap-1 bg-label/15 p-2 rounded-sm text-label font-semibold">
             <Checkbox
               id="adaptive"
@@ -179,7 +179,7 @@ const TestList = ({ cosmos_tests = [], expert_rating_tests = [],selectedTests,se
             <img src="/svgs/AiStar.svg" alt="" />
             Auto-select using AI
           </Button>
-        </div>
+        </div> */}
 
         {selectedTests.length === 0 ? (
           <div className="text-center text-gray-500 py-8">No test selected</div>
