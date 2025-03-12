@@ -71,9 +71,7 @@ const CreateAssessmentFilters = ({ designations, formData, onTabChange, onFieldC
         </TabsContent>
       </Tabs>
 
-      <Button variant="outline" className="text-Error border border-Error px-6 py-3 rounded-sm hover:bg-Error hover:text-White">
-        Discard
-      </Button>
+      
     </div>
   );
 };
