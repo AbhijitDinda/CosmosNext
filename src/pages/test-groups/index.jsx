@@ -70,7 +70,7 @@ const TestGroups = () => {
 
   return (
     <div className="rounded-sm mx-auto w-full max-w-[1300px]">
-      <Heading title="Test Groups" />
+      <Heading title="Test Groups" amount={testsData?.data?.count}/>
       <div className="p-4 bg-White rounded-sm">
       <TestGroupsFilter filters={filters} onFilterChange={handleFilterChange} />
 

@@ -98,7 +98,7 @@ const DesignationPage = () => {
 
     return (
         <section className="mx-auto rounded-sm w-full max-w-screen-xl">
-            <Heading title="Designation" />
+            <Heading title="Designation" amount={designationDataWithPagination?.data?.count}/>
             <div className="p-4 bg-White rounded-sm">
                 {/* Add Admin Button with Dialog */}
                 <div className="ml-auto flex items-center justify-end mb-4">
