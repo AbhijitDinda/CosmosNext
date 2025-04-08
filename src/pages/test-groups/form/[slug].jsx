@@ -94,7 +94,7 @@ const TestGroupForm = () => {
 
   return (
     <div className="rounded-sm mx-auto w-full max-w-[1300px]">
-      <Heading title="Team Inventory Assessment" />
+      <Heading title={testsDataById?.data?.data.test_name} />
       <div className="w-full mx-auto bg-White p-4 rounded-sm">
         <Form {...form}>
           <form
@@ -185,7 +185,7 @@ const TestGroupForm = () => {
                     Test Timer
                   </FormLabel>
                   <FormControl className="cursor-pointer">
-                    <Input type="time" className="" {...field} />
+                    <Input type="text" placeholder="HH:MM" className="" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -200,6 +200,7 @@ const TestGroupForm = () => {
             >
               Submit
             </Button>
+
           </form>
         </Form>
       </div>
