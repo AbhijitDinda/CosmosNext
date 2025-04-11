@@ -38,7 +38,7 @@ const CreateAssessmentFilters = ({ designations, formData, onTabChange, onFieldC
                   <SelectGroup>
                     <SelectLabel>Designation</SelectLabel>
                     {designations.map((designation) => (
-                      <SelectItem key={designation.id} value={designation.slug}>
+                      <SelectItem key={designation.id} value={designation.designation_name}>
                         {designation.designation_name}
                       </SelectItem>
                     ))}
@@ -71,9 +71,7 @@ const CreateAssessmentFilters = ({ designations, formData, onTabChange, onFieldC
         </TabsContent>
       </Tabs>
 
-      <Button variant="outline" className="text-Error border border-Error px-6 py-3 rounded-sm hover:bg-Error hover:text-White">
-        Discard
-      </Button>
+      
     </div>
   );
 };

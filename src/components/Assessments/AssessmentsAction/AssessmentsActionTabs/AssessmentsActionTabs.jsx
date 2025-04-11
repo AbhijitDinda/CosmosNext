@@ -20,12 +20,12 @@ export default function AssessmentsActionTabs({data,token}) {
           >
             Candidates
           </TabsTrigger>
-          <TabsTrigger
+          {/* <TabsTrigger
             value="tests"
             className="border border-Secondary_Text data-[state=active]:bg-Primary data-[state=active]:text-white focus-within:border-Primary rounded-none"
           >
             Tests
-          </TabsTrigger>
+          </TabsTrigger> */}
         </TabsList>
         <div className="flex gap-2">
           <Button
@@ -42,11 +42,11 @@ export default function AssessmentsActionTabs({data,token}) {
         </div>
       </div>
       <TabsContent value="candidates">
-        <AssessmentsCandidateList user={data} />
+        <AssessmentsCandidateList user={data} token={token} />
       </TabsContent>
-      <TabsContent value="tests">
+      {/* <TabsContent value="tests">
         <AssessmentsTests />
-      </TabsContent>
+      </TabsContent> */}
     </Tabs>
   );
 }

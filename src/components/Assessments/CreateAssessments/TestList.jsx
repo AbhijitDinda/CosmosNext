@@ -28,23 +28,26 @@ const TestList = ({ cosmos_tests = [], expert_rating_tests = [],selectedTests,se
   // const [searchQuery, setSearchQuery] = useState("");
   // console.log("selectedTests",selectedTests)
 
-  const handleAddTest = (test) => {
-    // Check if the test already exists in the selectedTests array
-    const testExists = selectedTests.some((t) => t.test_id === test.test_id);
+  const groupTests = [7, 8, 9];
 
-    if (testExists) {
-      // show toast
-      console.warn("Test is already added.");
-      return;
-    }
+const handleAddTest = (test) => {
+  const testExists = selectedTests.some((t) => t.test_id === test.test_id);
 
-    // Add the test if it doesn't exist
-    setSelectedTests((prev) => [
-      ...prev,
-      { ...test, testId: nanoid() }, // Add a unique testId
-    ]);
+  if (testExists) {
+    console.log("Test is already added.");
+    return;
+  }
 
-  };
+  // Check if any test from the group is already added
+  const isGroupTestAdded = selectedTests.some((t) => groupTests.includes(t.test_id));
+
+  if (isGroupTestAdded && groupTests.includes(test.test_id)) {
+    console.log("Only one test from this group can be added.");
+    return;
+  }
+
+  setSelectedTests((prev) => [...prev, { ...test, testId: nanoid() }]);
+};
 
 
   const handleRemoveTest = (test) => {
@@ -160,7 +163,7 @@ const TestList = ({ cosmos_tests = [], expert_rating_tests = [],selectedTests,se
             <div>~0 sec/question</div>
           </div>
         </div>
-        <div className="flex flex-wrap items-center gap-2 mb-4">
+        {/* <div className="flex flex-wrap items-center gap-2 mb-4">
           <div className="flex items-center gap-1 bg-label/15 p-2 rounded-sm text-label font-semibold">
             <Checkbox
               id="adaptive"
@@ -179,7 +182,7 @@ const TestList = ({ cosmos_tests = [], expert_rating_tests = [],selectedTests,se
             <img src="/svgs/AiStar.svg" alt="" />
             Auto-select using AI
           </Button>
-        </div>
+        </div> */}
 
         {selectedTests.length === 0 ? (
           <div className="text-center text-gray-500 py-8">No test selected</div>

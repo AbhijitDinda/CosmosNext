@@ -29,7 +29,7 @@ const dummyData = [
 const CandidateTable = ({data,item_per_page,pagination,total_page = 1,current_page = 1,handlePageChange }) => {
   // console.log("aaa",data);
   // const displayedData = item_per_page ? data.slice(0, item_per_page) : data;
-  console.log(data)
+  // console.log("Hello DAta",data[0]?.test_token)
 
   const [currentPageData, setCurrentPageData] = useState(
     data.slice(0, item_per_page)
@@ -81,7 +81,9 @@ const CandidateTable = ({data,item_per_page,pagination,total_page = 1,current_pa
                 )} */}
               </TableCell>
               <TableCell>
-                <Link href={`/candidates/action/${item.candidate_id}`}>
+
+              {item.test_status === "Invited" ? (
+                <Link href={`/assessments/action/${item.assessment_id}`}>
                   <Button
                     size="icon"
                     variant="outline"
@@ -90,6 +92,22 @@ const CandidateTable = ({data,item_per_page,pagination,total_page = 1,current_pa
                     <ArrowRight className="w-5 h-5 text-gray-500" />
                   </Button>
                 </Link>
+                
+              ) : (
+                <Link href={`/candidates/action/${item.test_token}&${item.candidate_id}`}>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    className="p-2 border border-gray-300"
+                  >
+                    <ArrowRight className="w-5 h-5 text-gray-500" />
+                  </Button>
+                </Link>
+                
+              )}
+                
+
+
               </TableCell>
             </TableRow>
           ))}

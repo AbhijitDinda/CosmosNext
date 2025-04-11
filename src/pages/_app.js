@@ -30,8 +30,6 @@ export default function App({ Component, pageProps }) {
         {/* Conditionally render Navbar */}
         {!isNavbarExcluded && isClient && <Navbar />}
 
-
-
         {/* Main Content */}
         {isClient && isPublicRoute ? (
           <Component {...pageProps} />
@@ -45,9 +43,6 @@ export default function App({ Component, pageProps }) {
           )
         )}
         {/* Main Content end */}
-
-
-
         <Toaster />
 
       </AuthContextProvider>

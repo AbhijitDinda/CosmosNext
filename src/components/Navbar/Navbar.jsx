@@ -61,7 +61,7 @@ const Navbar = () => {
     { name: "Designation", path: "/designation" },
   ];
 
-  const username = "Hi User";
+  const username = "Admin";
 
   return (
     <>
@@ -86,7 +86,7 @@ const Navbar = () => {
         </div>
 
         <div className="relative flex justify-center items-center gap-5 font-OpenSans text-lg text-TEXT_P">
-          <Image src="/svgs/Control.svg" alt="Control" width={24} height={24} />
+          {/* <Image src="/svgs/Control.svg" alt="Control" width={24} height={24} /> */}
           <div>{username}</div>
           <div
             ref={dropdownRef} // Attach ref to dropdown container

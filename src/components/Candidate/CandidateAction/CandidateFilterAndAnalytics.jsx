@@ -1,4 +1,5 @@
 import React from "react";
+import { useState,useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -14,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { DownloadIcon, PencilIcon, XCircleIcon } from 'lucide-react';
 import SvgCorrect from '@/svgs/SvgCorrect';
+import { Skeleton } from "@/components/ui/skeleton"
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -64,23 +66,55 @@ const testResults = [
   }
 ];
 
-// const listOfAssessment =["Team Inventory Assessment (TIA)","Motivation Drive Assessment (MDA),","Approach Assessment (AA)","Emotional Intelligence Assessment (EIA)","Team Inventory Assessment (TIA)","Emotional Intelligence Assessment (EIA)"]
 
-const CandidateFilterAndAnalytics = () => {
-  const form = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-    },
-  });
 
-  function onSubmit(values) {
-    console.log(values);
+const CandidateFilterAndAnalytics = ({isLoading,name,email,report_url}) => {
+  
+  
+  const [isLinkAvailable, setIsLinkAvailable] = useState(false);
+
+  useEffect(() => {
+    if (report_url) {
+      setIsLinkAvailable(true);
+    } else {
+      setIsLinkAvailable(false);
+    }
+  }, [report_url]);
+
+  const handleDownload = () => {
+    if (report_url) {
+      const link = document.createElement('a');
+      link.href = report_url;
+      link.target = '_blank';
+      link.click();
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="w-full  mx-auto p-4">
+      <div className="flex flex-col md:flex-row gap-4 items-start justify-between">
+        <div className="w-full md:w-1/3 space-y-2">
+          <Skeleton className="h-6 w-16" />
+          <Skeleton className="h-12 w-full rounded-md" />
+        </div>
+
+        <div className="w-full md:w-1/3 space-y-2">
+          <Skeleton className="h-6 w-16" />
+          <Skeleton className="h-12 w-full rounded-md" />
+        </div>
+
+        <div className="w-full md:w-1/4 flex items-end">
+          <Skeleton className="h-12 w-full rounded-md" />
+        </div>
+      </div>
+    </div>
+    )
   }
 
   return (
     <div className="w-full space-y-4">
+
       <div className="flex justify-between items-center">
         <div className=" w-full flex lg:flex-row flex-col max-md:flex-wrap lg:justify-center justify-start lg:items-end gap-3 md:gap-6">
           <div>
@@ -88,7 +122,7 @@ const CandidateFilterAndAnalytics = () => {
             <div
               className="rounded-sm p-3 w-full lg:w-80 border border-Lines text-start"
             >
-              Abhijit Dinda
+              {name}
             </div>
           </div>
           <div>
@@ -96,17 +130,17 @@ const CandidateFilterAndAnalytics = () => {
             <div
               className="rounded-sm p-3 w-full lg:w-80 border border-Lines text-start"
             >
-              abhijitdinda228@gmail.com
+              {email}
             </div>
           </div>
-          <Button
+          {/* <Button
             type="submit"
             variant="outline"
             className="rounded-sm border border-Primary text-Primary hover:text-white hover:bg-Primary
                                                       "
           >
             Select for next stage
-          </Button>
+          </Button> */}
         </div>
 
         {/* <Form {...form}>
@@ -158,10 +192,15 @@ const CandidateFilterAndAnalytics = () => {
           <Button
             variant="outline"
             size="icon"
-            className="bg-white hover:bg-white border border-gray-200 p-2 rounded-sm"
+            className="bg-white hover:bg-white border border-Primary w-max p-2 rounded-sm"
+            onClick={handleDownload}
+            disabled={!isLinkAvailable}
           >
-            <DownloadIcon className="text-gray-400" />
+          <span className="text-Primary"> Download Report</span>
+            <DownloadIcon className="text-Primary" />
           </Button>
+
+          
           {/* <Button className="bg-white hover:bg-white border border-gray-200 p-2 rounded-sm">
             <PencilIcon className="text-gray-400" />
           </Button> */}
@@ -169,7 +208,7 @@ const CandidateFilterAndAnalytics = () => {
       </div>
 
       {/* Anti-Cheating Monitor Section */}
-      <div className='space-y-2'>
+      {/* <div className='space-y-2'>
         <h2>Anti Cheating Monitor</h2>
         <div className="flex flex-wrap items-center gap-2 ">
           {antiCheatingMonitor.map((type, index) => (
@@ -184,7 +223,7 @@ const CandidateFilterAndAnalytics = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/*List of Assessment Section */}
       {/* <div className='space-y-2'>
@@ -200,7 +239,7 @@ const CandidateFilterAndAnalytics = () => {
       </div> */}
 
       {/* {Test Performance Section} */}
-      <div className="pt-6 grid grid-cols-12 gap-4">
+      {/* <div className="pt-6 grid grid-cols-12 gap-4">
         {testResults.map((type, index) => (
           <div
             key={index}
@@ -214,7 +253,7 @@ const CandidateFilterAndAnalytics = () => {
             </span>
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };

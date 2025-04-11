@@ -17,7 +17,7 @@ export const getAllAdmin = async ({ token }, logout, page) => {
             return;
         } else {
             console.error("Error in Get list of Admins", error);
-            throw error;
+            // throw error;
         }
     }
 };
@@ -43,7 +43,7 @@ export const addAdmin = async ({ organization_name, name, user_id, account_statu
             return;
         } else {
             // console.error("Error in adding admin:", error);
-            throw error;
+            // throw error;
         }
     }
 };
@@ -64,7 +64,7 @@ export const deleteAdmin = async ({ token,logout,admin_id }) => {
             return;
         } else {
             console.error("Error in Delete Admin", error);
-            throw error;
+            // throw error;
         }
 
     }
@@ -90,7 +90,7 @@ export const editAdmin = async ({ token, logout, admin_id, organization_name, na
             return;
         } else {
             console.error("Error in Edit Admin", error);
-            throw error;
+            // throw error;
         }
     }
 };

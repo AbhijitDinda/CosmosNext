@@ -17,7 +17,7 @@ import { useTestById } from "@/hooks/apis/test-group/useTestById";
 import { useParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { useUpdateTestById } from "@/hooks/apis/test-group/useUpdateTestById";
-
+import { useToast } from "@/hooks/use-toast"
 const formSchema = z.object({
   description1: z.string().min(5, {
     message: "Assesment Description must be at least 5 characters.",
@@ -33,6 +33,8 @@ const formSchema = z.object({
 });
 
 const TestGroupForm = () => {
+
+
   const params = useParams();
   const { testsDataById } = useTestById(params?.slug);
 
@@ -60,6 +62,8 @@ const TestGroupForm = () => {
     }
   }, [testsDataById, form]);
 
+
+  const { toast } = useToast()
   const {isPending,updateTestsDataMutation} = useUpdateTestById(params?.slug);
 
   function onSubmit(values) {
@@ -69,12 +73,28 @@ const TestGroupForm = () => {
       test_instruction: values.description2,
       test_objective: values.description3,
       test_time: values.testTimer,
+    })
+    .then(() => {
+      toast({
+        title: "Success",
+        description: "Test data updated successfully!",
+        status: "success",
+        duration: 3000,
+      });
+    })
+    .catch((error) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to update test data.",
+        status: "error",
+        duration: 3000,
+      });
     });
   }
 
   return (
     <div className="rounded-sm mx-auto w-full max-w-[1300px]">
-      <Heading title="Team Inventory Assessment" />
+      <Heading title={testsDataById?.data?.data.test_name} />
       <div className="w-full mx-auto bg-White p-4 rounded-sm">
         <Form {...form}>
           <form
@@ -165,7 +185,7 @@ const TestGroupForm = () => {
                     Test Timer
                   </FormLabel>
                   <FormControl className="cursor-pointer">
-                    <Input type="time" className="" {...field} />
+                    <Input type="text" placeholder="HH:MM" className="" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -180,6 +200,7 @@ const TestGroupForm = () => {
             >
               Submit
             </Button>
+
           </form>
         </Form>
       </div>
