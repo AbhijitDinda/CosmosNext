@@ -8,20 +8,31 @@ export const useSignin = () => {
 
     const { isPending, isSuccess, error, mutateAsync: signinMutation } = useMutation({
         mutationFn: signInRequest,
-        onSuccess: (response) => {
-            console.log('Scuccessfully signed in', response);
+        // onSuccess: (response) => {
+        //     console.log('Scuccessfully signed in', response);
 
-            // const userObject = JSON.stringify(response.data);
+        //     // const userObject = JSON.stringify(response.data);
             
 
-            // localStorage.setItem('user', userObject);
-            localStorage.setItem('token', response.token);
-            setAuth({
-                token: response.token,
-            });
+        //     // localStorage.setItem('user', userObject);
+        //     localStorage.setItem('token', response.token);
+        //     setAuth({
+        //         token: response.token,
+        //     });
 
 
+        // },
+        onSuccess: (response) => {
+            if (response?.token) {
+                localStorage.setItem('token', response.token);
+                setAuth({
+                    token: response.token,
+                });
+            } else {
+                throw new Error('Invalid credentials');
+            }
         },
+        
         onError: (error) => {
             console.error('Failed to sign in', error);
 
