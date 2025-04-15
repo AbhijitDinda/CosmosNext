@@ -9,7 +9,7 @@ export const signInRequest = async ({ user_id, password }) => {
         console.log("sign in",response?.data)
         return response?.data;
     } catch(error) {
-        console.error(error);
+        console.log(error);
         // throw error.response.data;     
     }
 };

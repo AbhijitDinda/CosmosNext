@@ -7,7 +7,7 @@ import Heading from "@/components/Heading";
 import { useCreateAssessmentData } from "@/hooks/apis/assessments/useCreateAssessmentData";
 import { useCreateAssessment } from "@/hooks/apis/assessments/useCreateAssessment";
 import { useToast } from "@/hooks/use-toast";
-import { useRouter } from 'next/navigation'; 
+import { useRouter } from 'next/navigation';
 
 export default function CreateAssessment() {
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
@@ -38,7 +38,7 @@ export default function CreateAssessment() {
   const validateForm = () => {
     const isSingleCandidate = formData.type === "singleCandidate";
 
-    
+
 
     if (isSingleCandidate) {
       const { candidate_name, email_id, designation } = formData.singleCandidate;
@@ -77,12 +77,18 @@ export default function CreateAssessment() {
       // Determine test variant and prepare the data object
       const isSingleCandidate = formData.type === "singleCandidate";
       const testVariant = isSingleCandidate ? "single" : "multiple";
-
+      // Rearrange the test list so that test_id ending with "-exp" are at the end
+      const rearrangedTestList = selectedTests.sort((a, b) => {
+        const aEndsWithExp = typeof a.test_id === "string" && a.test_id.endsWith("-exp");
+        const bEndsWithExp = typeof b.test_id === "string" && b.test_id.endsWith("-exp");
+        if (aEndsWithExp === bEndsWithExp) return 0; // Keep original order if both are same
+        return aEndsWithExp ? 1 : -1; // Move "-exp" tests to the end
+      });
       const dataObj = {
         test_name: isSingleCandidate
           ? formData.singleCandidate.designation
           : formData.multiCandidate.designation,
-        test_list: selectedTests.map((test) => test.test_id),
+        test_list: rearrangedTestList.map((test) => test.test_id),
         ...(isSingleCandidate && {
           candidate_name: formData.singleCandidate.candidate_name,
           email: formData.singleCandidate.email_id,
@@ -93,7 +99,7 @@ export default function CreateAssessment() {
 
       // Call the mutation with prepared data
       const response = await createAssessmentMutation({ dataObj, test_variant: testVariant });
-      console.log("response",response?.data?.data?.test_data?.id)
+      console.log("response", response?.data?.data?.test_data?.id)
 
 
       // toast({ description: "Assessment created successfully!", variant: "success" });
@@ -106,15 +112,15 @@ export default function CreateAssessment() {
 
       setShowSuccessDialog(true);
 
-      const RedirectAssessmentId = response?.data?.data?.test_data?.id 
-      
+      const RedirectAssessmentId = response?.data?.data?.test_data?.id
+
       if (RedirectAssessmentId) {
         // Delay redirection by 2 seconds (2000ms)
         setTimeout(() => {
           router.push(`/assessments/action/${RedirectAssessmentId}`);
         }, 2000);
       }
-      
+
     } catch (error) {
       console.error("Failed to create Assessment:", error);
       toast({ description: "Failed to create Assessment.", variant: "destructive" });

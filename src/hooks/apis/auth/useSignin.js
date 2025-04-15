@@ -34,9 +34,11 @@ export const useSignin = () => {
         },
         
         onError: (error) => {
-            console.error('Failed to sign in', error);
+            console.log('Failed to sign in', error);
 
         }
+
+        
     });
 
     return {
